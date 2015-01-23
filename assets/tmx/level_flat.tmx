@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="1000" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="farmer_tileset" tilewidth="32" tileheight="32">
+  <image source="gfx/farmer_tileset.png" width="192" height="832"/>
+ </tileset>
+ <layer name="sky" width="1000" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt07ENgDAQBMGvyyUAATgA+q+Et+TUsZE1wWgbuCsRUQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg57a098Kq2saPmP83AACAkTNdvbCqtvEa8/8GAAAwcqenF1bVNv6mDymbd7g=
+  </data>
+ </layer>
+ <layer name="ground" width="1000" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt170uBVEUBtD7fIigQIsCBZ4CBd7ZLu5NNHNnivOzt6xiJVPN/r59MpOc891udw4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAQHrv4SN8Lmg1Z+n9LWf0yJYlo54AAAD/21f4Dj8LWs1Zen/LGT2yZcmoJwAAAAAAAAAAAABQyV24Dw8F52x556h+Gfc0uvuIeWszZpx3xkyzz6l3lsrfiXw5e2XLo+f2zNX+wVUz9shaqfesvK1nVtt59vzH8ozMmm0vmVTczWN4Cs8F52x556h+Gfc0uvuIeWszZpx3xkyzz6l3lsrfiXw5e2XLo+f2zNX+wVUz9shaqfesvK1nVtt59vzH8ozMmm0vmbTazUk4DWf7555ewmt4KzhnyztH9cu4p9HdR8xbmzHjvDNmmn1OvbNU/k7ky9krWx49t2eu9g+umrFH1kq9Z+VtPbPF+w53lBl3rb/5Z9/71vKMzJptL5m02s1FuAxX+2cAAIDZDneU2fcuGOk63ITb/TMAAMBshzvK7PsSjPQLHvQeWw==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 2" width="0" height="0">
+  <object name="ground" x="0" y="406" width="31999" height="73"/>
+  <object name="fence" x="899" y="332" width="22" height="70"/>
+  <object name="fence" x="1733" y="337" width="23" height="65"/>
+  <object name="fence" x="2401" y="338" width="25" height="65"/>
+  <object name="fence" x="2691" y="339" width="24" height="64"/>
+  <object name="fence" x="4098" y="342" width="25" height="60"/>
+  <object name="fence" x="4707" y="342" width="25" height="64"/>
+  <object name="fence" x="5602" y="345" width="25" height="59"/>
+  <object name="fence" x="6402" y="341" width="27" height="63"/>
+  <object name="fence" x="6657" y="342" width="27" height="63"/>
+  <object name="fence" x="7586" y="342" width="26" height="62"/>
+  <object name="fence" x="7840" y="343" width="29" height="60"/>
+  <object name="fence" x="8993" y="340" width="27" height="64"/>
+  <object name="fence" x="10111" y="344" width="31" height="59"/>
+  <object name="fence" x="10562" y="345" width="27" height="60"/>
+  <object name="fence" x="11171" y="343" width="26" height="61"/>
+  <object name="fence" x="12449" y="341" width="29" height="62"/>
+  <object name="fence" x="13729" y="343" width="27" height="62"/>
+  <object name="fence" x="14178" y="342" width="29" height="63"/>
+  <object name="fence" x="15330" y="344" width="27" height="59"/>
+  <object name="fence" x="17185" y="340" width="28" height="66"/>
+  <object name="fence" x="18626" y="342" width="27" height="61"/>
+  <object name="fence" x="18881" y="345" width="30" height="61"/>
+  <object name="fence" x="19136" y="350" width="29" height="56"/>
+  <object name="fence" x="20448" y="345" width="29" height="62"/>
+  <object name="fence" x="21825" y="346" width="28" height="60"/>
+  <object name="fence" x="22433" y="345" width="29" height="60"/>
+  <object name="fence" x="23841" y="344" width="28" height="63"/>
+  <object name="fence" x="24769" y="345" width="27" height="61"/>
+  <object name="fence" x="25407" y="342" width="32" height="63"/>
+  <object name="fence" x="26945" y="342" width="29" height="65"/>
+  <object name="fence" x="28096" y="340" width="30" height="66"/>
+  <object name="fence" x="28321" y="346" width="31" height="62"/>
+  <object name="fence" x="29185" y="345" width="28" height="61"/>
+  <object name="fence" x="31457" y="343" width="30" height="67"/>
+  <object name="ground" x="1314" y="208" width="211" height="41"/>
+  <object name="ground" x="2116" y="208" width="216" height="42"/>
+  <object name="ground" x="3362" y="210" width="277" height="41"/>
+  <object name="ground" x="5219" y="212" width="280" height="39"/>
+  <object name="t5" x="1357" y="160" width="22" height="24"/>
+  <object name="t5" x="1414" y="161" width="23" height="23"/>
+  <object name="t5" x="1471" y="159" width="24" height="25"/>
+  <object name="t10" x="1330" y="352" width="21" height="23"/>
+  <object name="t1" x="1387" y="352" width="26" height="24"/>
+  <object name="t1" x="1444" y="352" width="25" height="22"/>
+  <object name="t1" x="1487" y="351" width="25" height="22"/>
+  <object name="t8" x="2143" y="353" width="23" height="22"/>
+  <object name="t4" x="2201" y="353" width="25" height="23"/>
+  <object name="t6" x="2151" y="159" width="26" height="24"/>
+  <object name="t2" x="2209" y="161" width="28" height="23"/>
+  <object name="t1" x="2264" y="160" width="28" height="23"/>
+ </objectgroup>
+</map>
