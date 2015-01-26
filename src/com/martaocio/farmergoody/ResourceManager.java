@@ -36,7 +36,7 @@ public class ResourceManager {
 	
 	//load sounds
 	public Music themeMusic;
-	public Sound coinCollect;
+	public Sound eatTomato;
 	public Sound jumpSound;
 	
 	//TEXTURES
@@ -45,11 +45,11 @@ public class ResourceManager {
 	
 	private BuildableBitmapTextureAtlas gameTexturesAtlas;
 	
-	private BuildableBitmapTextureAtlas levelFailedAtlas;//,levelPassedAtlas;
+	private BuildableBitmapTextureAtlas levelFailedAtlas,levelPassedAtlas;
 	
 	public ITextureRegion playButton,mainMenuBackground;
 	//public ITextureRegion restartButton,quitButton,failedBG,passedBG;
-	public ITextureRegion failedBG;
+	public ITextureRegion failedBG,passedBG;
 	
 	//Create coin texture
 //	public ITextureRegion coinTexture; 
@@ -58,6 +58,9 @@ public class ResourceManager {
 	public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
 	
+	public ITextureRegion correctIconTexture;
+	
+	public ITextureRegion tomatoIconTexture;
 	public ITextureRegion tomato1Texture;
 	public ITextureRegion tomato2Texture;
 	public ITextureRegion tomato3Texture;
@@ -90,7 +93,7 @@ public class ResourceManager {
 		
 		this.levelFailedAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(),1024,1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
-	//	this.levelPassedAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(),1024,1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.levelPassedAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(),1024,1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		this.gameTexturesAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -100,6 +103,9 @@ public class ResourceManager {
 		this.bullTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png", 4, 1);
 		this.tomatoTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato.png", 5, 1);
 		
+		this.correctIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "correct.png");
+		
+		this.tomatoIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_icon.png");
 		this.tomato1Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point1.png");
 		this.tomato2Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point2.png");
 		this.tomato3Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point3.png");
@@ -112,6 +118,7 @@ public class ResourceManager {
 	//	this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas,activity.getAssets(),"level_cleared_background.png");
 		
 		this.failedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "level_failed.png");
+		this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "level_passed.png");
 		
 	//	this.restartButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "restart.png");
 		
@@ -123,9 +130,9 @@ public class ResourceManager {
 			
 			this.levelFailedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,BitmapTextureAtlas>(0,0,1));
 			this.levelFailedAtlas.load();
-//			
-//			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,BitmapTextureAtlas>(0,0,1));
-//			this.levelPassedAtlas.load();
+			
+			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,BitmapTextureAtlas>(0,0,1));
+			this.levelPassedAtlas.load();
 			
 		}catch(TextureAtlasBuilderException e){
 			Debug.e(e);
@@ -133,14 +140,14 @@ public class ResourceManager {
 	}
 	
 	private void loadGameSounds(){
-	//	try {
+		try {
 			
-//			this.coinCollect=SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/coin_pickup.ogg");
-//			this.jumpSound=SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/jumping.ogg");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+			this.eatTomato=SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/nom.wav");
+			this.jumpSound=SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/jump.wav");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void loadMenuResources(){

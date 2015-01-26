@@ -48,8 +48,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.martaocio.farmergoody.SceneManager.SceneType;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener,
-		IOnMenuItemClickListener {
+public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMenuItemClickListener {
 
 	private final int RESTART = 0;
 	private final int QUIT = 1;
@@ -64,6 +63,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 	private LinkedList<Sprite> tomatos;
 
 	public Text textScore;
+	public Text textRightPathScore;
+	public Sprite tomatoScoreIcon;
+	public Sprite rightPathScoreIcon;
 
 	private Player player;
 	private Bull bull;
@@ -73,6 +75,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 	private DelayModifier deleteAfterFadeModifier = null;
 
 	private int score = 0;
+	private int rightPathScore = 0;
 
 	// create 2 new menuScene
 	private MenuScene levelFailed, levelCleared;
@@ -81,7 +84,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 	public void createScene() {
 		createPhysicsWorld();
 		createLevel();
-		// createLevelClearedScene();
+		createLevelClearedScene();
 		createLevelFailedScene();
 
 		// listen when someone touch the screen
@@ -110,16 +113,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 	private void createLevel() {
 
 		// create the tex for the score
-		textScore = new Text(100, 10, this.resourceManager.font, "Coins: 0",
-				vbom);
 
-		vegetables = new LinkedList<Sprite>();
+		tomatoScoreIcon = new Sprite(40, 10, 35, 35, ResourceManager.getInstance().tomatoIconTexture, vbom);
+		textScore = new Text(80, 10, this.resourceManager.font, ": 0   ", vbom);
+		rightPathScoreIcon = new Sprite(40, 50, 35, 35, ResourceManager.getInstance().correctIconTexture, vbom);
+		textRightPathScore = new Text(80, 50, this.resourceManager.font, ": 0   ", vbom);
+
+		// Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50,
+		// ResourceManager.getInstance().tomato2Texture,
+		// vbom);
+
 		tomatos = new LinkedList<Sprite>();
 		fencesBodies = new LinkedList<Body>();
 
 		try {
-			final TMXLoader tmxLoader = new TMXLoader(activity.getAssets(),
-					activity.getTextureManager(),
+			final TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
 
 			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/level_flat.tmx");
@@ -130,109 +138,113 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		}
 
 		// Create all the objects from the TMXLayer
-		for (final TMXObjectGroup group : this.mTMXTiledMap
-				.getTMXObjectGroups()) {// loop over the objectgroups
+		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {// loop
+																					// over
+																					// the
+																					// objectgroups
 			for (final TMXObject object : group.getTMXObjects()) {
-				if (object.getName().equals("ground")) {
-					Rectangle rect = new Rectangle(object.getX(),
-							object.getY(), object.getWidth(),
-							object.getHeight(), vbom);
+				if (object.getName().equals(SpriteTag.GROUND)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
 
-					FixtureDef groundFixtureDef = PhysicsFactory
-							.createFixtureDef(0, 0, .2f);
+					FixtureDef groundFixtureDef = PhysicsFactory.createFixtureDef(0, 0, .2f);
 					// BodyType to static if u dont want the body moves
-					PhysicsFactory.createBoxBody(mPhysicsWorld, rect,
-							BodyType.StaticBody, groundFixtureDef).setUserData(
-							"ground");
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, groundFixtureDef).setUserData(SpriteTag.GROUND);
 
 					// store data in userData so it can be retrieved later on
 
 					rect.setVisible(false);
 					attachChild(rect);
-				} else if (object.getName().equals("fence")) {
-					Rectangle rect = new Rectangle(object.getX(),
-							object.getY(), object.getWidth(),
-							object.getHeight(), vbom);
+				} else if (object.getName().equals(SpriteTag.FENCE)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
 
-					FixtureDef spikeFixtureDef = PhysicsFactory
-							.createFixtureDef(0, 0, 0f);
-					Body fenceBody = PhysicsFactory.createBoxBody(
-							mPhysicsWorld, rect, BodyType.StaticBody,
-							spikeFixtureDef);
-					fenceBody.setUserData("fence");
+					FixtureDef spikeFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body fenceBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, spikeFixtureDef);
+					fenceBody.setUserData(SpriteTag.FENCE);
 					fencesBodies.add(fenceBody);
-				}
-				else if(object.getName().equals("t1")){
-					Sprite tomatoType1=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato1Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType1, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t1");
+				} else if (object.getName().equals(SpriteTag.CORRECT)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef correctFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body correctBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, correctFixtureDef);
+					correctBody.setUserData(SpriteTag.CORRECT);
+
+				} else if (object.getName().equals(SpriteTag.TOMATO1)) {
+					Sprite tomatoType1 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato1Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType1, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO1);
 					tomatos.add(tomatoType1);
 					tomatoType1.setUserData(body);
-				}
-				else if(object.getName().equals("t2")){
-					Sprite tomatoType2=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato2Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType2, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t2");
+				} else if (object.getName().equals(SpriteTag.TOMATO2)) {
+					Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato2Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType2, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO2);
 					tomatos.add(tomatoType2);
 					tomatoType2.setUserData(body);
-				}
-				else if(object.getName().equals("t3")){
-					Sprite tomatoType3=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato3Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType3, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t3");
+				} else if (object.getName().equals(SpriteTag.TOMATO3)) {
+					Sprite tomatoType3 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato3Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType3, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO3);
 					tomatos.add(tomatoType3);
 					tomatoType3.setUserData(body);
-				}
-				else if(object.getName().equals("t4")){
-					Sprite tomatoType4=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato4Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType4, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t4");
+				} else if (object.getName().equals(SpriteTag.TOMATO4)) {
+					Sprite tomatoType4 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato4Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType4, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO4);
 					tomatos.add(tomatoType4);
 					tomatoType4.setUserData(body);
-				}
-				else if(object.getName().equals("t5")){
-					Sprite tomatoType5=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato5Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType5, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t5");
+				} else if (object.getName().equals(SpriteTag.TOMATO5)) {
+					Sprite tomatoType5 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato5Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType5, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO5);
 					tomatos.add(tomatoType5);
 					tomatoType5.setUserData(body);
-				}
-				else if(object.getName().equals("t6")){
-					Sprite tomatoType6=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato6Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType6, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t6");
+				} else if (object.getName().equals(SpriteTag.TOMATO6)) {
+					Sprite tomatoType6 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato6Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType6, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO6);
 					tomatos.add(tomatoType6);
 					tomatoType6.setUserData(body);
-				}
-				else if(object.getName().equals("t8")){
-					Sprite tomatoType8=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato8Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType8, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t8");
+				} else if (object.getName().equals(SpriteTag.TOMATO8)) {
+					Sprite tomatoType8 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato8Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType8, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO8);
 					tomatos.add(tomatoType8);
 					tomatoType8.setUserData(body);
-				}
-				else if(object.getName().equals("t9")){
-					Sprite tomatoType9=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato9Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType9, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t9");
+				} else if (object.getName().equals(SpriteTag.TOMATO9)) {
+					Sprite tomatoType9 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato9Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType9, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO9);
 					tomatos.add(tomatoType9);
 					tomatoType9.setUserData(body);
-				}
-				else if(object.getName().equals("t10")){
-					Sprite tomatoType10=new Sprite(object.getX(),object.getY(),50,50,ResourceManager.getInstance().tomato10Texture,vbom);
-					FixtureDef tomatoFixtureDef =PhysicsFactory .createFixtureDef(0, 0, 0f);
-					Body body=PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType10, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData("t10");
+				} else if (object.getName().equals(SpriteTag.TOMATO10)) {
+					Sprite tomatoType10 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato10Texture,
+							vbom);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType10, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(SpriteTag.TOMATO10);
 					tomatos.add(tomatoType10);
 					tomatoType10.setUserData(body);
+				} else if (object.getName().equals(SpriteTag.END)) {
+
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef endLineDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, endLineDef).setUserData(SpriteTag.END);
+
 				}
 				/*
 				 * else if (object.getName().equals("coin")) { // Sprite is
@@ -288,13 +300,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		// for (int i = 0; i < coins.size(); i++) {
 		// this.attachChild(coins.get(i));
 		// }
-		for (Sprite tomato:tomatos){
+		for (Sprite tomato : tomatos) {
 			this.attachChild(tomato);
 		}
 		// /////////////////////////////////////////////////////////////////
 
 		// Attach player
-		player = new Player(400, 150, 160, 160, vbom, camera, mPhysicsWorld) {
+		player = new Player(400, 150, 150, 150, vbom, camera, mPhysicsWorld) {
 
 			@Override
 			public void onDie() {
@@ -306,7 +318,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		this.attachChild(player);
 
 		// Attach bull
-		bull = new Bull(50, 150, 160, 160, vbom, camera, mPhysicsWorld);
+		bull = new Bull(50, 150, 150, 150, vbom, camera, mPhysicsWorld);
 
 		// animate the player
 		bull.setRunning();
@@ -320,6 +332,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		// that heads up the display
 		HUD hud = new HUD();
 		hud.attachChild(textScore);
+		hud.attachChild(textRightPathScore);
+		hud.attachChild(rightPathScoreIcon);
+		hud.attachChild(tomatoScoreIcon);
 
 		this.camera.setHUD(hud);
 
@@ -340,8 +355,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 
 	private void createPhysicsWorld() {
 
-		this.mPhysicsWorld = new PhysicsWorld(new Vector2(0,
-				SensorManager.GRAVITY_EARTH), false);
+		this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
 
 		this.registerUpdateHandler(mPhysicsWorld);
 		mPhysicsWorld.setContactListener(contactListener());
@@ -351,6 +365,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		// if the action is down , the player should jump
 		if (pSceneTouchEvent.isActionDown()) {
+			resourceManager.jumpSound.play();
 			player.jump();
 			// open mouth
 			// player.eat();
@@ -408,81 +423,216 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 				Body b = contact.getFixtureB().getBody();
 				// collision between player and ground
 				if (a.getUserData() != null && b.getUserData() != null) {
-					if (a.getUserData().equals("player")
-							&& b.getUserData().equals("ground")
-							|| b.getUserData().equals("player")
-							&& a.getUserData().equals("ground")) {
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.GROUND)) {
 
 						player.canEat = false;
 						player.canJump = true;
 						player.setRunning();
 					}
 
-					// collision between bull and ground
-					if (a.getUserData().equals("bull")
-							&& b.getUserData().equals("ground")
-							|| b.getUserData().equals("bull")
-							&& a.getUserData().equals("ground")) {
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.GROUND, SpriteTag.BULL)) {
 						bull.setRunning();
 					}
-					// collision between player and coin
-					if (a.getUserData().equals("player")
-							&& b.getUserData().equals("bull")
-							|| a.getUserData().equals("bull")
-							&& b.getUserData().equals("player")) {
-						// resourceManager.coinCollect.play();
-						// update the score
-						/*
-						 * if (player.canEat) { score += 5;
-						 * textScore.setText("Coins: " + score);
-						 * 
-						 * // detect which body was colaided
-						 * if(a.getUserData().equals("tomato")) { removeBody(a);
-						 * } else if (b.getUserData().equals("tomato")) {
-						 * removeBody(b); } } else { if
-						 * (a.getUserData().equals("tomato")) {
-						 * 
-						 * fadeOutBody(a); } else if
-						 * (b.getUserData().equals("tomato")) { fadeOutBody(b);
-						 * }
-						 * 
-						 * }
-						 */
+
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.BULL)) {
+
 						showLevelFailed();
 					}
-					if (a.getUserData().equals("player")
-							&& b.getUserData().equals("fence")
-							|| a.getUserData().equals("fence")
-							&& b.getUserData().equals("player")) {
-						//
-						// // call level failed
-						
-						//
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.FENCE)) {
+
+						player.setRunning();
+
 					}
-					if (a.getUserData().equals("bull")
-							&& b.getUserData().equals("fence")
-							|| a.getUserData().equals("fence")
-							&& b.getUserData().equals("bull")) {
-						if (a.getUserData().equals("fence")) {
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.FENCE)) {
+
+						if (a.getUserData().equals(SpriteTag.FENCE)) {
 							removeFence(a);
-						}else if(b.getUserData().equals("fence")){
+						} else if (b.getUserData().equals(SpriteTag.FENCE)) {
 							removeFence(b);
-							
+
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO1)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 1;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO1)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO1)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO2)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 2;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO2)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO2)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO3)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 3;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO3)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO3)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO4)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 4;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO4)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO4)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO5)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 5;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO5)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO5)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO6)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 6;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO6)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO6)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO8)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 8;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO8)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO8)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO9)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 9;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO9)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO9)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO10)) {
+						// resourceManager.coinCollect.play();
+						// update the score
+						score += 10;
+						textScore.setText(": " + score);
+						resourceManager.eatTomato.play();
+						// detect which body was colaided
+						if (a.getUserData().equals(SpriteTag.TOMATO10)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.TOMATO10)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO1)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO2)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO3)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO4)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO5)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO6)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO8)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO9)
+							|| GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.TOMATO10)) {
+
+					}
+					if (a.getUserData().equals(SpriteTag.BULL) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.BULL)
+							&& GameUtils.isBodyTomato(a)) {
+						String tomatoType = "";
+						if (GameUtils.isBodyTomato(a)) {
+							// tomatoType=GameUtils.extractTomatoType(a);
+							removeBody(a);
+						} else if (GameUtils.isBodyTomato(b)) {
+							removeBody(b);
+						}
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.CORRECT)) {
+						rightPathScore++;
+						textRightPathScore.setText(": " + rightPathScore);
+						if (a.getUserData().equals(SpriteTag.CORRECT)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
+							removeBody(b);
 						}
 
 					}
-					//
-					// if (a.getUserData().equals("player")
-					// && b.getUserData().equals("finishline")
-					// || a.getUserData().equals("finishline")
-					// && b.getUserData().equals("player")) {
-					//
-					// // call level passed
-					// showLevelCleared();
-					//
-					// }
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.CORRECT)) {
+
+						if (a.getUserData().equals(SpriteTag.CORRECT)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
+							removeBody(b);
+						}
+
+					}
+					if(GameUtils.isCollisionBetween(a, b,SpriteTag.PLAYER, SpriteTag.END)){
+						//show success screen 
+						showLevelCleared();
+					}
 
 				}
+				//
+				// if (a.getUserData().equals("player")
+				// && b.getUserData().equals("finishline")
+				// || a.getUserData().equals("finishline")
+				// && b.getUserData().equals("player")) {
+				//
+				// // call level passed
+				// showLevelCleared();
+				//
+				// }
 
 			}
 
@@ -512,12 +662,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 
 	private void removeBody(final Body body) {
 
-		for (int i = 0; i < vegetables.size(); i++) {
-			if (vegetables.get(i).getUserData() == body) { // if the coin is the
-															// coin
+		for (int i = 0; i < tomatos.size(); i++) {
+			if (tomatos.get(i).getUserData() == body) { // if the coin is the
+														// coin
 				// the player touchs,
 				// then delete it
-				detachChild(vegetables.get(i));
+				detachChild(tomatos.get(i));
 
 			}
 		}
@@ -609,41 +759,37 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		// levelFailed.setOnMenuItemClickListener(this);
 	}
 
-	//
-	// private void createLevelClearedScene() {
-	// levelCleared = new MenuScene(camera);
-	// levelCleared.setPosition(0, 0);
-	//
-	// final IMenuItem restartButton = new ScaleMenuItemDecorator(
-	// new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom),
-	// 1.2f, 1);
-	// final IMenuItem quitButton = new ScaleMenuItemDecorator(
-	// new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom),
-	// 1.2f, 1);
-	//
-	// Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
-	//
-	// levelCleared.addMenuItem(restartButton);
-	// levelCleared.addMenuItem(quitButton);
-	//
-	// levelCleared.buildAnimations();
-	//
-	// levelCleared.setOnMenuItemClickListener(this);
-	// }
-	//
+	private void createLevelClearedScene() {
+		levelCleared = new MenuScene(camera);
+		levelCleared.setPosition(0, 0);
+
+//		final IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.2f,
+//				1);
+//		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
+
+		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
+		
+		levelCleared.attachChild(bg);
+		levelCleared.setBackgroundEnabled(false);
+//		levelCleared.addMenuItem(restartButton);
+//		levelCleared.addMenuItem(quitButton);
+
+//		levelCleared.buildAnimations();
+//
+//		levelCleared.setOnMenuItemClickListener(this);
+	}
+
 	private void showLevelFailed() {
 
 		this.setChildScene(levelFailed, false, true, true);
 	}
 
-	//
-	// private void showLevelCleared() {
-	// this.setChildScene(levelCleared, false, true, true);
-	// }
+	private void showLevelCleared() {
+		this.setChildScene(levelCleared, false, true, true);
+	}
 
 	@Override
-	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-			float pMenuItemLocalX, float pMenuItemLocalY) {
+	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
 
 		switch (pMenuItem.getID()) {
 
@@ -695,59 +841,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,
 		this.dispose();
 
 		SceneManager.getInstance().createGameScene();
-	}
-
-	private void clearVegetables() {
-		for (int i = 0; i < vegetables.size(); i++) {
-			if (!vegetables.get(i).hasParent()) {
-				vegetables.remove(i);
-			}
-		}
-	}
-
-	private void addTomatoObject() {
-
-		if (vegetables.size() < 2) {
-			Tomato tomato = new Tomato(700, 50, 50, 50, vbom, camera,
-					mPhysicsWorld) {
-
-				@Override
-				public void onDie() {
-					this.setVisible(false);
-					getBody().setActive(false);
-					this.setIgnoreUpdate(true);
-					removeBody((Body) this.getUserData());
-
-					// for (int i = 0; i < vegetables.size(); i++) {
-					// if (vegetables.get(i).getUserData() ==
-					// this.getUserData()) { // if the coin is the
-					// // coin
-					// // the player touchs,
-					// // then delete it
-					// detachChild(vegetables.get(i));
-					// vegetables.remove(i);
-					// }
-					// }
-				}
-			};
-
-			FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0,
-					0f);
-			Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomato,
-					BodyType.DynamicBody, tomatoFixtureDef);
-			body.setUserData("tomato");
-
-			// animate the player
-			vegetables.add(tomato);
-			tomato.setUserData(tomato.getBody());
-			tomato.setRunning();
-			for (int i = 0; i < vegetables.size(); i++) {
-				if (!vegetables.get(i).hasParent()) {
-					this.attachChild(vegetables.get(i));
-				}
-			}
-		}
-
 	}
 
 }
