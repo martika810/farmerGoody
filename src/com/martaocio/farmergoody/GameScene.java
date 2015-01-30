@@ -11,7 +11,9 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.primitive.Polygon;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
@@ -48,7 +50,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.martaocio.farmergoody.SceneManager.SceneType;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMenuItemClickListener {
+public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMenuItemClickListener {
 
 	private final int RESTART = 0;
 	private final int QUIT = 1;
@@ -63,9 +65,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private LinkedList<Sprite> tomatos;
 
 	public Text textScore;
-	public Text textRightPathScore;
+	
 	public Sprite tomatoScoreIcon;
 	public Sprite rightPathScoreIcon;
+	public Sprite upButton; 
+	public Sprite leftButton;
+	public Sprite rightButton;
+	
 
 	private Player player;
 	private Bull bull;
@@ -76,6 +82,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	private int score = 0;
 	private int rightPathScore = 0;
+	private int wrongPathScore = 0;
 
 	// create 2 new menuScene
 	private MenuScene levelFailed, levelCleared;
@@ -88,7 +95,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createLevelFailedScene();
 
 		// listen when someone touch the screen
-		this.setOnSceneTouchListener(this);
+	//	this.setOnSceneTouchListener(this);
+		
 
 	}
 
@@ -116,8 +124,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		tomatoScoreIcon = new Sprite(40, 10, 35, 35, ResourceManager.getInstance().tomatoIconTexture, vbom);
 		textScore = new Text(80, 10, this.resourceManager.font, ": 0   ", vbom);
-		rightPathScoreIcon = new Sprite(40, 50, 35, 35, ResourceManager.getInstance().correctIconTexture, vbom);
-		textRightPathScore = new Text(80, 50, this.resourceManager.font, ": 0   ", vbom);
+		
+		createButtons();
+		
+		
 
 		// Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50,
 		// ResourceManager.getInstance().tomato2Texture,
@@ -167,7 +177,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					Body correctBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, correctFixtureDef);
 					correctBody.setUserData(SpriteTag.CORRECT);
 
-				} else if (object.getName().equals(SpriteTag.TOMATO1)) {
+				}else if (object.getName().equals(SpriteTag.WRONG)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef wrongFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body wrongBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, wrongFixtureDef);
+					wrongBody.setUserData(SpriteTag.WRONG);
+
+				}
+				
+				else if (object.getName().equals(SpriteTag.TOMATO1)) {
 					Sprite tomatoType1 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato1Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
@@ -328,15 +346,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// for (int i = 0; i < vegetables.size(); i++) {
 		// this.attachChild(vegetables.get(i));
 		// }
-
+		
 		// that heads up the display
 		HUD hud = new HUD();
 		hud.attachChild(textScore);
-		hud.attachChild(textRightPathScore);
-		hud.attachChild(rightPathScoreIcon);
 		hud.attachChild(tomatoScoreIcon);
+		
+		
+		hud.attachChild(rightButton);
+		hud.attachChild(leftButton);
+		hud.attachChild(upButton);
+		
+		hud.registerTouchArea(upButton);
+		hud.registerTouchArea(rightButton);
+		hud.registerTouchArea(leftButton);
+		
+		setOnSceneTouchListener(this);
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 
 		this.camera.setHUD(hud);
+		
 
 		// this will be trigger when the scene is updated
 		// TimerHandler updateModifier = new TimerHandler(5f, true,
@@ -353,6 +383,49 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// this.registerUpdateHandler(updateModifier);
 	}
 
+	private void createButtons() {
+		upButton= new Sprite(360 ,400 , 60, 60,ResourceManager.getInstance().upArrowTexture,vbom){
+			@Override
+			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
+				 if (pSceneTouchEvent.isActionUp())
+			        {
+			            player.jump();
+			        }
+				return true;
+			};
+		};
+		
+		
+		leftButton = new Sprite(290,400, 60, 60,ResourceManager.getInstance().leftArrowTexture,vbom)
+		{
+			@Override
+			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
+				 if (pSceneTouchEvent.isActionUp())
+			        {
+			            player.runSlower();
+			        }
+				return true;
+			};
+		};
+		rightButton = new Sprite(430,400, 60, 60,ResourceManager.getInstance().rightArrowTexture,vbom)
+		{
+			@Override
+			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
+				 if (pSceneTouchEvent.isActionUp())
+			        {
+			            player.runFaster(camera);
+			        }
+				return true;
+			};
+		};
+
+		
+		
+		
+		
+		
+	}
+
 	private void createPhysicsWorld() {
 
 		this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
@@ -361,39 +434,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		mPhysicsWorld.setContactListener(contactListener());
 	}
 
-	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+//	@Override
+//	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		// if the action is down , the player should jump
-		if (pSceneTouchEvent.isActionDown()) {
-			resourceManager.jumpSound.play();
-			player.jump();
-			// open mouth
-			// player.eat();
-			//
-			// if (keepRunningModifier != null) {
-			// keepRunningModifier.reset();
-			// }
-			// keepRunningModifier = new DelayModifier(0.5f);
-			//
-			// keepRunningModifier
-			// .addModifierListener(new IModifierListener<IEntity>() {
-			//
-			// @Override
-			// public void onModifierStarted(
-			// IModifier<IEntity> pModifier, IEntity pItem) {
-			//
-			// }
-			//
-			// @Override
-			// public void onModifierFinished(
-			// IModifier<IEntity> pModifier, IEntity pItem) {
-			// player.setRunning();
-			//
-			// }
-			//
-			// });
-			// player.registerEntityModifier(keepRunningModifier);
-		}
+//		if (pSceneTouchEvent.isActionDown()) {
+//			resourceManager.jumpSound.play();
+//			player.jump();
+//		
+//		}
 
 		// if(timerPlayer==null){
 		// timerPlayer=new TimerHandler(300f,false,new ITimerCallback(){
@@ -411,8 +459,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// }
 		// player.registerUpdateHandler(timerPlayer);
 
-		return false;
-	}
+//		return false;
+//	}
 
 	private ContactListener contactListener() {
 		ContactListener contactListener = new ContactListener() {
@@ -600,10 +648,22 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.CORRECT)) {
 						rightPathScore++;
-						textRightPathScore.setText(": " + rightPathScore);
+						addRewardIcon(true);
+						//textRightPathScore.setText(": " + rightPathScore);
 						if (a.getUserData().equals(SpriteTag.CORRECT)) {
 							removeBody(a);
 						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
+							removeBody(b);
+						}
+
+					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.WRONG)) {
+						wrongPathScore++;
+						addRewardIcon(false);
+						//textRightPathScore.setText(": " + rightPathScore);
+						if (a.getUserData().equals(SpriteTag.WRONG)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
 							removeBody(b);
 						}
 
@@ -617,22 +677,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						}
 
 					}
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.WRONG)) {
+
+						if (a.getUserData().equals(SpriteTag.WRONG)) {
+							removeBody(a);
+						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
+							removeBody(b);
+						}
+
+					}
 					if(GameUtils.isCollisionBetween(a, b,SpriteTag.PLAYER, SpriteTag.END)){
 						//show success screen 
 						showLevelCleared();
 					}
 
 				}
-				//
-				// if (a.getUserData().equals("player")
-				// && b.getUserData().equals("finishline")
-				// || a.getUserData().equals("finishline")
-				// && b.getUserData().equals("player")) {
-				//
-				// // call level passed
-				// showLevelCleared();
-				//
-				// }
 
 			}
 
@@ -807,6 +866,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		return false;
 	}
+	private void addRewardIcon(boolean wasGoodPath){
+		Sprite icon=null;
+		int totalIconAlreadyAdded=rightPathScore+wrongPathScore;
+		int rowToPlaceIcon=totalIconAlreadyAdded % 10 + 1;
+		float positionX=760-35*totalIconAlreadyAdded;
+		if(wasGoodPath){
+			icon=new Sprite(positionX,10,35,35,ResourceManager.getInstance().correctIconTexture,vbom);
+			
+		}else{
+			icon=new Sprite(positionX,10,35,35,ResourceManager.getInstance().wrongIconTexture,vbom);
+		}
+		this.camera.getHUD().attachChild(icon);
+	}
 
 	private void quit() {
 		// do some clean up
@@ -842,5 +914,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		SceneManager.getInstance().createGameScene();
 	}
+
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
 
 }

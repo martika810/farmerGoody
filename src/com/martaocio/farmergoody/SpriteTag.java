@@ -16,6 +16,7 @@ public class SpriteTag {
 	public static final String GROUND = "ground";
 	public static final String FENCE = "fence";
 	public static final String CORRECT = "correct";
+	public static final String WRONG = "wrong";
 	public static final String END = "end";
 
 }

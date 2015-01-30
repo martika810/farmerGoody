@@ -58,7 +58,11 @@ public class ResourceManager {
 	public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
 	
-	public ITextureRegion correctIconTexture;
+	public ITextureRegion correctIconTexture,wrongIconTexture;
+	
+	public ITextureRegion upArrowTexture;
+	public ITextureRegion rightArrowTexture;
+	public ITextureRegion leftArrowTexture;
 	
 	public ITextureRegion tomatoIconTexture;
 	public ITextureRegion tomato1Texture;
@@ -104,6 +108,11 @@ public class ResourceManager {
 		this.tomatoTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato.png", 5, 1);
 		
 		this.correctIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "correct.png");
+		this.wrongIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "error.png");
+		
+		this.upArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_up.png");
+		this.rightArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_right.png");
+		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_left.png");
 		
 		this.tomatoIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_icon.png");
 		this.tomato1Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point1.png");

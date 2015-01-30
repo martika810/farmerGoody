@@ -10,20 +10,14 @@
  </layer>
  <layer name="ground" width="550" height="15">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup name="Object Layer 2" width="0" height="0">
   <object name="ground" x="0" y="406" width="31999" height="73"/>
   <object name="fence" x="899" y="332" width="22" height="70"/>
   <object name="fence" x="1733" y="337" width="23" height="65"/>
-  <object name="fence" x="2691" y="339" width="24" height="64"/>
   <object name="fence" x="4098" y="342" width="25" height="60"/>
-  <object name="fence" x="4707" y="342" width="25" height="64"/>
-  <object name="fence" x="5602" y="345" width="25" height="59"/>
-  <object name="fence" x="6402" y="341" width="27" height="63"/>
-  <object name="fence" x="6657" y="342" width="27" height="63"/>
-  <object name="fence" x="7586" y="342" width="26" height="62"/>
   <object name="fence" x="7840" y="343" width="29" height="60"/>
   <object name="fence" x="8993" y="340" width="27" height="64"/>
   <object name="fence" x="10111" y="344" width="31" height="59"/>
@@ -120,5 +114,28 @@
   <object name="t5" x="9589" y="160" width="34" height="31"/>
   <object name="t2" x="9647" y="161" width="36" height="30"/>
   <object name="end" x="17563" y="249" width="14" height="149"/>
+  <object name="fence" x="2818" y="334" width="26" height="70"/>
+  <object name="fence" x="4865" y="341" width="30" height="64"/>
+  <object name="fence" x="5698" y="341" width="21" height="62"/>
+  <object name="wrong" x="1329" y="381" width="183" height="11"/>
+  <object name="wrong" x="2149" y="186" width="143" height="13"/>
+  <object name="wrong" x="3368" y="386" width="240" height="8"/>
+  <object name="wrong" x="4400" y="187" width="92" height="14"/>
+  <object name="wrong" x="5219" y="189" width="186" height="17"/>
+  <object name="wrong" x="6014" y="200" width="168" height="8"/>
+  <object name="wrong" x="6872" y="198" width="190" height="11"/>
+  <object name="wrong" x="8264" y="387" width="175" height="12"/>
+  <object name="wrong" x="9537" y="197" width="146" height="9"/>
+  <object name="wrong" x="10854" y="393" width="81" height="10"/>
+  <object name="fence" x="6530" y="341" width="28" height="64"/>
+  <object name="fence" x="7459" y="340" width="27" height="63"/>
+  <object name="ground" x="11562" y="214" width="274" height="25"/>
+  <object name="t5" x="11635" y="147" width="34" height="32"/>
+  <object name="t3" x="11693" y="147" width="33" height="32"/>
+  <object name="t5" x="11750" y="146" width="35" height="33"/>
+  <object name="t6" x="11634" y="342" width="36" height="30"/>
+  <object name="t6" x="11695" y="342" width="35" height="31"/>
+  <object name="right" x="11634" y="183" width="151" height="17"/>
+  <object name="wrong" x="11633" y="377" width="97" height="14"/>
  </objectgroup>
 </map>

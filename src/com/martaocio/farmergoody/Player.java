@@ -112,5 +112,22 @@ public abstract class Player extends AnimatedSprite {
 		}
 	}
 	
+	public void runFaster(BoundCamera camera){
+		//float currentVelocity=body.getLinearVelocity().x;
+		Vector2 velocity=new Vector2(5f,body.getLinearVelocity().y); //set the height of the jump(10 metres off the ground)
+		
+		body.setTransform(body.getPosition().x+1f,body.getPosition().y, 0);
+		camera.offsetCenter(camera.getCenterX()+1, camera.getCenterY());
+		
+		
+	}
+	
+	public void runSlower(){
+		//float currentVelocity=body.getLinearVelocity().x;
+		body.setTransform(body.getPosition().x-1f,body.getPosition().y, 0);
+		
+		
+	}
+	
 
 }
