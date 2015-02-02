@@ -47,9 +47,9 @@ public class ResourceManager {
 	
 	private BuildableBitmapTextureAtlas levelFailedAtlas,levelPassedAtlas;
 	
-	public ITextureRegion playButton,mainMenuBackground;
+	public ITextureRegion playMenuButton,continueMenuButton,mainMenuBackground;
 	//public ITextureRegion restartButton,quitButton,failedBG,passedBG;
-	public ITextureRegion failedBG,passedBG;
+	public ITextureRegion restartButton,quitButton,playButton,pauseButton,failedBG,passedBG;
 	
 	//Create coin texture
 //	public ITextureRegion coinTexture; 
@@ -110,9 +110,9 @@ public class ResourceManager {
 		this.correctIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "correct.png");
 		this.wrongIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "error.png");
 		
-		this.upArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_up.png");
-		this.rightArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_right.png");
-		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "arrow_left.png");
+		this.upArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "upbtn.png");
+		this.rightArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "rightbtn.png");
+		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "leftbtn.png");
 		
 		this.tomatoIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_icon.png");
 		this.tomato1Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point1.png");
@@ -129,9 +129,11 @@ public class ResourceManager {
 		this.failedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "level_failed.png");
 		this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "level_passed.png");
 		
-	//	this.restartButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "restart.png");
+		this.restartButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "restartbtn.png");
 		
-	//	this.quitButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "quit.png");
+		this.quitButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "homebtn.png");
+		this.playButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "playbtn.png");
+		this.pauseButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "pausebtn.png");
 		
 		try{
 			this.gameTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,BitmapTextureAtlas>(0, 0,1));
@@ -178,7 +180,8 @@ public class ResourceManager {
 		
 		
 		//add the play button
-		this.playButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas,activity.getAssets(),"play_btn.png");
+		this.playMenuButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas,activity.getAssets(),"playbtn.png");
+		this.continueMenuButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas,activity.getAssets(),"restartbtn.png");
 		
 		try{
 			this.mainMenuTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource,BitmapTextureAtlas>(0, 0,1));

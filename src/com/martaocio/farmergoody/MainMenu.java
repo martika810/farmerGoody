@@ -17,6 +17,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener {
 	
 	private MenuScene menuChildScene;//menu that can have buttons
 	private final int PLAY = 0;//to recognize when the play buttons is gonna be played
+	private final int CONTINUE = 1;
 
 	@Override
 	public void createScene() {
@@ -61,12 +62,18 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener {
 		
 		//create the menu buttons
 		// when the button is clicked , it is scaled it to 1.2
-		final IMenuItem playMenuItem=new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY,resourceManager.playButton,vbom),1.2f,1);
+		final IMenuItem playMenuItem=new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY,resourceManager.playMenuButton,vbom),1.7f,1.5f);
+		
+		final IMenuItem continueMenuItem=new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE,resourceManager.continueMenuButton,vbom),1.2f,1);
 		
 		this.menuChildScene.addMenuItem(playMenuItem);
+		this.menuChildScene.addMenuItem(continueMenuItem);
 		
 		this.menuChildScene.buildAnimations();
 		this.menuChildScene.setBackgroundEnabled(false);
+		
+		playMenuItem.setPosition(360,260);
+		continueMenuItem.setPosition(650,370);
 		this.menuChildScene.setOnMenuItemClickListener(this);
 		
 		//attach the play menu to the scene
@@ -80,6 +87,10 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener {
 			
 		case PLAY:
 			//load game
+			UserState.getInstance().clear();
+			SceneManager.getInstance().createGameScene();
+			return true;
+		case CONTINUE:			
 			SceneManager.getInstance().createGameScene();
 			return true;
 		default:

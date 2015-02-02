@@ -50,10 +50,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.martaocio.farmergoody.SceneManager.SceneType;
 
-public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMenuItemClickListener {
+public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMenuItemClickListener {
 
 	private final int RESTART = 0;
 	private final int QUIT = 1;
+	private final int KEEP_PLAYING = 2;
+	private final int TAG_REWARD_ICON=999;
+	private final int TAG_TOMAT_ICON=998;
+	private final int TAG_SCORE_TEXT=997;
 
 	private TMXTiledMap mTMXTiledMap;
 	private TMXLayer tmxLayer;
@@ -65,13 +69,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 	private LinkedList<Sprite> tomatos;
 
 	public Text textScore;
-	
+
 	public Sprite tomatoScoreIcon;
 	public Sprite rightPathScoreIcon;
-	public Sprite upButton; 
+	public Sprite upButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
-	
 
 	private Player player;
 	private Bull bull;
@@ -79,6 +82,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 	private TimerHandler timerPlayer = null;
 	private DelayModifier keepRunningModifier = null;
 	private DelayModifier deleteAfterFadeModifier = null;
+	private final static int MAX_NUMBER_ERROR=5;
 
 	private int score = 0;
 	private int rightPathScore = 0;
@@ -90,13 +94,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 	@Override
 	public void createScene() {
 		createPhysicsWorld();
-		createLevel();
+		createLevel(UserState.getInstance().getCurrentLevel());
 		createLevelClearedScene();
 		createLevelFailedScene();
 
 		// listen when someone touch the screen
-	//	this.setOnSceneTouchListener(this);
-		
+		// this.setOnSceneTouchListener(this);
 
 	}
 
@@ -118,16 +121,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 
 	}
 
-	private void createLevel() {
+	private void createLevel(int levelNumber) {
 
 		// create the tex for the score
 
 		tomatoScoreIcon = new Sprite(40, 10, 35, 35, ResourceManager.getInstance().tomatoIconTexture, vbom);
 		textScore = new Text(80, 10, this.resourceManager.font, ": 0   ", vbom);
-		
+		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
+		textScore.setTag(TAG_SCORE_TEXT);
+
 		createButtons();
-		
-		
 
 		// Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50,
 		// ResourceManager.getInstance().tomato2Texture,
@@ -140,7 +143,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 			final TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
 
-			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/level_flat.tmx");
+			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(levelNumber));
 		} catch (TMXLoadException e) {
 
 			Debug.e(e);
@@ -177,14 +180,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 					Body correctBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, correctFixtureDef);
 					correctBody.setUserData(SpriteTag.CORRECT);
 
-				}else if (object.getName().equals(SpriteTag.WRONG)) {
+				} else if (object.getName().equals(SpriteTag.WRONG)) {
 					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
 					FixtureDef wrongFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body wrongBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, wrongFixtureDef);
 					wrongBody.setUserData(SpriteTag.WRONG);
 
 				}
-				
+
 				else if (object.getName().equals(SpriteTag.TOMATO1)) {
 					Sprite tomatoType1 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato1Texture,
 							vbom);
@@ -346,27 +349,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		// for (int i = 0; i < vegetables.size(); i++) {
 		// this.attachChild(vegetables.get(i));
 		// }
-		
+
 		// that heads up the display
 		HUD hud = new HUD();
 		hud.attachChild(textScore);
 		hud.attachChild(tomatoScoreIcon);
-		
-		
+
 		hud.attachChild(rightButton);
 		hud.attachChild(leftButton);
 		hud.attachChild(upButton);
-		
+
 		hud.registerTouchArea(upButton);
 		hud.registerTouchArea(rightButton);
 		hud.registerTouchArea(leftButton);
-		
+
 		setOnSceneTouchListener(this);
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 
 		this.camera.setHUD(hud);
-		
 
 		// this will be trigger when the scene is updated
 		// TimerHandler updateModifier = new TimerHandler(5f, true,
@@ -384,46 +385,35 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 	}
 
 	private void createButtons() {
-		upButton= new Sprite(360 ,400 , 60, 60,ResourceManager.getInstance().upArrowTexture,vbom){
+		upButton = new Sprite(360, 400, 80, 64, ResourceManager.getInstance().upArrowTexture, vbom) {
 			@Override
-			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
-				 if (pSceneTouchEvent.isActionUp())
-			        {
-			            player.jump();
-			        }
-				return true;
-			};
-		};
-		
-		
-		leftButton = new Sprite(290,400, 60, 60,ResourceManager.getInstance().leftArrowTexture,vbom)
-		{
-			@Override
-			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
-				 if (pSceneTouchEvent.isActionUp())
-			        {
-			            player.runSlower();
-			        }
-				return true;
-			};
-		};
-		rightButton = new Sprite(430,400, 60, 60,ResourceManager.getInstance().rightArrowTexture,vbom)
-		{
-			@Override
-			 public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y)  {
-				 if (pSceneTouchEvent.isActionUp())
-			        {
-			            player.runFaster(camera);
-			        }
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionUp()) {
+					player.jump();
+				}
 				return true;
 			};
 		};
 
-		
-		
-		
-		
-		
+		leftButton = new Sprite(290, 400, 80, 64, ResourceManager.getInstance().leftArrowTexture, vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionUp()) {
+					player.runSlower();
+				}
+				return true;
+			};
+		};
+		rightButton = new Sprite(430, 400, 80, 64, ResourceManager.getInstance().rightArrowTexture, vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionUp()) {
+					player.runFaster(camera);
+				}
+				return true;
+			};
+		};
+
 	}
 
 	private void createPhysicsWorld() {
@@ -434,33 +424,34 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		mPhysicsWorld.setContactListener(contactListener());
 	}
 
-//	@Override
-//	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// if the action is down , the player should jump
-//		if (pSceneTouchEvent.isActionDown()) {
-//			resourceManager.jumpSound.play();
-//			player.jump();
-//		
-//		}
+	// @Override
+	// public boolean onSceneTouchEvent(Scene pScene, TouchEvent
+	// pSceneTouchEvent) {
+	// if the action is down , the player should jump
+	// if (pSceneTouchEvent.isActionDown()) {
+	// resourceManager.jumpSound.play();
+	// player.jump();
+	//
+	// }
 
-		// if(timerPlayer==null){
-		// timerPlayer=new TimerHandler(300f,false,new ITimerCallback(){
-		//
-		// @Override
-		// public void onTimePassed(final TimerHandler pTimerHandler){
-		// player.setRunning();
-		//
-		// }
-		// });
-		// }else{
-		//
-		// timerPlayer.setTimerSeconds(300f);
-		//
-		// }
-		// player.registerUpdateHandler(timerPlayer);
+	// if(timerPlayer==null){
+	// timerPlayer=new TimerHandler(300f,false,new ITimerCallback(){
+	//
+	// @Override
+	// public void onTimePassed(final TimerHandler pTimerHandler){
+	// player.setRunning();
+	//
+	// }
+	// });
+	// }else{
+	//
+	// timerPlayer.setTimerSeconds(300f);
+	//
+	// }
+	// player.registerUpdateHandler(timerPlayer);
 
-//		return false;
-//	}
+	// return false;
+	// }
 
 	private ContactListener contactListener() {
 		ContactListener contactListener = new ContactListener() {
@@ -649,7 +640,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.CORRECT)) {
 						rightPathScore++;
 						addRewardIcon(true);
-						//textRightPathScore.setText(": " + rightPathScore);
+						// textRightPathScore.setText(": " + rightPathScore);
 						if (a.getUserData().equals(SpriteTag.CORRECT)) {
 							removeBody(a);
 						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
@@ -660,7 +651,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.WRONG)) {
 						wrongPathScore++;
 						addRewardIcon(false);
-						//textRightPathScore.setText(": " + rightPathScore);
+						// textRightPathScore.setText(": " + rightPathScore);
 						if (a.getUserData().equals(SpriteTag.WRONG)) {
 							removeBody(a);
 						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
@@ -686,9 +677,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 						}
 
 					}
-					if(GameUtils.isCollisionBetween(a, b,SpriteTag.PLAYER, SpriteTag.END)){
-						//show success screen 
-						showLevelCleared();
+					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
+						// show success screen
+						UserState.getInstance().setCurrentLevel(UserState.getInstance().getCurrentLevel() + 1);
+						UserState.getInstance().saveToFile();
+						if(wrongPathScore<MAX_NUMBER_ERROR){
+							showLevelCleared();
+						}else{
+							showLevelFailed();
+						}
+						
 					}
 
 				}
@@ -796,13 +794,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		levelFailed = new MenuScene(camera);
 		levelFailed.setPosition(0, 0);
 		//
-		// // Add menu item
-		// final IMenuItem restartButton = new ScaleMenuItemDecorator(
-		// new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom),
-		// 1.2f, 1);
-		// final IMenuItem quitButton = new ScaleMenuItemDecorator(
-		// new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom),
-		// 1.2f, 1);
+		// Add menu item
+		final IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.3f,
+				1.1f);
+		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.3f, 1.1f);
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.failedBG, vbom);
@@ -811,40 +806,52 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		levelFailed.setBackgroundEnabled(false);// to see our scena throught the
 		// background
 
-		// levelFailed.addMenuItem(restartButton);
-		// levelFailed.addMenuItem(quitButton);
-		//
-		// levelFailed.buildAnimations();
-		// levelFailed.setOnMenuItemClickListener(this);
+		levelFailed.addMenuItem(restartButton);
+		levelFailed.addMenuItem(quitButton);
+
+		restartButton.setPosition(400, 350);
+		quitButton.setPosition(400, 420);
+
+		levelFailed.buildAnimations();
+		levelFailed.setOnMenuItemClickListener(this);
 	}
 
 	private void createLevelClearedScene() {
 		levelCleared = new MenuScene(camera);
 		levelCleared.setPosition(0, 0);
 
-//		final IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.2f,
-//				1);
-//		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
+		final IMenuItem playButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.playButton, vbom), 1.3f,
+				1.1f);
+		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
 
 		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
-		
+
 		levelCleared.attachChild(bg);
 		levelCleared.setBackgroundEnabled(false);
-//		levelCleared.addMenuItem(restartButton);
-//		levelCleared.addMenuItem(quitButton);
+		
+		levelCleared.addMenuItem(playButton);
+		levelCleared.addMenuItem(quitButton);
 
-//		levelCleared.buildAnimations();
-//
-//		levelCleared.setOnMenuItemClickListener(this);
+		levelCleared.buildAnimations();
+		//
+		levelCleared.setOnMenuItemClickListener(this);
 	}
 
 	private void showLevelFailed() {
 
+		this.hideControlButtons();
 		this.setChildScene(levelFailed, false, true, true);
 	}
 
 	private void showLevelCleared() {
+		this.hideControlButtons();
 		this.setChildScene(levelCleared, false, true, true);
+	}
+
+	private void hideControlButtons() {
+		this.leftButton.setVisible(false);
+		this.rightButton.setVisible(false);
+		this.upButton.setVisible(false);
 	}
 
 	@Override
@@ -862,22 +869,30 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 			// go to main menu
 			quit();
 			break;
+			
+		case KEEP_PLAYING:
+			restartLevel();
+			break;
+			
 		}
 
 		return false;
 	}
-	private void addRewardIcon(boolean wasGoodPath){
-		Sprite icon=null;
-		int totalIconAlreadyAdded=rightPathScore+wrongPathScore;
-		int rowToPlaceIcon=totalIconAlreadyAdded % 10 + 1;
-		float positionX=760-35*totalIconAlreadyAdded;
-		if(wasGoodPath){
-			icon=new Sprite(positionX,10,35,35,ResourceManager.getInstance().correctIconTexture,vbom);
-			
-		}else{
-			icon=new Sprite(positionX,10,35,35,ResourceManager.getInstance().wrongIconTexture,vbom);
+
+	private void addRewardIcon(boolean wasGoodPath) {
+		Sprite icon = null;
+		int totalIconAlreadyAdded = rightPathScore + wrongPathScore;
+		int rowToPlaceIcon = totalIconAlreadyAdded % 10 + 1;
+		float positionX = 760 - 35 * totalIconAlreadyAdded;
+		if (wasGoodPath) {
+			icon = new Sprite(positionX, 10, 35, 35, ResourceManager.getInstance().correctIconTexture, vbom);
+
+		} else {
+			icon = new Sprite(positionX, 10, 35, 35, ResourceManager.getInstance().wrongIconTexture, vbom);
 		}
+		icon.setTag(TAG_REWARD_ICON);
 		this.camera.getHUD().attachChild(icon);
+		
 	}
 
 	private void quit() {
@@ -890,14 +905,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		this.clearTouchAreas();
 		this.clearEntityModifiers();
 		this.clearUpdateHandlers();
+		this.camera.getHUD().clearEntityModifiers();
+		this.camera.getHUD().clearUpdateHandlers();
+		this.camera.getHUD().detachSelf();
 		this.dispose();
 
 		// reset the camera
-		resourceManager.camera.setCenter(0, 0);
-
+	//	resourceManager.camera.setCenter(0, 0);
+		int widthTiledBackgroung=this.mTMXTiledMap.getTileColumns()*this.mTMXTiledMap.getTileHeight();
+		int heightTiledBackgroung=this.mTMXTiledMap.getTileRows()*this.mTMXTiledMap.getTileWidth();
+		//resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2-widthTiledBackgroung/2,resourceManager.camera.getHeight() / 2-heightTiledBackgroung/2);
+		//resourceManager.camera.setBoundsEnabled(false);
+		player.setX(0);
+		player.setY(0);
+		resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2, resourceManager.camera.getHeight() / 2);
+		
+		
 		SceneManager.getInstance().setMainMenu();
 
 	}
+	
+	
 
 	private void restartLevel() {
 
@@ -920,7 +948,5 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener,IOnMen
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 
 }

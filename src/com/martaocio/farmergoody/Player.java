@@ -59,9 +59,10 @@ public abstract class Player extends AnimatedSprite {
 					camera.setChaseEntity(null);
 				}
 				
+				float velocityX=2+UserState.getInstance().getCurrentLevel()%4;
 				// the velocyty makes the player moves  in certain direction
 				//we leave the y the same bcos we just want to move it across
-				body.setLinearVelocity(new Vector2(3f,body.getLinearVelocity().y));
+				body.setLinearVelocity(new Vector2(velocityX,body.getLinearVelocity().y));
 			}
 		});
 		
@@ -84,7 +85,7 @@ public abstract class Player extends AnimatedSprite {
 		//first stop the player from running
 		if(canJump){
 			
-			//ResourceManager.getInstance().jumpSound.play();
+			ResourceManager.getInstance().jumpSound.play();
 			//comment this if the walking animation is gonna keep running while jumping
 			this.stopAnimation();
 			this.setCurrentTileIndex(5);//set the application to the jump picture

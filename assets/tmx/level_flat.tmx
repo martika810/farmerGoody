@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="550" height="15" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="farmer_tileset" tilewidth="32" tileheight="32">
-  <image source="gfx/farmer_tileset.png" width="192" height="832"/>
+  <image source="gfx/farmer_tileset.png" width="192" height="1032"/>
  </tileset>
  <layer name="sky" width="550" height="15">
   <data encoding="base64" compression="zlib">
@@ -10,7 +10,7 @@
  </layer>
  <layer name="ground" width="550" height="15">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup name="Object Layer 2" width="0" height="0">
@@ -113,7 +113,6 @@
   <object name="t8" x="9535" y="159" width="33" height="32"/>
   <object name="t5" x="9589" y="160" width="34" height="31"/>
   <object name="t2" x="9647" y="161" width="36" height="30"/>
-  <object name="end" x="17563" y="249" width="14" height="149"/>
   <object name="fence" x="2818" y="334" width="26" height="70"/>
   <object name="fence" x="4865" y="341" width="30" height="64"/>
   <object name="fence" x="5698" y="341" width="21" height="62"/>
@@ -135,7 +134,38 @@
   <object name="t5" x="11750" y="146" width="35" height="33"/>
   <object name="t6" x="11634" y="342" width="36" height="30"/>
   <object name="t6" x="11695" y="342" width="35" height="31"/>
-  <object name="right" x="11634" y="183" width="151" height="17"/>
+  <object name="correct" x="11634" y="183" width="151" height="17"/>
   <object name="wrong" x="11633" y="377" width="97" height="14"/>
+  <object name="ground" x="12934" y="209" width="180" height="27"/>
+  <object name="t2" x="12973" y="154" width="34" height="31"/>
+  <object name="t6" x="13018" y="154" width="35" height="32"/>
+  <object name="t4" x="12970" y="342" width="34" height="29"/>
+  <object name="t3" x="13021" y="342" width="34" height="30"/>
+  <object name="correct" x="12970" y="189" width="88" height="16"/>
+  <object name="wrong" x="12969" y="377" width="91" height="13"/>
+  <object name="fence" x="13472" y="337" width="27" height="66"/>
+  <object name="ground" x="14469" y="215" width="175" height="20"/>
+  <object name="ground" x="15013" y="210" width="135" height="25"/>
+  <object name="t10" x="14517" y="347" width="38" height="32"/>
+  <object name="t1" x="14574" y="346" width="33" height="33"/>
+  <object name="t6" x="14515" y="159" width="30" height="31"/>
+  <object name="t6" x="14570" y="160" width="30" height="30"/>
+  <object name="correct" x="14498" y="195" width="123" height="14"/>
+  <object name="wrong" x="14506" y="381" width="117" height="16"/>
+  <object name="t6" x="15054" y="155" width="29" height="37"/>
+  <object name="t2" x="15104" y="156" width="33" height="37"/>
+  <object name="t5" x="15043" y="342" width="32" height="34"/>
+  <object name="t4" x="15089" y="341" width="33" height="37"/>
+  <object name="wrong" x="15036" y="191" width="112" height="16"/>
+  <object name="correct" x="15037" y="380" width="95" height="15"/>
+  <object name="ground" x="15794" y="214" width="192" height="25"/>
+  <object name="t6" x="15832" y="155" width="33" height="35"/>
+  <object name="t3" x="15881" y="155" width="36" height="33"/>
+  <object name="t1" x="15829" y="345" width="37" height="34"/>
+  <object name="t3" x="15882" y="344" width="36" height="36"/>
+  <object name="t3" x="15934" y="345" width="35" height="34"/>
+  <object name="wrong" x="15819" y="383" width="163" height="13"/>
+  <object name="correct" x="15824" y="193" width="118" height="16"/>
+  <object name="end" x="17522" y="277" width="13" height="127"/>
  </objectgroup>
 </map>
