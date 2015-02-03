@@ -10,8 +10,10 @@ public class LevelProvider {
 			
 			case 2:
 				return "tmx/level_flat2.tmx";
+			case 3:
+				return "tmx/level_flat3.tmx";
 			default:
-				return "tmx/level_flat.tmx";
+				return "";
 		}
 				
 		
