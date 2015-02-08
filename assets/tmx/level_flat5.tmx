@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="city_tileset" tilewidth="32" tileheight="32">
+  <image source="gfx/city_tileset.png" width="192" height="1732"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKGL+P3TLMdAwVVTVVVVVVVVVVVVVVVVVVVVVVVVffwApDILOw==
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0rlOVWEUxfFjZYEWGhJ8AZFEIRFMFBOFxOENVFQGR5wFnCcUcGBQQHBE7ACNqGEwMkSUyFBKo4002uhz8D/FbW7nOd+N392s4pd7VrOz9rdv5pIgyPTMriAIdmMPSrAX+4L/30t9RfdYfPv4aj9vWooylKMCBzx+Z/UV3cPuPr46yJsewmEcwVFUevzO6iu6h919fHWMNz2OEziJUzjt8Turr+gedvfx1Rne9CyqUI0anPP4ndVXdA+7+/jqPG96ARdxCZdxxeN3Vl/RPezuE1pN/2ysQU7w7zkxp4fvXvThFV5HmBXmpcy6yu81XMcN1OJmxHmpzsvVVzlmtnQPq/+vtViHXORFyN8whzfox1u8w/sYs26hDvVowG3ccdDVdVZfZRfZ2j2s7RPm9chHATZEyN/xAwMYxBCG8SHGrLu4h0Y0oRktDrq6zuqr7CJbu4e1fcK8EZtQiM0R8k/M4yNGMIoxjMeYdR8P0Io2tOOhg66us/oqu8jW7mFtnzBvwVYUoThC/oXf+IQJfMYXTMaY1YFOPMJjPMFTB11dZ/VVdpGt3cPaPmHehu3YgZ0R8h/8xVdMYRozmI0x6xmeowsv0I2XDrq6zuqr7CJbu4e1fcKcISKSZpYlfadKYv4KEZE0szLpO1US87NERNLMqqTvVEnMXwAjdh7K
+  </data>
+ </layer>
+ <layer name="deco" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0zdWBEEMBNBe7OK9t/c/DRAAARAAARDgva8bMCq1enofFfxggpZK0ptuJ6WuiIiIiIiIiIiIiIiI/Ht3KaV7eIBHeILnVGfPNrK2rc2Zc/bupdvVkpXJUSJ7Lfsp6QXzvcIbvMMHfAbPzPZsI2vb2pw5Z+9eul0tWZkcJbLXsp+SvjDfN/xAwncH+ow1dvB0F/Ya7ortybyzZrOy1i+1q9p6s7WY+3lvnnNuTyYmh+UNuyfvfqL/yQj9MACDMATDRI19zHsAhw3nZnsy76zZomcvtavaerO1mPt5b55zbk8mJoflDbsn736i/8kIIzAKYzAOEzBprHGEeY/hpOHcbE/mnTWblbV+qV3V1putxdzPe/Occ3syMTksb9g9efcT/U9GmIJpmIFZmIN5Y41TzHsG5w3nZnsy76zZrKz1S+2qtt5sLeZ+3pvnnNuTiclhecPuybuf6H8ywgIswhIswwqsGmtcYN5LuGo4N9uTeWfNZmWtX2pXtfVmazH3894859yeTEwOyxt2T979RP+TEdZgHTZgE7Zg21jjGvPewG3DudmezDtrNitr/VK7qq03W4u5n/fmOef2ZGJyWN6we/LuJ/qfFBERERH5yy9vrduc
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object name="ground" x="1" y="407" width="10556" height="71"/>
+  <object name="end" x="10504" y="94" width="15" height="311"/>
+  <object name="fence" x="1461" y="238" width="53" height="166"/>
+  <object name="fence" x="2714" y="237" width="47" height="168"/>
+  <object name="fence" x="3479" y="238" width="51" height="166"/>
+  <object name="fence" x="3865" y="237" width="47" height="169"/>
+  <object name="fence" x="4856" y="237" width="49" height="169"/>
+  <object name="fence" x="6296" y="239" width="49" height="165"/>
+  <object name="fence" x="6713" y="237" width="49" height="169"/>
+  <object name="fence" x="7895" y="237" width="51" height="167"/>
+  <object name="fence" x="9080" y="237" width="49" height="169"/>
+  <object name="fence" x="10039" y="237" width="51" height="166"/>
+  <object name="ground" x="900" y="228" width="156" height="17"/>
+  <object name="ground" x="1828" y="229" width="155" height="17"/>
+  <object name="ground" x="2277" y="230" width="156" height="15"/>
+  <object name="ground" x="4229" y="228" width="153" height="16"/>
+  <object name="ground" x="5220" y="228" width="157" height="18"/>
+  <object name="ground" x="5830" y="229" width="154" height="15"/>
+  <object name="ground" x="7204" y="228" width="153" height="16"/>
+  <object name="ground" x="8291" y="226" width="158" height="17"/>
+  <object name="ground" x="8709" y="229" width="159" height="15"/>
+  <object name="ground" x="9510" y="228" width="153" height="15"/>
+  <object name="t4" x="919" y="178" width="32" height="32"/>
+  <object name="t6" x="968" y="177" width="36" height="34"/>
+  <object name="t5" x="918" y="357" width="39" height="34"/>
+  <object name="t5" x="974" y="358" width="40" height="33"/>
+  <object name="correct" x="908" y="163" width="111" height="54"/>
+  <object name="wrong" x="914" y="328" width="106" height="63"/>
+  <object name="t3" x="1842" y="187" width="35" height="31"/>
+  <object name="t3" x="1893" y="185" width="36" height="32"/>
+  <object name="t5" x="1943" y="183" width="32" height="33"/>
+  <object name="t10" x="1881" y="356" width="40" height="36"/>
+  <object name="correct" x="1839" y="156" width="136" height="61"/>
+  <object name="wrong" x="1853" y="335" width="101" height="58"/>
+  <object name="t5" x="2299" y="182" width="35" height="34"/>
+  <object name="t5" x="2350" y="182" width="33" height="33"/>
+  <object name="t3" x="2285" y="352" width="37" height="32"/>
+  <object name="t3" x="2335" y="349" width="36" height="35"/>
+  <object name="t3" x="2383" y="348" width="36" height="36"/>
+  <object name="correct" x="2289" y="151" width="108" height="64"/>
+  <object name="wrong" x="2283" y="327" width="144" height="60"/>
+  <object name="t5" x="4243" y="172" width="37" height="37"/>
+  <object name="t4" x="4289" y="171" width="39" height="37"/>
+  <object name="t3" x="4337" y="170" width="36" height="39"/>
+  <object name="t8" x="4267" y="353" width="36" height="33"/>
+  <object name="t5" x="4314" y="349" width="36" height="37"/>
+  <object name="correct" x="4257" y="321" width="103" height="65"/>
+  <object name="wrong" x="4242" y="146" width="134" height="67"/>
+  <object name="t6" x="5258" y="183" width="35" height="33"/>
+  <object name="t8" x="5302" y="182" width="37" height="34"/>
+  <object name="t3" x="5231" y="356" width="34" height="35"/>
+  <object name="t2" x="5276" y="355" width="35" height="35"/>
+  <object name="t4" x="5323" y="354" width="34" height="36"/>
+  <object name="correct" x="5253" y="143" width="94" height="77"/>
+  <object name="wrong" x="5230" y="313" width="137" height="82"/>
+  <object name="t5" x="5867" y="188" width="35" height="34"/>
+  <object name="t6" x="5909" y="185" width="36" height="34"/>
+  <object name="t4" x="5856" y="353" width="37" height="32"/>
+  <object name="t8" x="5902" y="352" width="38" height="33"/>
+  <object name="correct" x="5854" y="303" width="104" height="89"/>
+  <object name="wrong" x="5861" y="127" width="91" height="92"/>
+  <object name="t6" x="7239" y="181" width="35" height="34"/>
+  <object name="t6" x="7286" y="181" width="35" height="34"/>
+  <object name="t5" x="7218" y="349" width="36" height="34"/>
+  <object name="t5" x="7266" y="349" width="36" height="35"/>
+  <object name="t1" x="7315" y="345" width="34" height="39"/>
+  <object name="correct" x="7237" y="128" width="91" height="90"/>
+  <object name="wrong" x="7217" y="315" width="138" height="70"/>
+  <object name="t3" x="8302" y="179" width="40" height="36"/>
+  <object name="t3" x="8353" y="177" width="39" height="37"/>
+  <object name="t2" x="8402" y="177" width="36" height="35"/>
+  <object name="t5" x="8320" y="348" width="35" height="35"/>
+  <object name="t4" x="8367" y="347" width="37" height="36"/>
+  <object name="wrong" x="8302" y="132" width="139" height="85"/>
+  <object name="correct" x="8317" y="301" width="96" height="87"/>
+  <object name="t9" x="8750" y="174" width="32" height="36"/>
+  <object name="t1" x="8792" y="172" width="34" height="37"/>
+  <object name="t3" x="8728" y="331" width="35" height="36"/>
+  <object name="t3" x="8776" y="330" width="33" height="37"/>
+  <object name="t4" x="8821" y="329" width="38" height="37"/>
+  <object name="correct" x="8740" y="119" width="98" height="94"/>
+  <object name="wrong" x="8729" y="291" width="136" height="86"/>
+  <object name="t6" x="9547" y="169" width="34" height="35"/>
+  <object name="t1" x="9592" y="168" width="36" height="36"/>
+  <object name="t2" x="9525" y="350" width="36" height="36"/>
+  <object name="t2" x="9573" y="349" width="36" height="36"/>
+  <object name="t2" x="9619" y="349" width="39" height="36"/>
+  <object name="correct" x="9539" y="108" width="97" height="99"/>
+  <object name="wrong" x="9523" y="305" width="144" height="86"/>
+ </objectgroup>
+</map>

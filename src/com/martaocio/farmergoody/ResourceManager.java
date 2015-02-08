@@ -65,15 +65,15 @@ public class ResourceManager {
 	public ITextureRegion leftArrowTexture;
 	
 	public ITextureRegion tomatoIconTexture;
-	public ITextureRegion tomato1Texture;
-	public ITextureRegion tomato2Texture;
-	public ITextureRegion tomato3Texture;
-	public ITextureRegion tomato4Texture;
-	public ITextureRegion tomato5Texture;
-	public ITextureRegion tomato6Texture;
-	public ITextureRegion tomato8Texture;
-	public ITextureRegion tomato9Texture;
-	public ITextureRegion tomato10Texture;
+	public ITextureRegion point1Texture;
+	public ITextureRegion point2Texture;
+	public ITextureRegion point3Texture;
+	public ITextureRegion point4Texture;
+	public ITextureRegion point5Texture;
+	public ITextureRegion point6Texture;
+	public ITextureRegion point8Texture;
+	public ITextureRegion point9Texture;
+	public ITextureRegion point10Texture;
 	
 
 	// Singleton pattern so all scenes use the same Resouce Manager
@@ -114,16 +114,17 @@ public class ResourceManager {
 		this.rightArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "rightbtn.png");
 		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "leftbtn.png");
 		
+		String levelType=LevelType.getLevelType(UserState.getInstance().getCurrentLevel()).getTypeLevel();
 		this.tomatoIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_icon.png");
-		this.tomato1Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point1.png");
-		this.tomato2Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point2.png");
-		this.tomato3Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point3.png");
-		this.tomato4Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point4.png");
-		this.tomato5Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point5.png");
-		this.tomato6Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point6.png");
-		this.tomato8Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point8.png");
-		this.tomato9Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point9.png");
-		this.tomato10Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_point10.png");
+		this.point1Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT1, levelType));
+		this.point2Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT2, levelType));
+		this.point3Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT3, levelType));
+		this.point4Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT4, levelType));
+		this.point5Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT5, levelType));
+		this.point6Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT6, levelType));
+		this.point8Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT8, levelType));
+		this.point9Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT9, levelType));
+		this.point10Texture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), ImageProvider.getPointImage(Constants.POINT10, levelType));
 	//	this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas,activity.getAssets(),"level_cleared_background.png");
 		
 		this.failedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "level_failed.png");

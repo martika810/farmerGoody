@@ -189,7 +189,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				}
 
 				else if (object.getName().equals(SpriteTag.TOMATO1)) {
-					Sprite tomatoType1 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato1Texture,
+					Sprite tomatoType1 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point1Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType1, BodyType.StaticBody, tomatoFixtureDef);
@@ -197,7 +197,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType1);
 					tomatoType1.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO2)) {
-					Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato2Texture,
+					Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point2Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType2, BodyType.StaticBody, tomatoFixtureDef);
@@ -205,7 +205,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType2);
 					tomatoType2.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO3)) {
-					Sprite tomatoType3 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato3Texture,
+					Sprite tomatoType3 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point3Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType3, BodyType.StaticBody, tomatoFixtureDef);
@@ -213,7 +213,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType3);
 					tomatoType3.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO4)) {
-					Sprite tomatoType4 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato4Texture,
+					Sprite tomatoType4 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point4Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType4, BodyType.StaticBody, tomatoFixtureDef);
@@ -221,7 +221,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType4);
 					tomatoType4.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO5)) {
-					Sprite tomatoType5 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato5Texture,
+					Sprite tomatoType5 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point5Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType5, BodyType.StaticBody, tomatoFixtureDef);
@@ -229,7 +229,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType5);
 					tomatoType5.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO6)) {
-					Sprite tomatoType6 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato6Texture,
+					Sprite tomatoType6 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point6Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType6, BodyType.StaticBody, tomatoFixtureDef);
@@ -237,7 +237,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType6);
 					tomatoType6.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO8)) {
-					Sprite tomatoType8 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato8Texture,
+					Sprite tomatoType8 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point8Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType8, BodyType.StaticBody, tomatoFixtureDef);
@@ -245,7 +245,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType8);
 					tomatoType8.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO9)) {
-					Sprite tomatoType9 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato9Texture,
+					Sprite tomatoType9 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point9Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType9, BodyType.StaticBody, tomatoFixtureDef);
@@ -253,7 +253,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					tomatos.add(tomatoType9);
 					tomatoType9.setUserData(body);
 				} else if (object.getName().equals(SpriteTag.TOMATO10)) {
-					Sprite tomatoType10 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().tomato10Texture,
+					Sprite tomatoType10 = new Sprite(object.getX(), object.getY(), 50, 50, ResourceManager.getInstance().point10Texture,
 							vbom);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType10, BodyType.StaticBody, tomatoFixtureDef);
@@ -267,42 +267,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, endLineDef).setUserData(SpriteTag.END);
 
 				}
-				/*
-				 * else if (object.getName().equals("coin")) { // Sprite is
-				 * anobject u can do things with. moving Sprite coin = new
-				 * Sprite(object.getX(), object.getY(), object.getWidth(),
-				 * object.getHeight(),
-				 * ResourceManager.getInstance().coinTexture, vbom); // create
-				 * the body for the sprite FixtureDef coinFixtureDef =
-				 * PhysicsFactory .createFixtureDef(0, 0, 0f);
-				 * 
-				 * Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, coin,
-				 * BodyType.StaticBody, coinFixtureDef);
-				 * 
-				 * // for collecting coins body.setUserData("coin");
-				 * coins.add(coin); coin.setUserData(body);// pass the body bcos
-				 * we will remove // it later
-				 * 
-				 * } else if (object.getName().equals("spike")) { Rectangle rect
-				 * = new Rectangle(object.getX(), object.getY(),
-				 * object.getWidth(), object.getHeight(), vbom);
-				 * 
-				 * FixtureDef spikeFixtureDef = PhysicsFactory
-				 * .createFixtureDef(0, 0, 0f);
-				 * PhysicsFactory.createBoxBody(mPhysicsWorld, rect,
-				 * BodyType.StaticBody, spikeFixtureDef).setUserData( "spike");
-				 * 
-				 * } else if (object.getName().equals("finishline")) {
-				 * 
-				 * Rectangle rect = new Rectangle(object.getX(), object.getY(),
-				 * object.getWidth(), object.getHeight(), vbom); FixtureDef
-				 * finishLineDef = PhysicsFactory.createFixtureDef( 0, 0, 0f);
-				 * PhysicsFactory.createBoxBody(mPhysicsWorld, rect,
-				 * BodyType.StaticBody, finishLineDef).setUserData(
-				 * "finishline");
-				 * 
-				 * }
-				 */
+				
 			}
 
 		}
@@ -316,7 +281,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(1);
 
 		attachChild(tmxLayer);
-
+		if(this.mTMXTiledMap.getTMXLayers().size()>2){
+			tmxLayer = this.mTMXTiledMap.getTMXLayers().get(2);
+			attachChild(tmxLayer);
+		}
+		
+		
 		// add the coins to the scene
 		// for (int i = 0; i < coins.size(); i++) {
 		// this.attachChild(coins.get(i));
@@ -651,11 +621,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.WRONG)) {
 						wrongPathScore++;
 						addRewardIcon(false);
+						
 						// textRightPathScore.setText(": " + rightPathScore);
 						if (a.getUserData().equals(SpriteTag.WRONG)) {
 							removeBody(a);
 						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
 							removeBody(b);
+						}
+						if(wrongPathScore >= MAX_NUMBER_ERROR){
+							showLevelFailed();
 						}
 
 					}

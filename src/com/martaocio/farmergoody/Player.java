@@ -59,7 +59,7 @@ public abstract class Player extends AnimatedSprite {
 					camera.setChaseEntity(null);
 				}
 				
-				float velocityX=2+UserState.getInstance().getCurrentLevel()%4;
+				float velocityX=VelocityProvider.getVelocityByLevel(UserState.getInstance().getCurrentLevel());
 				// the velocyty makes the player moves  in certain direction
 				//we leave the y the same bcos we just want to move it across
 				body.setLinearVelocity(new Vector2(velocityX,body.getLinearVelocity().y));

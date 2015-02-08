@@ -38,7 +38,7 @@ public class Bull extends AnimatedSprite {
 				super.onUpdate(pSecondsElapsed);
 				camera.onUpdate(pSecondsElapsed);
 				//add 1 to the velocity every 3 levels
-				float velocityX=2+UserState.getInstance().getCurrentLevel()%4;
+				float velocityX=VelocityProvider.getVelocityByLevel(UserState.getInstance().getCurrentLevel());
 				
 				body.setLinearVelocity(new Vector2(velocityX,body.getLinearVelocity().y));
 			}
