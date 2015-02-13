@@ -63,6 +63,7 @@ public class ResourceManager {
 	public ITextureRegion upArrowTexture;
 	public ITextureRegion rightArrowTexture;
 	public ITextureRegion leftArrowTexture;
+	public ITextureRegion pauseBtnTexture;
 	
 	public ITextureRegion tomatoIconTexture;
 	public ITextureRegion point1Texture;
@@ -113,6 +114,7 @@ public class ResourceManager {
 		this.upArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "upbtn.png");
 		this.rightArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "rightbtn.png");
 		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "leftbtn.png");
+		this.pauseBtnTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "pausebtn.png");
 		
 		String levelType=LevelType.getLevelType(UserState.getInstance().getCurrentLevel()).getTypeLevel();
 		this.tomatoIconTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "tomato_icon.png");

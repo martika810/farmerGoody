@@ -37,8 +37,8 @@
   <object name="ground" x="6660" y="222" width="121" height="15"/>
   <object name="ground" x="7304" y="223" width="117" height="14"/>
   <object name="ground" x="8520" y="223" width="117" height="16"/>
-  <object name="correct" x="1782" y="319" width="86" height="51"/>
-  <object name="wrong" x="1775" y="165" width="89" height="43"/>
+  <object name="correct" x="1785" y="242" width="70" height="128"/>
+  <object name="wrong" x="1789" y="8" width="72" height="208"/>
   <object name="t5" x="1774" y="174" width="41" height="35"/>
   <object name="t8" x="1830" y="174" width="34" height="33"/>
   <object name="t4" x="1784" y="335" width="39" height="34"/>
@@ -48,60 +48,60 @@
   <object name="t6" x="809" y="182" width="33" height="32"/>
   <object name="t5" x="760" y="337" width="35" height="32"/>
   <object name="t5" x="810" y="338" width="34" height="31"/>
-  <object name="correct" x="750" y="164" width="106" height="46"/>
-  <object name="wrong" x="756" y="317" width="91" height="46"/>
+  <object name="correct" x="760" y="10" width="80" height="207"/>
+  <object name="wrong" x="761" y="248" width="79" height="126"/>
   <object name="t10" x="2414" y="178" width="36" height="34"/>
   <object name="t4" x="2460" y="179" width="32" height="33"/>
   <object name="t9" x="2418" y="338" width="37" height="31"/>
   <object name="t6" x="2467" y="339" width="37" height="29"/>
-  <object name="correct" x="2414" y="323" width="95" height="44"/>
-  <object name="wrong" x="2411" y="161" width="125" height="51"/>
+  <object name="correct" x="2420" y="243" width="71" height="132"/>
+  <object name="wrong" x="2420" y="14" width="77" height="196"/>
   <object name="t6" x="3414" y="178" width="37" height="34"/>
   <object name="t8" x="3467" y="178" width="38" height="37"/>
   <object name="t5" x="3399" y="336" width="38" height="34"/>
   <object name="t4" x="3444" y="335" width="37" height="35"/>
-  <object name="t3" x="3406" y="165" width="101" height="48"/>
-  <object name="wrong" x="3409" y="320" width="88" height="51"/>
+  <object name="t3" x="3413" y="14" width="92" height="202"/>
+  <object name="wrong" x="3416" y="251" width="85" height="125"/>
   <object name="correct" x="3491" y="336" width="29" height="31"/>
   <object name="t5" x="4086" y="177" width="37" height="35"/>
   <object name="t3" x="4136" y="177" width="37" height="35"/>
   <object name="t2" x="4072" y="337" width="39" height="34"/>
   <object name="t2" x="4116" y="336" width="35" height="35"/>
   <object name="t3" x="4158" y="336" width="29" height="31"/>
-  <object name="correct" x="4079" y="169" width="104" height="44"/>
-  <object name="wrong" x="4073" y="318" width="102" height="51"/>
+  <object name="correct" x="4087" y="15" width="78" height="196"/>
+  <object name="wrong" x="4090" y="251" width="78" height="123"/>
   <object name="t4" x="4810" y="175" width="36" height="34"/>
   <object name="t4" x="4854" y="176" width="34" height="33"/>
   <object name="t3" x="4896" y="174" width="34" height="35"/>
   <object name="t10" x="4825" y="335" width="30" height="31"/>
   <object name="t2" x="4868" y="334" width="33" height="34"/>
-  <object name="wrong" x="4823" y="158" width="93" height="53"/>
-  <object name="correct" x="4822" y="311" width="82" height="60"/>
+  <object name="wrong" x="4822" y="9" width="80" height="205"/>
+  <object name="correct" x="4827" y="248" width="69" height="123"/>
   <object name="t10" x="5816" y="180" width="37" height="35"/>
   <object name="t5" x="5865" y="180" width="40" height="36"/>
   <object name="t6" x="5817" y="331" width="35" height="38"/>
   <object name="t8" x="5863" y="332" width="33" height="37"/>
-  <object name="correct" x="5812" y="167" width="95" height="50"/>
-  <object name="wrong" x="5817" y="314" width="79" height="57"/>
+  <object name="correct" x="5821" y="17" width="71" height="195"/>
+  <object name="wrong" x="5817" y="246" width="73" height="126"/>
   <object name="t8" x="6677" y="176" width="37" height="34"/>
   <object name="t5" x="6725" y="177" width="37" height="33"/>
   <object name="t4" x="6677" y="338" width="35" height="34"/>
   <object name="t10" x="6721" y="335" width="34" height="37"/>
-  <object name="wrong" x="6678" y="163" width="83" height="49"/>
-  <object name="correct" x="6677" y="321" width="76" height="49"/>
+  <object name="wrong" x="6682" y="13" width="82" height="198"/>
+  <object name="correct" x="6680" y="248" width="77" height="124"/>
   <object name="t6" x="7324" y="179" width="37" height="34"/>
   <object name="t8" x="7369" y="180" width="38" height="34"/>
   <object name="t5" x="7306" y="336" width="37" height="33"/>
   <object name="t4" x="7351" y="334" width="34" height="34"/>
   <object name="t3" x="7391" y="333" width="29" height="35"/>
-  <object name="correct" x="7325" y="169" width="86" height="50"/>
-  <object name="wrong" x="7328" y="316" width="70" height="56"/>
+  <object name="correct" x="7324" y="12" width="78" height="196"/>
+  <object name="wrong" x="7328" y="246" width="72" height="128"/>
   <object name="t4" x="8523" y="177" width="39" height="36"/>
   <object name="t4" x="8571" y="177" width="36" height="35"/>
   <object name="t3" x="8614" y="177" width="36" height="35"/>
   <object name="t10" x="8536" y="334" width="32" height="34"/>
   <object name="t2" x="8575" y="334" width="36" height="33"/>
-  <object name="wrong" x="8544" y="153" width="66" height="60"/>
-  <object name="correct" x="8544" y="307" width="64" height="65"/>
+  <object name="wrong" x="8540" y="15" width="70" height="199"/>
+  <object name="correct" x="8544" y="251" width="68" height="122"/>
  </objectgroup>
 </map>

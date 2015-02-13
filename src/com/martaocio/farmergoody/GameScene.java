@@ -55,6 +55,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private final int RESTART = 0;
 	private final int QUIT = 1;
 	private final int KEEP_PLAYING = 2;
+	private final int UNPAUSE = 3;
 	private final int TAG_REWARD_ICON=999;
 	private final int TAG_TOMAT_ICON=998;
 	private final int TAG_SCORE_TEXT=997;
@@ -67,12 +68,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private LinkedList<Sprite> vegetables;
 	private LinkedList<Body> fencesBodies;
 	private LinkedList<Sprite> tomatos;
+	
+	private LinkedList<Sprite> pathScoreIndicators;
 
 	public Text textScore;
 
 	public Sprite tomatoScoreIcon;
 	public Sprite rightPathScoreIcon;
 	public Sprite upButton;
+	public Sprite pauseButton;
+	public Sprite restartButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
 
@@ -82,14 +87,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private TimerHandler timerPlayer = null;
 	private DelayModifier keepRunningModifier = null;
 	private DelayModifier deleteAfterFadeModifier = null;
-	private final static int MAX_NUMBER_ERROR=5;
+	private final static int MAX_NUMBER_ERROR=3;
 
 	private int score = 0;
 	private int rightPathScore = 0;
 	private int wrongPathScore = 0;
 
 	// create 2 new menuScene
-	private MenuScene levelFailed, levelCleared;
+	private MenuScene levelFailed, levelCleared,levelPause;
 
 	@Override
 	public void createScene() {
@@ -97,6 +102,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createLevel(UserState.getInstance().getCurrentLevel());
 		createLevelClearedScene();
 		createLevelFailedScene();
+	//	createLevelPauseScene();
 
 		// listen when someone touch the screen
 		// this.setOnSceneTouchListener(this);
@@ -138,7 +144,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		tomatos = new LinkedList<Sprite>();
 		fencesBodies = new LinkedList<Body>();
-
+		pathScoreIndicators=new LinkedList<Sprite>();
 		try {
 			final TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
@@ -328,10 +334,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		hud.attachChild(rightButton);
 		hud.attachChild(leftButton);
 		hud.attachChild(upButton);
+		hud.attachChild(pauseButton);
+		hud.attachChild(restartButton);
 
 		hud.registerTouchArea(upButton);
 		hud.registerTouchArea(rightButton);
 		hud.registerTouchArea(leftButton);
+		hud.registerTouchArea(pauseButton);
+		hud.registerTouchArea(restartButton);
 
 		setOnSceneTouchListener(this);
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
@@ -383,7 +393,34 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				return true;
 			};
 		};
+		
+		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				restartButton.setVisible(true);
+				pauseButton.setVisible(false);
+				pause(true);
+				
+				return true;
+			};
+		};
+		
+		restartButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				pause(false);
+				restartButton.setVisible(false);
+				pauseButton.setVisible(true);
+				return true;
+			};
+		};
+		restartButton.setVisible(false);
 
+	}
+	
+	private void pause(boolean shouldPause){
+		this.setIgnoreUpdate(shouldPause);
+		
 	}
 
 	private void createPhysicsWorld() {
@@ -394,15 +431,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		mPhysicsWorld.setContactListener(contactListener());
 	}
 
-	// @Override
-	// public boolean onSceneTouchEvent(Scene pScene, TouchEvent
-	// pSceneTouchEvent) {
-	// if the action is down , the player should jump
-	// if (pSceneTouchEvent.isActionDown()) {
-	// resourceManager.jumpSound.play();
-	// player.jump();
-	//
-	// }
+	
 
 	// if(timerPlayer==null){
 	// timerPlayer=new TimerHandler(300f,false,new ITimerCallback(){
@@ -769,9 +798,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelFailed.setPosition(0, 0);
 		//
 		// Add menu item
-		final IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.3f,
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.3f,
 				1.1f);
-		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.3f, 1.1f);
+		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.3f, 1.1f);
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.failedBG, vbom);
@@ -783,10 +812,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelFailed.addMenuItem(restartButton);
 		levelFailed.addMenuItem(quitButton);
 
-		restartButton.setPosition(400, 350);
-		quitButton.setPosition(400, 420);
-
 		levelFailed.buildAnimations();
+		restartButton.setPosition(470, 250);
+		quitButton.setPosition(470, 360);
+
 		levelFailed.setOnMenuItemClickListener(this);
 	}
 
@@ -794,33 +823,66 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelCleared = new MenuScene(camera);
 		levelCleared.setPosition(0, 0);
 
-		final IMenuItem playButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.playButton, vbom), 1.3f,
+		IMenuItem playButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.playButton, vbom), 1.3f,
 				1.1f);
-		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
+		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
 
 		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
 
 		levelCleared.attachChild(bg);
 		levelCleared.setBackgroundEnabled(false);
 		
+		
 		levelCleared.addMenuItem(playButton);
 		levelCleared.addMenuItem(quitButton);
 
 		levelCleared.buildAnimations();
-		//
+		
+		playButton.setPosition(470, 250);
+		quitButton.setPosition(470, 360);
+		
 		levelCleared.setOnMenuItemClickListener(this);
 	}
+	
+//	private void createLevelPauseScene() {
+//		levelPause = new MenuScene(camera);
+//		levelPause.setPosition(0, 0);
+//
+//		final IMenuItem playButton = new ScaleMenuItemDecorator(new SpriteMenuItem(UNPAUSE, resourceManager.playButton, vbom), 1.3f,
+//				1.1f);
+//		final IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 1);
+//
+//		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
+//
+//		levelPause.attachChild(bg);
+//		levelPause.setBackgroundEnabled(false);
+//		
+//		levelPause.addMenuItem(playButton);
+//		levelPause.addMenuItem(quitButton);
+//
+//		levelPause.buildAnimations();
+//		//
+//		levelPause.setOnMenuItemClickListener(this);
+//	}
+
 
 	private void showLevelFailed() {
-
+		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelFailed, false, true, true);
 	}
 
 	private void showLevelCleared() {
+		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelCleared, false, true, true);
 	}
+	
+//	private void showLevelPaused() {
+//		showGameIndicators(false);
+//		this.hideControlButtons();
+//		this.setChildScene(levelPause, false, true, true);
+//	}
 
 	private void hideControlButtons() {
 		this.leftButton.setVisible(false);
@@ -847,8 +909,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		case KEEP_PLAYING:
 			restartLevel();
 			break;
+		
 			
 		}
+		
 
 		return false;
 	}
@@ -866,6 +930,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 		icon.setTag(TAG_REWARD_ICON);
 		this.camera.getHUD().attachChild(icon);
+		this.pathScoreIndicators.add(icon);
+		
+	}
+	private void showGameIndicators(boolean shouldShow){
+		upButton.setVisible(shouldShow);
+		leftButton.setVisible(shouldShow);
+		rightButton.setVisible(shouldShow);
+		pauseButton.setVisible(shouldShow);
+		tomatoScoreIcon.setVisible(shouldShow);
+		textScore.setVisible(shouldShow);
+		for(Sprite rightWrongPathIcon:pathScoreIndicators){
+			rightWrongPathIcon.setVisible(shouldShow);
+		}
+		
+		
 		
 	}
 
@@ -888,8 +967,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	//	resourceManager.camera.setCenter(0, 0);
 		int widthTiledBackgroung=this.mTMXTiledMap.getTileColumns()*this.mTMXTiledMap.getTileHeight();
 		int heightTiledBackgroung=this.mTMXTiledMap.getTileRows()*this.mTMXTiledMap.getTileWidth();
-		//resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2-widthTiledBackgroung/2,resourceManager.camera.getHeight() / 2-heightTiledBackgroung/2);
-		//resourceManager.camera.setBoundsEnabled(false);
+		
 		player.setX(0);
 		player.setY(0);
 		resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2, resourceManager.camera.getHeight() / 2);
@@ -919,7 +997,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// TODO Auto-generated method stub
+		if(pSceneTouchEvent.isActionDown() && this.isIgnoreUpdate()){
+			pause(false);
+		}
 		return false;
 	}
 
