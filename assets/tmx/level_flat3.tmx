@@ -34,8 +34,7 @@
   <object name="ground" x="1284" y="216" width="119" height="21"/>
   <object name="t6" x="1303" y="161" width="35" height="33"/>
   <object name="t2" x="1350" y="160" width="34" height="34"/>
-  <object name="t3" x="1300" y="351" width="36" height="32"/>
-  <object name="t3" x="1347" y="352" width="33" height="31"/>
+  <object name="t6" x="1322" y="351" width="36" height="32"/>
   <object name="correct" x="1308" y="13" width="66" height="190"/>
   <object name="wrong" x="1299" y="256" width="81" height="137"/>
   <object name="ground" x="1919" y="214" width="131" height="22"/>
@@ -46,64 +45,53 @@
   <object name="correct" x="1944" y="20" width="80" height="184"/>
   <object name="wrong" x="1941" y="249" width="77" height="137"/>
   <object name="ground" x="2778" y="214" width="133" height="21"/>
-  <object name="t9" x="2806" y="160" width="32" height="34"/>
-  <object name="t1" x="2852" y="159" width="35" height="36"/>
-  <object name="t3" x="2790" y="349" width="35" height="32"/>
-  <object name="t3" x="2833" y="347" width="32" height="35"/>
-  <object name="t2" x="2873" y="349" width="31" height="34"/>
+  <object name="t10" x="2828" y="160" width="32" height="34"/>
+  <object name="t6" x="2809" y="344" width="32" height="35"/>
+  <object name="t2" x="2848" y="345" width="35" height="36"/>
   <object name="correct" x="2804" y="14" width="79" height="187"/>
   <object name="wrong" x="2807" y="247" width="78" height="145"/>
   <object name="ground" x="3225" y="215" width="142" height="22"/>
-  <object name="t2" x="3244" y="159" width="34" height="35"/>
-  <object name="t2" x="3290" y="159" width="31" height="36"/>
-  <object name="t2" x="3329" y="157" width="34" height="39"/>
-  <object name="t2" x="3256" y="350" width="35" height="33"/>
-  <object name="t5" x="3306" y="348" width="36" height="36"/>
+  <object name="t6" x="3276" y="157" width="34" height="39"/>
+  <object name="t2" x="3253" y="343" width="35" height="33"/>
+  <object name="t5" x="3294" y="342" width="36" height="33"/>
   <object name="wrong" x="3252" y="9" width="84" height="194"/>
   <object name="correct" x="3251" y="247" width="82" height="147"/>
   <object name="ground" x="5177" y="210" width="139" height="24"/>
-  <object name="t1" x="5194" y="160" width="34" height="34"/>
-  <object name="t1" x="5239" y="159" width="34" height="33"/>
-  <object name="t4" x="5283" y="159" width="30" height="34"/>
+  <object name="t6" x="5221" y="157" width="37" height="34"/>
   <object name="t2" x="5206" y="349" width="32" height="34"/>
   <object name="t3" x="5253" y="348" width="34" height="36"/>
   <object name="correct" x="5206" y="20" width="75" height="184"/>
   <object name="wrong" x="5201" y="256" width="73" height="135"/>
   <object name="ground" x="5565" y="215" width="130" height="21"/>
-  <object name="t6" x="5589" y="158" width="34" height="35"/>
+  <object name="t6" x="5598" y="158" width="34" height="35"/>
   <object name="t6" x="5638" y="158" width="34" height="36"/>
-  <object name="t10" x="5602" y="350" width="36" height="34"/>
+  <object name="t10" x="5613" y="350" width="36" height="34"/>
   <object name="correct" x="5600" y="14" width="69" height="190"/>
   <object name="wrong" x="5597" y="254" width="70" height="139"/>
   <object name="ground" x="6747" y="212" width="134" height="25"/>
   <object name="t3" x="6758" y="159" width="34" height="32"/>
   <object name="t3" x="6802" y="159" width="31" height="33"/>
   <object name="t2" x="6843" y="159" width="30" height="33"/>
-  <object name="t5" x="6770" y="351" width="38" height="33"/>
-  <object name="t4" x="6821" y="351" width="33" height="33"/>
+  <object name="t9" x="6794" y="351" width="38" height="33"/>
   <object name="correct" x="6779" y="246" width="66" height="142"/>
   <object name="wrong" x="6779" y="16" width="68" height="188"/>
   <object name="ground" x="8120" y="212" width="140" height="25"/>
-  <object name="t5" x="8134" y="159" width="34" height="34"/>
-  <object name="t4" x="8182" y="158" width="33" height="36"/>
-  <object name="t3" x="8226" y="157" width="32" height="37"/>
-  <object name="t6" x="8144" y="352" width="37" height="32"/>
-  <object name="t5" x="8192" y="350" width="36" height="35"/>
+  <object name="t9" x="8159" y="157" width="33" height="36"/>
+  <object name="t3" x="8199" y="157" width="32" height="37"/>
+  <object name="t6" x="8144" y="345" width="37" height="33"/>
+  <object name="t5" x="8191" y="344" width="36" height="35"/>
   <object name="correct" x="8153" y="23" width="72" height="181"/>
   <object name="wrong" x="8150" y="252" width="75" height="145"/>
   <object name="ground" x="8959" y="214" width="126" height="23"/>
-  <object name="t2" x="8978" y="159" width="35" height="33"/>
-  <object name="t6" x="9028" y="159" width="32" height="34"/>
-  <object name="t4" x="8982" y="351" width="30" height="33"/>
-  <object name="t3" x="9028" y="350" width="29" height="34"/>
+  <object name="t8" x="8998" y="159" width="35" height="33"/>
+  <object name="t4" x="8982" y="343" width="30" height="33"/>
+  <object name="t3" x="9025" y="341" width="29" height="34"/>
   <object name="correct" x="8982" y="15" width="67" height="188"/>
   <object name="wrong" x="8983" y="251" width="65" height="141"/>
   <object name="ground" x="9594" y="212" width="137" height="26"/>
-  <object name="t6" x="9613" y="161" width="34" height="32"/>
-  <object name="t3" x="9660" y="161" width="31" height="32"/>
-  <object name="t2" x="9698" y="162" width="30" height="33"/>
-  <object name="t9" x="9621" y="350" width="35" height="34"/>
-  <object name="t3" x="9671" y="348" width="32" height="36"/>
+  <object name="t6" x="9628" y="161" width="34" height="32"/>
+  <object name="t3" x="9678" y="161" width="31" height="32"/>
+  <object name="t9" x="9643" y="350" width="35" height="34"/>
   <object name="correct" x="9630" y="250" width="64" height="144"/>
   <object name="wrong" x="9633" y="19" width="62" height="185"/>
   <object name="end" x="10489" y="71" width="9" height="334"/>

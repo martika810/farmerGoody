@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="city_night_tileset" tilewidth="32" tileheight="32">
+  <image source="../gfx/city_night_tileset.png" width="192" height="1732"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKHr+P27LMdAwVVTVVVVVVVVVVVVVVVVVVVVVVVVffwA4QpFPQ==
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1blSVEEUxvE7GRGRLyAE4DO5AQLuioCouKC474qyuGSCoEKhWCAUKgVqqIkmmmiiz+E/wJKi5s5dunsu59QJfsn00P19Z/pe2qMoal+1uRRFdagv/f8sjbx/l1YD+zZiSynMuWn38dnTZa+4eYTIU82zirpfIWecNXuIefuYZbWftSLuQtrZr/1eljzr99+KbdiOHdiJpsi93/pMaXrFZckyn7Xn+rrDWc6M6+DzzmR5PuPOTTPrcmcl9Qj17ih3ru+7m/eZSpJ21q6zz/sbpPm/m9Sh3B4+74KP38MlTzNasAutaFv93LVfnkxxWao1Cx9d4zoUkavSuXlnvZF6hLq7vnsmzTrU+89n16QOoe9FUffun93Yg73Yh/04UECOjZZFewcpOTV0SMpZ9DtA06xDOYhDOIwOHEGnZVHfQUpODR2k5NTewUUXunEUPTiG45ZFfQcpOTV0kJJTS4cnGMUYnmLcw9oJ9OIkTuE0zgQ8T0oW7R2k5NTQQUrOanWYCNzhGZ7jBSYxhc/44rDWh7M4h36cxwXHPTVk0d5BSk4NHaTk1NJhGi/xCjN4ja/45rB2EZdwGVdwFdcc99SQRXsHKTk1dJCSU0uHWczhDeaxgO/44bB2HTdwE7dwG3cc99SQRXsHKTk1dJCSU0uHRbzFO7zHEn7il8PaXQzgHu5jEEOOe2rIor2DlJwaOkjJqaXDMlbwAR/xCb/xx2FtGCN4gId4hMeOe2rIor2DlJwaOkjJqaVDjTHGmIpqjTHGVLTJGGNMRX8B8j+LMA==
+  </data>
+ </layer>
+ <layer name="deco" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0sdSxEAMBFAvOeeclq/b7wUOwAE4AAfgQM65PwBXqW1rRrt0ld9N1qhH0ymKoiMiIiIiIiIiIiIiIiL/zh3cwwM8whM8d+EcUXJEnyl3hlx34nVuL77bKHcbyQu8whu8wwd8duEcUXJEnyl3hlx34nVuL77bKHcbyRd8ww8ULXzQ1/q7dgd2Yc/Ym6ln5mjqfzZPikxVZvLsV3cv3v2sGdlzrfeW492ye/Wq9dxpNP3IMwCDMATDMFKScR8O4NDYm6ln5mjqfzZPikxVZvLsV3cv3v2sGdlzrfeW492ye/Wq9dxpNKPIMwbjMAGTMFWS8QiO4cTYm6ln5mjqfzZPikxVZvLsV3cv3v2sGdlzrfeW492ye/Wq9dxpNNPIMwOzMAfzsFCS8RTO4NzYm6ln5mjqfzZPikxVZvLsV3cv3v2sGdlzrfeW492ye/Wq9dxpNIvIswTLsAKrsFaS8QIu4crYm6ln5mjqfzZPikxVZvLsV3cv3v2sGdlzrfeW492ye/Wq9dxpNOvIswGbsAVt2C7JeA03cGvszdQzczT1P5snRaYqM3n2q7sX737WjOy51nvL8W7ZvXrVeu5URERERCSlXzi3+wQ=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1"/>
+</map>

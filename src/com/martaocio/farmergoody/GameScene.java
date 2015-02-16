@@ -365,7 +365,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void createButtons() {
-		upButton = new Sprite(360, 400, 80, 64, ResourceManager.getInstance().upArrowTexture, vbom) {
+		upButton = new Sprite(360, 400, 80, 80, ResourceManager.getInstance().upArrowTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp()) {
@@ -375,7 +375,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			};
 		};
 
-		leftButton = new Sprite(290, 400, 80, 64, ResourceManager.getInstance().leftArrowTexture, vbom) {
+		leftButton = new Sprite(270, 400, 80, 80, ResourceManager.getInstance().leftArrowTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp()) {
@@ -384,7 +384,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				return true;
 			};
 		};
-		rightButton = new Sprite(430, 400, 80, 64, ResourceManager.getInstance().rightArrowTexture, vbom) {
+		rightButton = new Sprite(450, 400, 80, 80, ResourceManager.getInstance().rightArrowTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp()) {

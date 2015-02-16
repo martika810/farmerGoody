@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="forest_night_tileset" tilewidth="32" tileheight="32">
+  <image source="gfx/forest_night_tileset.png" width="192" height="1332"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1DkKQzEMhOF3/2xkIxvZrvKqHCtTprCLIIEk8xdfMyDwTOF5mqYZAAAAQLjPj+i3AEBG/JEAAAAAAAAAACCLhSxlJWvZdDLLrSXzfnNUj+w7R3UbuW/FTSveem/VspWd7OUgx05mubVk3m+O6pF956huI/etuGnFW++tWk5ylotc5dbJLLeWzPvNUT2y7xzVbeS+FTeteOu9VctdHvKUl7w7meXWknm/OapH9p2juo3ct+KmFW+9twIAAAAAAP/7Aqar+L4=
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztlzePFEEQhTfESJjkossuQnjvvffeCiNhUpxwwgmX4YQTTrh/AAlkF/OzeCvtSKNWdU/1VHV1r5jg0931ddV7ZWZWO97r9cYH/AS/an9zaBOjlTeVdoq6JV4t6szZy4rf4E8G/9q1x+TLqW2ZP+d7Qjvet6ehXLG7zfXFyRu6E9LRmFls3Zz7Pl+S9we3XlcjxV6nfIapHmnumsSL5vMjraXuRfMdoRkX40u6t5r9LzVXW51UHv4OyNEb7Wcx5nmLzWn1vcVq1yx8aH3G1L1o9Uf780/iS3PmJXyPmwlmgdlgDpgL5jFzS2JT9MnKT0jH+p1Q6bWpnfLalIdbn9UsuPuh5aftfLX0pbsn9WE5V2nPNTXmgwVgIVgEFoMlzNyS2BR9svJjpZPDU2l5tPYj98xK6Wvu+GFlKVgGloMVYCVYZRBbWi0l6uTwVFqe0vqTW1+aJ3f8sLIarAFrwTqwHmwwiC2tlhJ1cngqLU9p/cmtL82TO35Y2Qg2gc1gC9gKthnEllZLiTo5PJWWp7T+5NaX5skdL+UpeAaegxfgpdHZdrAD7AS7wG6wxyA2xZnPj7auT8e63vqZz1Ou2v7X3fCd+fSt65DON7YO7ffkK/AavAFvwTujs71gH9gPDoCD4JBBbP/sIrgELoMr4KqwNp+fUCzloUnXp8PxTOlJ7lVnPk+xuyGpTXM3pDPS2A3JPNwzn751HdL5xtZB9U3ynnwPPoCP4BP4bHR2GBwBR8ExcBycMIjtn10D18ENcBPcEtbm8xOKpTw06fp0OJ4pPcm96sznKXY3JLVp7oZ0Rhq7IZmHe+bTt65DOt/YOqi+Sd6TX8BX8A18Bz9anE0AE8EkMJkZOwZOglPgNDgzOKvfc/PGxIY83wZ3wF1wD9wntGJ64PMTiuV4cGN9OpwZUXrce6H5+jy5XlLWFrtXVCzlj+qFG+vGSXfDzceZW2h3ffqxz3mbHdecb2wdVN/GCNzeUXf6TAEjNWZE0I+dWvs5DUxvyFXd7f9+FpwD58GFwN0qb/1/VCx1j8r3ADwEj8Bj8KRBiwPlJ5ST44HyEasT0uPea8rfNEeux7a11e9w/XD8Ub1wfbStyxfrnnHmpjEfTs42eZp8xDxrIf02feP0biQRowlzd3R0dFgyWvvZ0dHR0eHnHzgg+/A=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object name="ground" x="0" y="395" width="10557" height="81"/>
+  <object name="ground" x="996" y="223" width="125" height="14"/>
+  <object name="ground" x="1473" y="222" width="127" height="14"/>
+  <object name="ground" x="2630" y="223" width="124" height="13"/>
+  <object name="ground" x="3461" y="222" width="124" height="15"/>
+  <object name="ground" x="4645" y="222" width="124" height="15"/>
+  <object name="ground" x="5224" y="221" width="117" height="15"/>
+  <object name="ground" x="5802" y="223" width="120" height="14"/>
+  <object name="ground" x="6950" y="222" width="124" height="14"/>
+  <object name="ground" x="7973" y="225" width="125" height="13"/>
+  <object name="ground" x="8549" y="224" width="126" height="12"/>
+  <object name="ground" x="9060" y="225" width="127" height="11"/>
+  <object name="ground" x="9574" y="224" width="121" height="12"/>
+  <object name="fence" x="1974" y="314" width="85" height="77"/>
+  <object name="fence" x="3029" y="313" width="87" height="76"/>
+  <object name="fence" x="3927" y="319" width="87" height="76"/>
+  <object name="fence" x="4249" y="319" width="87" height="76"/>
+  <object name="fence" x="6391" y="319" width="87" height="76"/>
+  <object name="fence" x="7444" y="319" width="87" height="76"/>
+  <object name="fence" x="9945" y="316" width="87" height="76"/>
+  <object name="t3" x="1004" y="164" width="48" height="48"/>
+  <object name="t4" x="1063" y="163" width="48" height="48"/>
+  <object name="t8" x="1032" y="320" width="48" height="48"/>
+  <object name="wrong" x="1025" y="4" width="61" height="213"/>
+  <object name="correct" x="1024" y="243" width="62" height="142"/>
+  <object name="wrong" x="1504" y="2" width="66" height="216"/>
+  <object name="correct" x="1503" y="242" width="65" height="147"/>
+  <object name="t6" x="1512" y="163" width="48" height="48"/>
+  <object name="t3" x="1483" y="320" width="48" height="48"/>
+  <object name="t4" x="1541" y="320" width="48" height="48"/>
+  <object name="t5" x="2660" y="164" width="48" height="48"/>
+  <object name="t4" x="2643" y="319" width="48" height="48"/>
+  <object name="t2" x="2700" y="319" width="48" height="48"/>
+  <object name="wrong" x="2656" y="6" width="64" height="212"/>
+  <object name="correct" x="2658" y="239" width="59" height="150"/>
+  <object name="t3" x="3492" y="159" width="48" height="48"/>
+  <object name="t1" x="3472" y="321" width="48" height="48"/>
+  <object name="t1" x="3527" y="320" width="48" height="48"/>
+  <object name="correct" x="3489" y="9" width="62" height="208"/>
+  <object name="wrong" x="3489" y="246" width="64" height="143"/>
+  <object name="t9" x="4659" y="165" width="48" height="48"/>
+  <object name="t1" x="4714" y="165" width="48" height="48"/>
+  <object name="t6" x="4716" y="319" width="48" height="48"/>
+  <object name="t6" x="4661" y="320" width="48" height="48"/>
+  <object name="wrong" x="4671" y="8" width="63" height="209"/>
+  <object name="correct" x="4673" y="244" width="62" height="142"/>
+  <object name="t4" x="5256" y="161" width="48" height="48"/>
+  <object name="t3" x="5289" y="320" width="48" height="48"/>
+  <object name="t2" x="5234" y="320" width="48" height="48"/>
+  <object name="correct" x="5251" y="243" width="62" height="142"/>
+  <object name="wrong" x="5250" y="5" width="63" height="209"/>
+  <object name="t8" x="5831" y="162" width="48" height="48"/>
+  <object name="t3" x="5811" y="320" width="48" height="48"/>
+  <object name="t4" x="5867" y="320" width="48" height="48"/>
+  <object name="correct" x="5824" y="7" width="64" height="212"/>
+  <object name="wrong" x="5826" y="241" width="63" height="149"/>
+  <object name="t10" x="6984" y="159" width="48" height="48"/>
+  <object name="correct" x="6979" y="5" width="64" height="212"/>
+  <object name="wrong" x="6979" y="239" width="63" height="149"/>
+  <object name="t5" x="6961" y="322" width="48" height="48"/>
+  <object name="t4" x="7016" y="321" width="48" height="48"/>
+  <object name="t2" x="7984" y="162" width="48" height="48"/>
+  <object name="correct" x="8004" y="243" width="63" height="147"/>
+  <object name="wrong" x="8003" y="8" width="63" height="206"/>
+  <object name="t4" x="8010" y="325" width="48" height="48"/>
+  <object name="t1" x="8043" y="163" width="48" height="48"/>
+  <object name="wrong" x="8578" y="11" width="63" height="206"/>
+  <object name="correct" x="8579" y="244" width="63" height="147"/>
+  <object name="t3" x="8561" y="162" width="48" height="48"/>
+  <object name="t4" x="8616" y="161" width="48" height="48"/>
+  <object name="t5" x="8565" y="324" width="48" height="48"/>
+  <object name="t3" x="8620" y="324" width="48" height="48"/>
+  <object name="correct" x="9092" y="11" width="63" height="206"/>
+  <object name="wrong" x="9093" y="243" width="63" height="147"/>
+  <object name="t8" x="9098" y="162" width="48" height="48"/>
+  <object name="t3" x="9133" y="323" width="48" height="48"/>
+  <object name="t3" x="9073" y="324" width="48" height="48"/>
+  <object name="wrong" x="9602" y="6" width="63" height="206"/>
+  <object name="correct" x="9598" y="248" width="63" height="147"/>
+  <object name="t2" x="9588" y="160" width="48" height="48"/>
+  <object name="t2" x="9582" y="316" width="48" height="48"/>
+  <object name="t6" x="9644" y="160" width="48" height="48"/>
+  <object name="end" x="10526" y="2" width="12" height="386"/>
+ </objectgroup>
+</map>

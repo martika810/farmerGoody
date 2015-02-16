@@ -17,7 +17,11 @@ public class LevelProvider {
 			case 5:
 				return "tmx/level_flat4_2.tmx";
 			case 6:
+				return "tmx/level_flat4_3.tmx";
+			case 7:
 				return "tmx/level_flat5.tmx";
+			case 8:
+				return "tmx/level_london_2.tmx";
 			default:
 				return "";
 		}
