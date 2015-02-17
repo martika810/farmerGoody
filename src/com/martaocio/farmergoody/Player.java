@@ -27,7 +27,7 @@ public abstract class Player extends AnimatedSprite {
 		camera.setChaseEntity(this);
 		camera.setBounds(0, 240, 10560, 290);
 		camera.setBoundsEnabled(true);
-		camera.offsetCenter(0, 0);
+		camera.offsetCenter(0, -10);
 		
 		
 	}
@@ -92,7 +92,7 @@ public abstract class Player extends AnimatedSprite {
 			
 			canJump=false;
 			
-			Vector2 velocity=new Vector2(0,-13); //set the height of the jump(10 metres off the ground)
+			Vector2 velocity=new Vector2(0,-12); //set the height of the jump(10 metres off the ground)
 			
 			body.setLinearVelocity(velocity);
 		}

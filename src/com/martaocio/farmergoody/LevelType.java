@@ -10,7 +10,8 @@ public enum LevelType {
 	LEVEL5(5,Constants.FOREST),
 	LEVEL6(6,Constants.FOREST),
 	LEVEL7(7,Constants.LONDON),
-	LEVEL8(8,Constants.LONDON);
+	LEVEL8(8,Constants.LONDON),
+	LEVEL9(9,Constants.LONDON);
 	
 	private int number;
 	private String typeLevel;
@@ -33,8 +34,11 @@ public enum LevelType {
 			return LEVEL5;
 		case 6:
 			return LEVEL6;
-//		case 7:
-//			return LEVEL7;
+		case 7:
+			return LEVEL7;
+		case 8:
+			return LEVEL8;
+
 		default:
 			return null;
 			

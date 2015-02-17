@@ -17,6 +17,8 @@ import com.google.gson.GsonBuilder;
 public class UserState {
 
 	private int currentLevel = 1;
+	private int currentAcumalatedPoints =0;
+	private int bestScore=0;
 	private static UserState INSTANCE = null;
 	private static  Gson gson = null;
 	private static String DATA_FILE = "fj.txt";
@@ -84,6 +86,23 @@ public class UserState {
 	
 	public void clear(){
 		currentLevel=1;
+		currentAcumalatedPoints=0;
+	}
+
+	public int getBestScore() {
+		return bestScore;
+	}
+
+	public void setBestScore(int bestScore) {
+		this.bestScore = bestScore;
+	}
+
+	public int getCurrentAcumalatedPoints() {
+		return currentAcumalatedPoints;
+	}
+
+	public void setCurrentAcumalatedPoints(int currentAcumalatedPoints) {
+		this.currentAcumalatedPoints = currentAcumalatedPoints;
 	}
 
 }

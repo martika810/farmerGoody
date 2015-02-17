@@ -72,6 +72,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private LinkedList<Sprite> pathScoreIndicators;
 
 	public Text textScore;
+	public Text textBestScore;
+	public Text textLevel;
 
 	public Sprite tomatoScoreIcon;
 	public Sprite rightPathScoreIcon;
@@ -132,7 +134,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// create the tex for the score
 
 		tomatoScoreIcon = new Sprite(40, 10, 35, 35, ResourceManager.getInstance().tomatoIconTexture, vbom);
-		textScore = new Text(80, 10, this.resourceManager.font, ": 0   ", vbom);
+		textScore = new Text(80, 10, this.resourceManager.font, ":"+UserState.getInstance().getCurrentAcumalatedPoints()+"   " , vbom);
+		textBestScore = new Text(40, 50, this.resourceManager.font, "Best Score:"+UserState.getInstance().getBestScore()+"   " , vbom);
+		textLevel= new Text(40, 90, this.resourceManager.font, "#"+UserState.getInstance().getCurrentLevel()+"   " , vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
 		textScore.setTag(TAG_SCORE_TEXT);
 
@@ -328,6 +332,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		// that heads up the display
 		HUD hud = new HUD();
+		hud.attachChild(textBestScore);
+		hud.attachChild(textLevel);
 		hud.attachChild(textScore);
 		hud.attachChild(tomatoScoreIcon);
 
@@ -459,6 +465,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			public void beginContact(Contact contact) {
 				Body a = contact.getFixtureA().getBody();
 				Body b = contact.getFixtureB().getBody();
+				UserState currentUserState=UserState.getInstance();
 				// collision between player and ground
 				if (a.getUserData() != null && b.getUserData() != null) {
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.GROUND)) {
@@ -473,6 +480,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					}
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.BULL)) {
+						if(currentUserState.getBestScore()<score){
+							currentUserState.setBestScore(score);
+						}
+						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
+						currentUserState.saveToFile();
+						
 
 						showLevelFailed();
 					}
@@ -658,6 +671,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 							removeBody(b);
 						}
 						if(wrongPathScore >= MAX_NUMBER_ERROR){
+							if(currentUserState.getBestScore()<score){
+								currentUserState.setBestScore(score);
+							}
+							currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
+							currentUserState.saveToFile();
 							showLevelFailed();
 						}
 
@@ -682,13 +700,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
 						// show success screen
-						UserState.getInstance().setCurrentLevel(UserState.getInstance().getCurrentLevel() + 1);
-						UserState.getInstance().saveToFile();
-						if(wrongPathScore<MAX_NUMBER_ERROR){
-							showLevelCleared();
-						}else{
-							showLevelFailed();
+						if(currentUserState.getBestScore()<score){
+							currentUserState.setBestScore(score);
 						}
+						currentUserState.setCurrentAcumalatedPoints(score);
+						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel() + 1);
+						currentUserState.saveToFile();
+						showLevelCleared();
+						
 						
 					}
 
@@ -940,6 +959,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		pauseButton.setVisible(shouldShow);
 		tomatoScoreIcon.setVisible(shouldShow);
 		textScore.setVisible(shouldShow);
+		textLevel.setVisible(shouldShow);
+		textBestScore.setVisible(shouldShow);
 		for(Sprite rightWrongPathIcon:pathScoreIndicators){
 			rightWrongPathIcon.setVisible(shouldShow);
 		}
@@ -969,7 +990,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int heightTiledBackgroung=this.mTMXTiledMap.getTileRows()*this.mTMXTiledMap.getTileWidth();
 		
 		player.setX(0);
-		player.setY(0);
+		player.setY(-10);
+		this.camera.setChaseEntity(null);
 		resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2, resourceManager.camera.getHeight() / 2);
 		
 		
