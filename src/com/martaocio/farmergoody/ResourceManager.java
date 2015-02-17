@@ -45,11 +45,11 @@ public class ResourceManager {
 	
 	private BuildableBitmapTextureAtlas gameTexturesAtlas;
 	
-	private BuildableBitmapTextureAtlas levelFailedAtlas,levelPassedAtlas;
+	private BuildableBitmapTextureAtlas levelFailedAtlas,levelPassedAtlas,pauseAtlas;
 	
 	public ITextureRegion playMenuButton,continueMenuButton,mainMenuBackground;
 	//public ITextureRegion restartButton,quitButton,failedBG,passedBG;
-	public ITextureRegion restartButton,quitButton,playButton,pauseButton,failedBG,passedBG;
+	public ITextureRegion restartButton,quitButton,playButton,pauseButton,failedBG,passedBG,pauseBG;
 	
 	//Create coin texture
 //	public ITextureRegion coinTexture; 
@@ -100,6 +100,8 @@ public class ResourceManager {
 		
 		this.levelPassedAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(),1024,1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
+		this.pauseAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(),1024,1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
 		this.gameTexturesAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
@@ -131,7 +133,7 @@ public class ResourceManager {
 		
 		this.failedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "level_failed.png");
 		this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "level_passed.png");
-		
+		this.pauseBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "pause_screen.png");
 		this.restartButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "restartbtn.png");
 		
 		this.quitButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "homebtn.png");

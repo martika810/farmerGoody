@@ -104,7 +104,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createLevel(UserState.getInstance().getCurrentLevel());
 		createLevelClearedScene();
 		createLevelFailedScene();
-	//	createLevelPauseScene();
+		createPauseScene();
 
 		// listen when someone touch the screen
 		// this.setOnSceneTouchListener(this);
@@ -132,14 +132,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private void createLevel(int levelNumber) {
 
 		// create the tex for the score
-
+		score=UserState.getInstance().getCurrentAcumalatedPoints();
 		tomatoScoreIcon = new Sprite(40, 10, 35, 35, ResourceManager.getInstance().tomatoIconTexture, vbom);
-		textScore = new Text(80, 10, this.resourceManager.font, ":"+UserState.getInstance().getCurrentAcumalatedPoints()+"   " , vbom);
+		textScore = new Text(80, 10, this.resourceManager.font, ":"+ score+"   " , vbom);
 		textBestScore = new Text(40, 50, this.resourceManager.font, "Best Score:"+UserState.getInstance().getBestScore()+"   " , vbom);
 		textLevel= new Text(40, 90, this.resourceManager.font, "#"+UserState.getInstance().getCurrentLevel()+"   " , vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
 		textScore.setTag(TAG_SCORE_TEXT);
-
+		
 		createButtons();
 
 		// Sprite tomatoType2 = new Sprite(object.getX(), object.getY(), 50, 50,
@@ -403,9 +403,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				restartButton.setVisible(true);
-				pauseButton.setVisible(false);
-				pause(true);
+				
+				showPause();
 				
 				return true;
 			};
@@ -837,6 +836,32 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		levelFailed.setOnMenuItemClickListener(this);
 	}
+	
+	private void createPauseScene() {
+
+		levelPause = new MenuScene(camera);
+		levelPause.setPosition(0, 0);
+		//
+		// Add menu item
+		IMenuItem unpauseButton = new ScaleMenuItemDecorator(new SpriteMenuItem(UNPAUSE, resourceManager.playButton, vbom), 1.3f,
+				1.1f);
+		
+		// create the background
+		Sprite bg = new Sprite(0, 0, resourceManager.pauseBG, vbom);
+		//
+		levelPause.attachChild(bg);
+		levelPause.setBackgroundEnabled(false);// to see our scena throught the
+		// background
+
+		levelPause.addMenuItem(unpauseButton);
+		
+
+		levelPause.buildAnimations();
+		//restartButton.setPosition(470, 250);
+		
+
+		levelPause.setOnMenuItemClickListener(this);
+	}
 
 	private void createLevelClearedScene() {
 		levelCleared = new MenuScene(camera);
@@ -896,6 +921,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.hideControlButtons();
 		this.setChildScene(levelCleared, false, true, true);
 	}
+	private void showPause(){
+		showGameIndicators(false);
+		this.hideControlButtons();
+		this.setChildScene(levelPause, false, true, true);
+	}
 	
 //	private void showLevelPaused() {
 //		showGameIndicators(false);
@@ -907,6 +937,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.leftButton.setVisible(false);
 		this.rightButton.setVisible(false);
 		this.upButton.setVisible(false);
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+
+		showGameIndicators(true);
 	}
 
 	@Override
@@ -927,9 +964,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			
 		case KEEP_PLAYING:
 			restartLevel();
+			
 			break;
 		
+		case UNPAUSE:
+			reset();
 			
+			break;	
 		}
 		
 
@@ -989,11 +1030,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int widthTiledBackgroung=this.mTMXTiledMap.getTileColumns()*this.mTMXTiledMap.getTileHeight();
 		int heightTiledBackgroung=this.mTMXTiledMap.getTileRows()*this.mTMXTiledMap.getTileWidth();
 		
-		player.setX(0);
-		player.setY(-10);
-		this.camera.setChaseEntity(null);
-		resourceManager.camera.setCenter(resourceManager.camera.getWidth() / 2, resourceManager.camera.getHeight() / 2);
 		
+		//center the camera
+		this.camera.setChaseEntity(null);
+		this.camera.setBoundsEnabled(false);
+		resourceManager.camera.setCenter(400, 240);
 		
 		SceneManager.getInstance().setMainMenu();
 
@@ -1019,9 +1060,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		if(pSceneTouchEvent.isActionDown() && this.isIgnoreUpdate()){
-			pause(false);
-		}
+//		if(pSceneTouchEvent.isActionDown() && this.isIgnoreUpdate()){
+//			pause(false);
+//		}
 		return false;
 	}
 

@@ -25,9 +25,9 @@ public abstract class Player extends AnimatedSprite {
 		createPhysics(camera, physicsWorld);
 		
 		camera.setChaseEntity(this);
-		camera.setBounds(0, 240, 10560, 290);
+		camera.setBounds(0, 190, 10560, 290);
 		camera.setBoundsEnabled(true);
-		camera.offsetCenter(0, -10);
+		camera.offsetCenter(0, 0);
 		
 		
 	}
