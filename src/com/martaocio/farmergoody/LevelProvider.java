@@ -6,12 +6,13 @@ public class LevelProvider {
 		
 		switch (levelNumber){
 			case 1:
-				return "tmx/level_flat.tmx";
+				//return "tmx/level_flat_new.tmx";
+				return "tmx/level3.tmx";
 			
 			case 2:
-				return "tmx/level_flat2.tmx";
+				return "tmx/level2.tmx";
 			case 3:
-				return "tmx/level_flat3.tmx";
+				return "tmx/level_flat_new.tmx";
 			case 4:
 				return "tmx/level_flat4.tmx";
 			case 5:

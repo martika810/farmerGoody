@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="forestTileset" tilewidth="32" tileheight="32">
+  <image source="gfx/forestTileset.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1EWw1gUUxuHvfpcQFRRBUVFRMbCxQUBQREXs7m4FC0VswMBA5dLd3d3d3d2t0t3gs3FYsZLNf+YsntWZM7/dm5WRStWhLvWoTwMa0ojGNKEpzWhOC1rSita0oS3taE8HOtKJ2mRFIxrRiEaCG13oSje604Oe9KI3fehLP/ozgIEMYjBDGMowhjOCkYxiNJ2jEY1oRCPhjbGMYzwTmMgkJjOFqUxjOjOYySxmM4e5zGM+C1jIIhazhDHRiEY0opHwxjKWs4KVrGI1a1jLOtazgb/4m3/YyCY2s4WtbGM7O9jJLpZGIxrRiEbCG3vYyz72c4CDHOIwRzhKKp1KZZAmk2xkJwc5OYlcnMwpnEpudkcjGtGIRsIbp7mdTl7OIB/5OZOzKMDZnMO5FOQ8zucCCnEhF3ExhbmES7mMPOloRCMa0Uh2owhXcCVXcTXXcC3XUZTruYEbuYmbuYVbKUZxbqMEJSnF7ZTm8mhEIxrRSHjjDu6kLHdRjru5h3spz31U4H4e4EEe4mEe4VEe43Ge4Eme4mnKRCMa0YhGwhvP8hzP8wIv8hIv8wqv8hqv8wZv8hZv8w7v8h7vU5FKfMCHfMQz0YhGNKKR8MYnVOZTPqMKn1OVL/iSr/iab/iW76hGdWrwPT/wIz9Rk5/5hY+jEY1oRCPhjd+oxe/8wZ/UJos61KUe9WlAQxrRmCY0pRnNaUFLWtGaNvwajWhEIxoJb7SjPR3oSCc604WudKM7PehJL3rTh770oz8DGMggBjOEobSNRjSiEY2EN4YzgpGMYjRjGMs4xjOBiUxiMlOYyjSmM4OZzGI2c5jLPIZFIxrRiEbCGwtYyCIWs4SlLGM5eTJCCOHEW2Nf1rKO9Wz4H3vz316tYCWrWJ0+1jje30a3TWxmC/OPs4nb2M4OdrKL3exhL/vYzwEOcojDHOEoqcxUKoM0mWQjOznIydZoRCMa0Uh4418VwDfy
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1jdvFEEYgOE9ERvoSBKxJdiGAnCJCbZB4kgluSdK5J4okXuiRO6JP4L4B4giNkBFek94pRNsuJn5Zufb1RaPLO2dd96dmR1dbxRFvYHMxCzMxhx0oRs9AZvK3BlbjCVYimXoxwAGFbRVaQ3Lti9q5VSW97ksnbH12ICN2ITN2IKtCtqqtIYa9kV9VldfWd7nsnTG9mAv9mE/DuAgDiloq9IaatgXGs7qml9leZ/L0hk7iVM4jTM4i3M4r6CtSmuoYV9oOKtrnVnX+N9urm/DduzATuyK/l6P/6/I9zmvJYttZ9aYLj15ruE6buAmbuE27gjMic9un+vpY6/52BemfJ3VodY51DtThKRzsuUwnx3BURzDcZxo+79O32cJeS1ZbDuzxnTpCTknGrptOnzsNR/7wpSv3xqh1ln7O2Mr7YxsucDnF3EJl3EFVwN1hmjJGlPD3Ng0aOjW1BG63ddvjVDzq/2dsZV1Tt7l83u4jwd4iEeBOkO0ZI2pYW5sGjR0a+qoanuoRu3vjIu0c/Ixnz3BUzzDc7wI1BiiJWtMDXNj06ChW1NHVdtDNWp/Z5I0E7xL+F7aOfmezz7gIz7hM74Itb3EK7zGG7zN+b7PFpsxXXtMn19qTiTmMVR7kX3a9qLpc0k2So3r0uRzTZPOyWbC94alnJOt68MxAiMxCqMbMm0/8BO/8BtRzn19ttiM6dpj+vxScyIxj6Hai+zTthdNn0uyUWpclyafa9rpOTn5n/Nx+tDf1vUpmIppQ9dnCPWN4z7jMQETMSnnvj5bbMZ07TF9fqk5kZjHUO1F9mnbi6bPJdkoNa5Lk+uaLmr4NR8LsLDVJXjfLnSjB3MxL2BLmr6EMfuEemyeX2pOXOcxZHuRfZr2os1zSTVKjmvb5LqmXyN331Os5P5NrMJqrMHahDG/WejnPgMYxHKsaGR/P63FZuxOZY3p2mP6/FJzIjGPodqL7NO2F02fS7JRalyXJtc1HdPoXPvZ1n49PhdN7tVubK1Wqyn2BzzX1nk=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object name="ground" x="1" y="416" width="10566" height="62"/>
+  <object name="t10" x="512" y="351" width="48" height="45"/>
+  <object name="t10" x="572" y="350" width="48" height="45"/>
+  <object name="t10" x="634" y="348" width="48" height="45"/>
+  <object name="ground" x="787" y="247" width="104" height="13"/>
+  <object x="866" y="255" height="3"/>
+ </objectgroup>
+</map>

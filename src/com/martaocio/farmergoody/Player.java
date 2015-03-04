@@ -18,6 +18,7 @@ public abstract class Player extends AnimatedSprite {
 	
 	public boolean canJump=true;
 	public boolean canEat=false;
+	public boolean sickRunning=false;
 
 	public Player(float pX,float pY,float width,float height,VertexBufferObjectManager vbom,BoundCamera camera,PhysicsWorld physicsWorld){
 		
@@ -77,7 +78,20 @@ public abstract class Player extends AnimatedSprite {
 			canEat=false;
 			final long[] PLAYER_ANIMATE=new long[]{100,100,100,100};//array to hold the animations
 			animate(PLAYER_ANIMATE,0,3,true);
+		}else if(this.isAnimationRunning()&& sickRunning){
+			this.stopAnimation();
+			canEat=false;
+			final long[] PLAYER_ANIMATE=new long[]{100,100,100,100};//array to hold the animations
+			animate(PLAYER_ANIMATE,0,3,true);
 		}
+		this.sickRunning=false;
+	}
+	
+	public void setRunningSick(){
+		this.sickRunning=true;
+		this.stopAnimation();
+		final long[] PLAYER_ANIMATE=new long[]{100,100,100,100};//array to hold the animations
+		animate(PLAYER_ANIMATE,6,9,true);
 	}
 	
 	//make the player jumps
@@ -92,7 +106,7 @@ public abstract class Player extends AnimatedSprite {
 			
 			canJump=false;
 			
-			Vector2 velocity=new Vector2(0,-12); //set the height of the jump(10 metres off the ground)
+			Vector2 velocity=new Vector2(0,-13); //set the height of the jump(10 metres off the ground)
 			
 			body.setLinearVelocity(velocity);
 		}

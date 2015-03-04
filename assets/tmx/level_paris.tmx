@@ -5,18 +5,17 @@
  </tileset>
  <layer name="sky" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   eJztzjcKQgEURcG/PtdmAAMYwAAGMIABDLvzrkALmwdOMd0pTqtpmtYH7ehEN3pfWoB/1I9BDGNU4AegmnFMYhqzAj8A1cxjEctYFfgBqGYdm9jGrsAPQDX7OMQxTgV+AKo5xyWucSvwA1DNPR7xjFeBHwAAAAAAAAAAAIBfvQFV6KI4
+   eJzt1MdqlVEYBdBEhUQhUUgUEgV9nryUvffeu8bexYYNG/bee++9t4HrTgWdXe4R92ANNvycb/MPdkddXV1HDQxkEIMZwlCG1ahLRESJhjOCkYxiNGMK6BURUYqxjGM8E5jIpAJ6RUSUYjJTmMo0pjOjgF4REaWYySxmM4e5zCugV0REKeazgIUsYjFLCugVEVGKpSxjOZ2sYGUBvSIiSrGK1axhLetYX0CviIjf1dOFrnSrQv7T3Q1sZBOb2cLWv3zf4OHG+tr/r4j4/zTQSHd6VCFXbpziNGc4yznOs43t7GAnu3jEY57wlGc8p8lGNmcnI6IGmmimJ72qkCs3LnCRS1zmClfZzR72so/9vOAlr3jNG97SYiNbs5MRUQMttNKbPlXIlRvXuM4NbnKL2xzgIIc4zBHe8Z4PfOQTn2mzke3ZyYiogTba6Uu/KuU73OUe93nAQ45yjOOc4CRf+Mo3vvODn/S3kQOykxEREREREfGP+QVSQLAF
   </data>
  </layer>
  <layer name="ground" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt0EdSQgEQANEvKKJiADEBiokgBjCegfufyL7F1Ez14m162dumabaSJEmSJEmSJEmSJCXTQhu72EMHO8l79FNJtXRxgEMcoYf95D36qaRaTnCKM/QxwHHyHv1UUi1DXOASV7jGefIe/VRSLSOMMcEt7nCTvEc/lVTLPR7wiCc8Y5q8Rz+VVMscCyzxghVmyXv0U0m1vOEdH1hjg9fkPfqppFq+8I0f/OIPn8l79FNJtfwDUtEdqA==
+   eJztzyERADAMBLB6GRqatvonk1DUexIQAemqagAAAAAAAAAAAAAAAAAAANadsPQfYHLD0n+AyQtL/wEmH48/bm8=
   </data>
  </layer>
  <layer name="deco" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   eJztyzdOBEAAwMD7JDlz5JwzvB3X9Cux0ozk0osFAAAAAAAAAPDXSq3WWq3XRm0O/ABms1XbtVO7tVf7Az+A2RzUYS3rqI7rZOAHMJvTOqvzuqjLuhr4Aczmum7qtu7qvh4GfgCzeayneq6Xeq23gR/AbN7roz7rq77rZ+AHAAAA/8kvwzwinw==
+   eJztw8EJAAAMA6FbOft/OkdBwVVTVVVVVVVVVVVVVVVVVVVVVVVVffwAQaeJbw==
   </data>
  </layer>
- <objectgroup name="Object Layer 1"/>
 </map>

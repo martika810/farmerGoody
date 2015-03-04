@@ -11,7 +11,8 @@ public enum LevelType {
 	LEVEL6(6,Constants.FOREST),
 	LEVEL7(7,Constants.LONDON),
 	LEVEL8(8,Constants.LONDON),
-	LEVEL9(9,Constants.LONDON);
+	LEVEL9(9,Constants.LONDON),
+	LEVEL10(9,Constants.LONDON);
 	
 	private int number;
 	private String typeLevel;

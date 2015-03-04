@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="farmer_tileset1" tilewidth="32" tileheight="32">
+  <image source="../gfx/farmer_tileset1.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt2mf0jnUYB/C/54lUFAohDaHsTWVEA1ltSZSVnZJsiXaRVUYZ7UUTDauyV5Q907C3MgpJn07Pi+ft8+K5O53ze/E517vr++a+vufc5/wmZsrImMQHfMhHfMwnfMpkpjCVz/icL/iSaUxnBjOZxVd8zTfMZg4TI8i4J5aR0Yzm3Mt9tKAlrWhNG+6nLe1oTwc60onOPEAXHuQh7qZpLH37uybNKLIe/icnIwiCVMzVMfOYzwIWsojFLGEp37KM5XzH96xgJatYzRrWso71bGAjmzJFk/GI++9OD3rSi970oS/9eJT+PMYABvI4T/AkT/E0z/AszyV6pVssffufT5pRZA0KPRkEKdusY35gCz/yEz/zC1vZxnZ2sJNd7GYPe9nHfg5wkEP8ym8c5kimaDJecP9DGMowhjOCF3mJkYxiNGN4mVcYyzjGM4FXeY3XeSPRK4Nj6dv/ZtKMIuut0JNBkLKjOuYYv/MHxznBSf7kFH9xmgw3lokYcc4gM1k4k6ycxdmcQzayx6LJeId3eY/3mcgkPuBDPuJjPuFTJjOFqXzG53zBl0xjOjMSvfJ2GvfPTJpRZM0KPRkEKTvX3ZxHDnKSi/O5gNzkIS8Xko/8FOAiCnIxl3Apl1GIyylMEYrGosn4mm+YzRzmMo/5LGAhi1jMEpbyLctYznd8zwpWsorViV75Ko371yTNKLLWhp4MgpRd4W6upBjFKUFJSlGaMpSlHOWpQEUqUZkqXMXVXENVqlGdGlwbiyZjPRvYyCY28wNb+JGf+Jlf2Mo2trODnexiN3vYyz72J3plXRr3H0iaUWQdDD0ZBCmr6W5qcR3XcwM3Ups61OUm6lGfBjSkETdzC7dyG7dzB3fSmLtoEosm41d+4zBHOMoxfucPjnOCk/zJKf7iNBlx//rEiHMGmckS/7dXDqVx/5lJM4qsrPH//psLgv+dWPrfokSRcbb7P4dsZOdcziMHOcnF+VxAbvKQlwvJR34KcBEFuZhLEr1yVjx9+y9NmlFkXRZ6MghSFsVblCgyLnf/hSlCUa7gSopRnBKUpBSlKUNZylGeClSkEpWpwlWJXikUT9/+q5NmFFnXhJ4MgpRF8RYlioxq7r86NbiWmtTiOq7nBm6kNnWoy03Uoz4NaEgjbuYWbk30StV4+vbfljSjyLo99GQQpCyKtyhRZNzp/htzF03+6QKacg/NaM693EcLWtKK1rThftrSjvZ0oGOiV+6Ip29/p6QZRVbn0JNBkLIo3qJEkdHF/T/IQ3TlYbrxCN3pQU960Zs+9KUfj9KfxxjAQB7niUSvPBBP3/4nk2YUWU+FngyClEXxFiWKjGfc/7M8x/MMYjAvMIShDGM4I3iRlxjJKEYzhpd5hbGMS/TK0/H07R+fNKPImhB6MgiCIAiCIAiCIFJ/A5294ZE=
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKGr+f2LLMdAwVVTVVVVVVVVVVVVVVVVVVVVVVVVffwAWsm5QQ==
+  </data>
+ </layer>
+ <objectgroup name="object">
+  <object name="ground" x="2" y="445" width="10554" height="32"/>
+ </objectgroup>
+</map>
