@@ -10,6 +10,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.app.Activity;
+import android.content.Context;
 
 public class MainGameActivity extends BaseGameActivity {
 	
@@ -39,7 +40,7 @@ public class MainGameActivity extends BaseGameActivity {
 	public void onCreateResources(
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws Exception {
-		ResourceManager.prepareManager(getEngine(),this, camera, getVertexBufferObjectManager());
+		ResourceManager.prepareManager(getEngine(),this, camera, getVertexBufferObjectManager(),getSystemService(Context.VIBRATOR_SERVICE));
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 		
 	}

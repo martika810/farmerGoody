@@ -13,12 +13,12 @@
    eJzt1jdvFEEYgOE9ERvoSBKxJdiGAnCJCbZB4kgluSdK5J4okXuiRO6JP4L4B4giNkBFek94pRNsuJn5Zufb1RaPLO2dd96dmR1dbxRFvYHMxCzMxhx0oRs9AZvK3BlbjCVYimXoxwAGFbRVaQ3Lti9q5VSW97ksnbH12ICN2ITN2IKtCtqqtIYa9kV9VldfWd7nsnTG9mAv9mE/DuAgDiloq9IaatgXGs7qml9leZ/L0hk7iVM4jTM4i3M4r6CtSmuoYV9oOKtrnVnX+N9urm/DduzATuyK/l6P/6/I9zmvJYttZ9aYLj15ruE6buAmbuE27gjMic9un+vpY6/52BemfJ3VodY51DtThKRzsuUwnx3BURzDcZxo+79O32cJeS1ZbDuzxnTpCTknGrptOnzsNR/7wpSv3xqh1ln7O2Mr7YxsucDnF3EJl3EFVwN1hmjJGlPD3Ng0aOjW1BG63ddvjVDzq/2dsZV1Tt7l83u4jwd4iEeBOkO0ZI2pYW5sGjR0a+qoanuoRu3vjIu0c/Ixnz3BUzzDc7wI1BiiJWtMDXNj06ChW1NHVdtDNWp/Z5I0E7xL+F7aOfmezz7gIz7hM74Itb3EK7zGG7zN+b7PFpsxXXtMn19qTiTmMVR7kX3a9qLpc0k2So3r0uRzTZPOyWbC94alnJOt68MxAiMxCqMbMm0/8BO/8BtRzn19ttiM6dpj+vxScyIxj6Hai+zTthdNn0uyUWpclyafa9rpOTn5n/Nx+tDf1vUpmIppQ9dnCPWN4z7jMQETMSnnvj5bbMZ07TF9fqk5kZjHUO1F9mnbi6bPJdkoNa5Lk+uaLmr4NR8LsLDVJXjfLnSjB3MxL2BLmr6EMfuEemyeX2pOXOcxZHuRfZr2os1zSTVKjmvb5LqmXyN331Os5P5NrMJqrMHahDG/WejnPgMYxHKsaGR/P63FZuxOZY3p2mP6/FJzIjGPodqL7NO2F02fS7JRalyXJtc1HdPoXPvZ1n49PhdN7tVubK1Wqyn2BzzX1nk=
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="0" height="0">
+ <objectgroup name="Object Layer 1"  width="0" height="0">
   <object name="ground" x="1" y="416" width="10566" height="62"/>
   <object name="t10" x="512" y="351" width="48" height="45"/>
   <object name="t10" x="572" y="350" width="48" height="45"/>
   <object name="t10" x="634" y="348" width="48" height="45"/>
   <object name="ground" x="787" y="247" width="104" height="13"/>
-  <object x="866" y="255" height="3"/>
+  <object name="end" x="10530" y="43" width="11" height="369"/>
  </objectgroup>
 </map>

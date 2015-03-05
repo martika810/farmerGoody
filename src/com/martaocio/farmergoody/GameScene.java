@@ -9,7 +9,10 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.PathModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Line;
 import org.andengine.entity.primitive.Polygon;
 import org.andengine.entity.primitive.Rectangle;
@@ -47,6 +50,7 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 
+import android.content.Context;
 import android.hardware.SensorManager;
 
 import com.badlogic.gdx.math.Vector2;
@@ -106,6 +110,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private DelayModifier keepRunningModifier = null;
 	private DelayModifier deleteAfterFadeModifier = null;
 	private final static int MAX_NUMBER_ERROR = 3;
+	
 
 	private int score = 10;
 	private int rightPathScore = 0;
@@ -436,8 +441,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						}
 						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
-
-						showLevelFailed();
+						endGameByBullCatch();
+						
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.FENCE)) {
 						if (player.sickRunning) {
@@ -607,7 +612,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (score <= 0) {
 						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
-						showLevelFailed();
+						endGameByRunOutPoints();
 					}
 					if (a.getUserData().equals(SpriteTag.PLAYER) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.PLAYER)
 							&& GameUtils.isBodyTomato(a)) {
@@ -621,6 +626,56 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 				}
 
+			}
+
+			private void endGameByBullCatch() {
+				resourceManager.vibrator.vibrate(250);
+				SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
+						new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
+						new RotationModifier(0.5f,0,360),
+						new MoveYModifier(1f, player.getY(), 1000)){
+					 @Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+				                // Your action after starting modifier
+				        }
+				       
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				                super.onModifierFinished(pItem);
+				                showLevelFailed();
+				        }
+				};
+				player.registerEntityModifier(rotationModifier);
+				
+				
+			}
+			
+			private void endGameByRunOutPoints() {
+				resourceManager.vibrator.vibrate(250);
+				SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
+						new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
+						new RotationModifier(0.5f,0,360),
+						new MoveYModifier(1f, player.getY(), 1000)){
+					 @Override
+				        protected void onModifierStarted(IEntity pItem)
+				        {
+				                super.onModifierStarted(pItem);
+				                // Your action after starting modifier
+				        }
+				       
+				        @Override
+				        protected void onModifierFinished(IEntity pItem)
+				        {
+				                super.onModifierFinished(pItem);
+				                showLevelFailed();
+				        }
+				};
+				player.registerEntityModifier(rotationModifier);
+				
+				
 			}
 
 			@Override
@@ -832,19 +887,23 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 			// restart
 			restartLevel();
+			System.gc();
 			break;
 		case QUIT:
 
 			// go to main menu
 			quit();
+			System.gc();
 			break;
 
 		case KEEP_PLAYING:
 			restartLevel();
+			System.gc();
 
 			break;
 
 		case UNPAUSE:
+			
 			reset();
 
 			break;

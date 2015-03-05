@@ -23,7 +23,9 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.util.Log;
 
 public class ResourceManager {
@@ -33,6 +35,8 @@ public class ResourceManager {
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	public Font font;
+	public Vibrator vibrator;
+	
 	
 	//load sounds
 	public Music themeMusic;
@@ -217,11 +221,12 @@ public class ResourceManager {
 
 	// method to prepare out manager
 	public static void prepareManager(Engine engine, MainGameActivity activity,
-			BoundCamera camera, VertexBufferObjectManager vbom) {
+			BoundCamera camera, VertexBufferObjectManager vbom,Object vibrator) {
 		getInstance().activity = activity;
 		getInstance().engine = engine;
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
+		getInstance().vibrator=(Vibrator)vibrator;
 
 	}
 
