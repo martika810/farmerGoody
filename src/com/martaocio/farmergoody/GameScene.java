@@ -325,7 +325,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				if(bull.getX()>player.getX()){
-					showLevelFailed();
+					endGameByBullCatch();
 				}
 
 			}
@@ -628,55 +628,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 			}
 
-			private void endGameByBullCatch() {
-				resourceManager.vibrator.vibrate(250);
-				SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
-						new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
-						new RotationModifier(0.5f,0,360),
-						new MoveYModifier(1f, player.getY(), 1000)){
-					 @Override
-				        protected void onModifierStarted(IEntity pItem)
-				        {
-				                super.onModifierStarted(pItem);
-				                // Your action after starting modifier
-				        }
-				       
-				        @Override
-				        protected void onModifierFinished(IEntity pItem)
-				        {
-				                super.onModifierFinished(pItem);
-				                showLevelFailed();
-				        }
-				};
-				player.registerEntityModifier(rotationModifier);
-				
-				
-			}
 			
-			private void endGameByRunOutPoints() {
-				resourceManager.vibrator.vibrate(250);
-				SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
-						new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
-						new RotationModifier(0.5f,0,360),
-						new MoveYModifier(1f, player.getY(), 1000)){
-					 @Override
-				        protected void onModifierStarted(IEntity pItem)
-				        {
-				                super.onModifierStarted(pItem);
-				                // Your action after starting modifier
-				        }
-				       
-				        @Override
-				        protected void onModifierFinished(IEntity pItem)
-				        {
-				                super.onModifierFinished(pItem);
-				                showLevelFailed();
-				        }
-				};
-				player.registerEntityModifier(rotationModifier);
-				
-				
-			}
 
 			@Override
 			public void endContact(Contact contact) {
@@ -740,6 +692,60 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			}
 
 		});
+	}
+	
+	public void endGameByBullCatch() {
+	//	player.setDead();
+		resourceManager.vibrator.vibrate(250);
+		SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
+				new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
+				new RotationModifier(0.5f,0,360),
+				new MoveYModifier(1f, player.getY(), 1000)
+				){
+			 @Override
+		        protected void onModifierStarted(IEntity pItem)
+		        {
+		                super.onModifierStarted(pItem);
+		                // Your action after starting modifier
+		                player.setDead();
+		        }
+		       
+		        @Override
+		        protected void onModifierFinished(IEntity pItem)
+		        {
+		                super.onModifierFinished(pItem);
+		                showLevelFailed();
+		        }
+		};
+		player.registerEntityModifier(rotationModifier);
+		
+		
+	}
+	
+	public void endGameByRunOutPoints() {
+		player.setDeadSick();
+		resourceManager.vibrator.vibrate(250);
+		SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
+				new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
+				new RotationModifier(0.5f,0,360),
+				new MoveYModifier(1f, player.getY(), 1000)){
+			 @Override
+		        protected void onModifierStarted(IEntity pItem)
+		        {
+		                super.onModifierStarted(pItem);
+		                // Your action after starting modifier
+		        }
+		       
+		        @Override
+		        protected void onModifierFinished(IEntity pItem)
+		        {
+		                super.onModifierFinished(pItem);
+		                showLevelFailed();
+		        }
+		};
+		player.registerEntityModifier(rotationModifier);
+		
+		
 	}
 
 	private void fadeOutBody(final Body body) {

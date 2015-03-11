@@ -51,7 +51,7 @@ public class ResourceManager {
 	
 	private BuildableBitmapTextureAtlas levelFailedAtlas,levelPassedAtlas,pauseAtlas;
 	
-	public ITextureRegion playMenuButton,continueMenuButton,mainMenuBackground;
+	public ITextureRegion playMenuButton,continueMenuButton,mainMenuBackground,shopMenuBackGround;
 	//public ITextureRegion restartButton,quitButton,failedBG,passedBG;
 	public ITextureRegion restartButton,quitButton,playButton,pauseButton,failedBG,passedBG,pauseBG;
 	
@@ -189,14 +189,17 @@ public class ResourceManager {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		
 		
+		
 		this.mainMenuTexturesAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
 		//add the background to the canvas
-		this.mainMenuBackground =BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(), "menubackground.png");
+		this.mainMenuBackground =BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(), "menubackground2.png");
+		this.shopMenuBackGround=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(), "shopPanel.png");
 		
 		
 		//add the play button
+		this.leftArrowTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(), "leftbtn.png");
 		this.playMenuButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas,activity.getAssets(),"playbtn.png");
 		this.continueMenuButton=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas,activity.getAssets(),"restartbtn.png");
 		
