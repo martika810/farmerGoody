@@ -170,7 +170,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createButtons();
 
 		tomatos = new LinkedList<Sprite>();
-		// stairs= new LinkedList<Stair>();
 		fencesBodies = new LinkedList<Body>();
 		pathScoreIndicators = new LinkedList<Sprite>();
 		try {

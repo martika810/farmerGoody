@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +25,16 @@ public class UserState {
 	private static UserState INSTANCE = null;
 	private static  Gson gson = null;
 	private static String DATA_FILE = "fj.txt";
+	private List<Vehicle> availableVehicles=new ArrayList<>();
+	private List<GameSession> sessions=new ArrayList<>();
+
+	public List<Vehicle> getAvailableVehicles() {
+		return availableVehicles;
+	}
+
+	public List<GameSession> getSessions() {
+		return sessions;
+	}
 
 	public static UserState getInstance() {
 		if (INSTANCE == null) {
@@ -37,6 +50,23 @@ public class UserState {
 	
 	public void setCurrentLevel(int level) {
 		this.currentLevel=level;
+	}
+	
+	public GameSession getLastModifiedSession(){
+		GameSession lastModifiedSession=null;
+		GregorianCalendar lastDateCalendar=null;
+		if(sessions.isEmpty()){
+			return lastModifiedSession;//that returns NULL
+		}
+		for(GameSession session:sessions){
+			if(lastModifiedSession==null) lastDateCalendar=session.getLastModified();
+			if(lastDateCalendar.before(session.getLastModified())){
+				lastDateCalendar=session.getLastModified();
+				lastModifiedSession=session;
+			}
+		}
+		return lastModifiedSession;
+		
 	}
 
 	public void saveToFile() {

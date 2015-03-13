@@ -12,5 +12,7 @@ public class Constants {
 	public final static String MINUSPOINT5="minuspoint5";
 	public final static String MINUSPOINT10="minuspoint10";
 	public final static String MINUSPOINT20="minuspoint20";
+	
+	public final static String EMPTY="somethingempty";
 
 }
