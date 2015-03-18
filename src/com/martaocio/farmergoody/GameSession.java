@@ -9,29 +9,48 @@ public class GameSession {
 	private Vehicle vehicleUsed=Vehicle.NONE;
 	private GregorianCalendar lastModified=new GregorianCalendar();
 	
+	public GameSession(){
+		this.currentLevel=1;
+		this.currentMoney=0;
+		this.vehicleUsed=Vehicle.NONE;
+		this.lastModified=new GregorianCalendar();
+	}
+	
 	public int getCurrentLevel() {
 		return currentLevel;
 	}
 	public void setCurrentLevel(int currentLevel) {
 		this.currentLevel = currentLevel;
+		this.lastModified=new GregorianCalendar();
 	}
 	public int getCurrentMoney() {
 		return currentMoney;
 	}
 	public void setCurrentMoney(int currentMoney) {
 		this.currentMoney = currentMoney;
+		this.lastModified=new GregorianCalendar();
 	}
 	public Vehicle getVehicleUsed() {
 		return vehicleUsed;
+		
 	}
 	public void setVehicleUsed(Vehicle vehicleUsed) {
 		this.vehicleUsed = vehicleUsed;
+		this.lastModified=new GregorianCalendar();
 	}
 	public GregorianCalendar getLastModified() {
 		return lastModified;
 	}
-	public void setLastModified(GregorianCalendar lastModified) {
-		this.lastModified = lastModified;
+	public void setLastModified() {
+		this.lastModified=new GregorianCalendar();;
+	}
+	
+	public boolean isEmptySession(){
+		
+		if(currentLevel==1 && currentMoney==0 && vehicleUsed.equals(Vehicle.NONE)){
+			return true;
+		}
+		return false;
 	}
 
 }

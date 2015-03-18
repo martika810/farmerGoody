@@ -20,6 +20,7 @@ import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtla
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
@@ -45,6 +46,9 @@ public class ResourceManager {
 	// TEXTURES
 	// this class is like a canvas to paint over
 	private BuildableBitmapTextureAtlas mainMenuTexturesAtlas;
+	
+	private BuildableBitmapTextureAtlas subMenuShopTextureAtlas;
+	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
 
 	private BuildableBitmapTextureAtlas gameTexturesAtlas;
 
@@ -68,6 +72,9 @@ public class ResourceManager {
 	public ITextureRegion rightArrowTexture;
 	public ITextureRegion leftArrowTexture;
 	public ITextureRegion shopItemMenuBackground;
+	public ITextureRegion sessionMenuBackground;
+	public ITextureRegion sessionMenuItem;
+	public ITextureRegion levelIcon;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
 	public ITextureRegion pauseBtnTexture;
@@ -82,6 +89,7 @@ public class ResourceManager {
 	public ITextureRegion minusPoint20Texture;
 
 	public ITextureRegion title;
+	
 
 	// Singleton pattern so all scenes use the same Resouce Manager
 	private static final ResourceManager INSTANCE = new ResourceManager();
@@ -222,18 +230,32 @@ public class ResourceManager {
 
 		this.mainMenuTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		this.subMenuShopTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+				TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		
+		this.subMenuSessionTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+				TextureOptions.NEAREST_PREMULTIPLYALPHA);
+
 
 		// add the background to the canvas
 		this.mainMenuBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
-				"menubackground2.png");
-		this.shopMenuBackGround = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
+				"menubackground3.png");
+		this.shopMenuBackGround = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"shopPanel.png");
-		this.shopItemMenuBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
+		this.shopItemMenuBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"menuItem.png");
-		this.unycleImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
+		this.unycleImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"unicycle.png");
-		this.buyBtn=BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
+		this.buyBtn=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"buyBtn.png");
+		
+		this.sessionMenuBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+			"sessionPanel.png");
+		this.sessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"session_item.png");
+		this.levelIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"level_noimage.png");
 
 		// add the play button
 		this.leftArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
@@ -246,6 +268,12 @@ public class ResourceManager {
 		try {
 			this.mainMenuTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.mainMenuTexturesAtlas.load();
+			
+			this.subMenuShopTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.subMenuShopTextureAtlas.load();
+			
+			this.subMenuSessionTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.subMenuSessionTextureAtlas.load();
 
 		} catch (TextureAtlasBuilderException e) {
 			Debug.e(e);

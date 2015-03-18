@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -20,13 +21,28 @@ import com.google.gson.GsonBuilder;
 public class UserState {
 
 	private int currentLevel = 1;
-	private int currentAcumalatedPoints =0;
-	private int bestScore=0;
+	private int currentAcumalatedPoints = 0;
+	private int bestScore = 0;
 	private static UserState INSTANCE = null;
-	private static  Gson gson = null;
+	private static Gson gson = null;
 	private static String DATA_FILE = "fj.txt";
-	private List<Vehicle> availableVehicles=new ArrayList<>();
-	private List<GameSession> sessions=new ArrayList<>();
+	private List<Vehicle> availableVehicles = new ArrayList<>();
+	private List<GameSession> sessions = Arrays.asList(new GameSession[3]);
+	private int indexSelectedSession = 0;
+	
+	public UserState(){
+		this.currentLevel = 1;
+		this.currentAcumalatedPoints = 0;
+		this.bestScore = 0;
+		this.availableVehicles = new ArrayList<>();
+		this.sessions = new ArrayList<>();
+		this.sessions.add(new GameSession());
+		this.sessions.add(new GameSession());
+		this.sessions.add(new GameSession());
+		this.indexSelectedSession = 0;
+		
+	}
+	
 
 	public List<Vehicle> getAvailableVehicles() {
 		return availableVehicles;
@@ -35,10 +51,14 @@ public class UserState {
 	public List<GameSession> getSessions() {
 		return sessions;
 	}
+	
+	public void initSessions(){
+		sessions=Arrays.asList(new GameSession[3]);
+	}
 
 	public static UserState getInstance() {
 		if (INSTANCE == null) {
-			
+
 			INSTANCE = load();
 		}
 		return INSTANCE;
@@ -47,31 +67,44 @@ public class UserState {
 	public int getCurrentLevel() {
 		return currentLevel;
 	}
-	
+
 	public void setCurrentLevel(int level) {
-		this.currentLevel=level;
+		this.currentLevel = level;
 	}
-	
-	public GameSession getLastModifiedSession(){
-		GameSession lastModifiedSession=null;
-		GregorianCalendar lastDateCalendar=null;
-		if(sessions.isEmpty()){
-			return lastModifiedSession;//that returns NULL
+
+	public GameSession getLastModifiedSession() {
+		GameSession lastModifiedSession = null;
+		GregorianCalendar lastDateCalendar = null;
+		if (sessions.isEmpty()) {
+			return lastModifiedSession;// that returns NULL
 		}
-		for(GameSession session:sessions){
-			if(lastModifiedSession==null) lastDateCalendar=session.getLastModified();
-			if(lastDateCalendar.before(session.getLastModified())){
-				lastDateCalendar=session.getLastModified();
-				lastModifiedSession=session;
+		for (GameSession session : sessions) {
+			if (lastModifiedSession == null) {
+				lastDateCalendar = session.getLastModified();
+				lastModifiedSession = session;
+			}
+			if (lastDateCalendar.before(session.getLastModified())) {
+				lastDateCalendar = session.getLastModified();
+				lastModifiedSession = session;
 			}
 		}
 		return lastModifiedSession;
-		
+
+	}
+
+	public GameSession getSelectedSession() {
+		if (sessions.isEmpty()) {
+			sessions.add(new GameSession());
+		}
+		indexSelectedSession=0;
+		return sessions.get(indexSelectedSession);
+	}
+	public void setSelectedSession(int indexSelectedSession){
+		this.indexSelectedSession=indexSelectedSession;
 	}
 
 	public void saveToFile() {
 
-	
 		File data_file = new File(DATA_FILE);
 		FileOutputStream fos;
 		try {
@@ -85,38 +118,37 @@ public class UserState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 	}
 
 	private static UserState load() {
-		if(gson==null){
-			gson=new GsonBuilder().create();
+		if (gson == null) {
+			gson = new GsonBuilder().create();
 		}
 		FileInputStream fis;
-		String strJson="";
-		UserState userState=new UserState();
+		String strJson = "";
+		UserState userState = new UserState();
 		try {
 			fis = ResourceManager.getInstance().activity.openFileInput(DATA_FILE);
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			strJson = br.readLine();
-		
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(!strJson.isEmpty()){
+		if (!strJson.isEmpty()) {
 			userState = gson.fromJson(strJson, UserState.class);
 		}
-		 
+
 		return userState;
 
 	}
-	
-	public void clear(){
-		currentLevel=1;
-		currentAcumalatedPoints=0;
+
+	public void clear() {
+		currentLevel = 1;
+		currentAcumalatedPoints = 0;
 	}
 
 	public int getBestScore() {

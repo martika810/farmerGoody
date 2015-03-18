@@ -572,8 +572,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 							if (currentUserState.getBestScore() < score) {
 								currentUserState.setBestScore(score);
 							}
-							currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
-							currentUserState.saveToFile();
+							//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
+							
+						//	currentUserState.saveToFile();
 							showLevelFailed();
 						}
 
@@ -601,15 +602,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						if (currentUserState.getBestScore() < score) {
 							currentUserState.setBestScore(score);
 						}
-						currentUserState.setCurrentAcumalatedPoints(score);
-						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel() + 1);
+						//currentUserState.setCurrentAcumalatedPoints(score);
+						//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel() + 1);
+						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
+						currentUserState.getSelectedSession().setCurrentMoney(100);
+						
 						currentUserState.saveToFile();
 						showLevelCleared();
 
 					}
 
 					if (score <= 0) {
-						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
+						//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
 						endGameByRunOutPoints();
 					}
