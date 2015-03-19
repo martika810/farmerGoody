@@ -62,6 +62,7 @@ public class ResourceManager {
 	// public ITextureRegion coinTexture;
 
 	public ITiledTextureRegion playerTexture;// this texture is gonna be tiled
+	public ITiledTextureRegion playerRidingUnicycleTexture;
 	public ITextureRegion stairTexture;
 	public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
@@ -74,6 +75,8 @@ public class ResourceManager {
 	public ITextureRegion shopItemMenuBackground;
 	public ITextureRegion sessionMenuBackground;
 	public ITextureRegion sessionMenuItem;
+	public ITextureRegion iconUnicycle;
+	public ITextureRegion vehicleNoImage;
 	public ITextureRegion levelIcon;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
@@ -125,7 +128,9 @@ public class ResourceManager {
 		// this.coinTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas,
 		// activity.getAssets(), "coin.png");
 		this.playerTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
-				"player1.png", 6, 2);
+				"player.png", 6, 1);
+		this.playerRidingUnicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"riding_unicycle.png", 6, 1);
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
 				4, 1);
 		this.tomatoTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
@@ -256,6 +261,10 @@ public class ResourceManager {
 				"session_item.png");
 		this.levelIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"level_noimage.png");
+		this.iconUnicycle=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"icon_unicycle.png");
+		this.vehicleNoImage=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"vehicle_noimage.png");
 
 		// add the play button
 		this.leftArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),

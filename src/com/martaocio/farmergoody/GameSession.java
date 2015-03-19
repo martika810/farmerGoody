@@ -6,12 +6,14 @@ public class GameSession {
 	
 	private int currentLevel=1;
 	private int currentMoney=0;
+	private int score =0;
 	private Vehicle vehicleUsed=Vehicle.NONE;
 	private GregorianCalendar lastModified=new GregorianCalendar();
 	
 	public GameSession(){
 		this.currentLevel=1;
 		this.currentMoney=0;
+		this.score=0;
 		this.vehicleUsed=Vehicle.NONE;
 		this.lastModified=new GregorianCalendar();
 	}
@@ -51,6 +53,14 @@ public class GameSession {
 			return true;
 		}
 		return false;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }

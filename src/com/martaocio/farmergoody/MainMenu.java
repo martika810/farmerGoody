@@ -1,8 +1,16 @@
 package com.martaocio.farmergoody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.MoveModifier;
+import org.andengine.entity.modifier.MoveYModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
@@ -22,6 +30,7 @@ import com.martaocio.farmergoody.SceneManager.SceneType;
 public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOnSceneTouchListener {
 
 	private static final int ORIGIN_X = 200;
+	private static final int ORIGIN_SESSIONMENU_X = 215;
 	private static final int ORIGIN_Y = 90;
 	private static final int PADDING_X = 10;
 	private static final int PADDING_Y = 5;
@@ -47,6 +56,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private boolean areMenuItemEnabled = true;
 	private boolean isShopMenuOnScreen = false;
 	private boolean isSessionMenuOnScreen = false;
+	private List<Sprite> sessionItems=new ArrayList<>();
 
 	@Override
 	public void createScene() {
@@ -148,9 +158,23 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 			Sprite sessionItem = createSessionMenuItem(session,indexItem);
 			sessionBg.attachChild(sessionItem);
+			if(sessionItems==null ){
+				sessionItems=new ArrayList<>();
+			}
+			sessionItems.add(sessionItem);
 			indexItem++;
 		}
 
+	}
+	
+	private void updateSessionItem(GameSession session,int menuIndexToUpdate){
+		Sprite sessionMenuItemToUpdate=sessionItems.get(menuIndexToUpdate);
+		sessionMenuItemToUpdate.detachSelf();
+		sessionMenuItemToUpdate.dispose();
+		sessionItems.remove(menuIndexToUpdate);
+		Sprite newSessionMenuItem=createSessionMenuItem(session, menuIndexToUpdate);
+		sessionBg.attachChild(newSessionMenuItem);
+		sessionItems.add(newSessionMenuItem);
 	}
 
 	private Sprite createSessionMenuItem(GameSession session,int indexItem) {
@@ -166,17 +190,31 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				return true;
 			};
 		};
-		sessionItem.setPosition(ORIGIN_X, ORIGIN_Y+PADDING_Y+(ITEM_SESSION_DIM_Y*indexItem));
+		sessionItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y+PADDING_Y+(ITEM_SESSION_DIM_Y*indexItem));
 		Sprite levelImage=new Sprite(20,10,resourceManager.levelIcon,vbom);
 		sessionItem.attachChild(levelImage);
 		
 		Text levelText = new Text(120, 30, resourceManager.font, "LEVEL "+session.getCurrentLevel(), new TextOptions(
 				HorizontalAlign.CENTER), vbom);
 		sessionItem.attachChild(levelText);
+		
+		Sprite vehicleIcon=createVehiculeIcon(session.getVehicleUsed());
+		vehicleIcon.setPosition(200,10);
+		sessionItem.attachChild(vehicleIcon);
+		
 		this.menuChildScene.registerTouchArea(sessionItem);
 
 		return sessionItem;
 
+	}
+	
+	private Sprite createVehiculeIcon(Vehicle vehicleSelected){
+		if(vehicleSelected.equals(Vehicle.UNICYCLE)){
+			return new Sprite(0,0,resourceManager.iconUnicycle,vbom);
+		}
+		return new Sprite(0,0,resourceManager.vehicleNoImage,vbom);
+			
+		
 	}
 
 	private void createSessionMenu() {
@@ -210,13 +248,19 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && isShopMenuOnScreen) {
-						setScale(1.2f);
-						UserState.getInstance().getAvailableVehicles().add(vehicle);
+						//setScale(1.2f);
+						UserState.getInstance().setSelectedSession(0);
+						UserState.getInstance().getSelectedSession().setVehicleUsed(vehicle);
+						int newCurrentCreadit=UserState.getInstance().getSelectedSession().getCurrentMoney()-vehicle.getPrice();
+						UserState.getInstance().getSelectedSession().setCurrentMoney(newCurrentCreadit);
+						UserState.getInstance().saveToFile();
+						updateSessionItem(UserState.getInstance().getSelectedSession(), 0);
+						this.registerEntityModifier(getBuyBtnEntityModifier());
 					}
 					return true;
 				};
 			};
-			buyBtn.registerEntityModifier(new ScaleModifier(1f, 1f, 1.2f));
+			
 			buyBtn.setPosition(130, -10);
 			this.menuChildScene.registerTouchArea(buyBtn);
 			itemBackground.attachChild(buyBtn);
@@ -226,6 +270,29 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		itemBackground.attachChild(priceText);
 
 		return itemBackground;
+	}
+	private SequenceEntityModifier getBuyBtnEntityModifier(){
+		
+		return new SequenceEntityModifier(
+				new ScaleModifier(0.5f, 1f, 1.2f) ,
+				new DelayModifier(0.2f),
+				new ScaleModifier(0.2f, 1f, 0f)
+				){
+			 @Override
+		        protected void onModifierStarted(IEntity pItem)
+		        {
+		                super.onModifierStarted(pItem);
+		                // Your action after starting modifier
+		                
+		        }
+		       
+		        @Override
+		        protected void onModifierFinished(IEntity pItem)
+		        {
+		                super.onModifierFinished(pItem);
+		                pItem.setVisible(false);
+		        }
+		};
 	}
 
 	private void showShopMenuScene() {

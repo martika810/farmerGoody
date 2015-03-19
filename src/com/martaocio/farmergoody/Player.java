@@ -6,6 +6,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.badlogic.gdx.math.Vector2;
@@ -18,12 +19,11 @@ public abstract class Player extends AnimatedSprite {
 	public boolean isAlive = true;
 	public boolean canJump = true;
 	public boolean canEat = false;
-	public boolean sickRunning = false;
+	
 
 	public Player(float pX, float pY, float width, float height, VertexBufferObjectManager vbom, BoundCamera camera,
 			PhysicsWorld physicsWorld) {
-
-		super(pX, pY, width, height, ResourceManager.getInstance().playerTexture, vbom);
+		super(pX, pY, width, height, getSelectedPlayerTexture(UserState.getInstance().getSelectedSession().getVehicleUsed()), vbom);
 		createPhysics(camera, physicsWorld);
 
 		camera.setChaseEntity(this);
@@ -72,6 +72,24 @@ public abstract class Player extends AnimatedSprite {
 		});
 
 	}
+	
+	private static ITiledTextureRegion getSelectedPlayerTexture(Vehicle vehiculeSelected){
+		if(vehiculeSelected.equals(vehiculeSelected.UNICYCLE)){
+			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+		}else if(vehiculeSelected.equals(vehiculeSelected.BICYCLE)){
+			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+		}
+		else if(vehiculeSelected.equals(vehiculeSelected.SCOOTER)){
+			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+		}
+		else if(vehiculeSelected.equals(vehiculeSelected.HARLEY)){
+			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+		}
+		else {
+			return ResourceManager.getInstance().playerTexture;
+		}
+		
+	}
 
 	public abstract void onDie();
 
@@ -86,7 +104,7 @@ public abstract class Player extends AnimatedSprite {
 																				// the
 																				// animations
 				animate(PLAYER_ANIMATE, 0, 3, true);
-			} else if (this.isAnimationRunning() && sickRunning) {
+			} else if (this.isAnimationRunning()) {
 				this.stopAnimation();
 				canEat = false;
 				final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100, 100 };// array
@@ -96,11 +114,11 @@ public abstract class Player extends AnimatedSprite {
 																				// animations
 				animate(PLAYER_ANIMATE, 0, 3, true);
 			}
-			this.sickRunning = false;
+			
 		}
 	}
 
-	public void setRunningSick() {
+	/*public void setRunningSick() {
 		if (isAlive) {
 			this.sickRunning = true;
 			this.stopAnimation();
@@ -111,7 +129,7 @@ public abstract class Player extends AnimatedSprite {
 			// animations
 			animate(PLAYER_ANIMATE, 5, 8, true);
 		}
-	}
+	}*/
 
 	// make the player jumps
 	public void jump() {
@@ -179,14 +197,14 @@ public abstract class Player extends AnimatedSprite {
 		isAlive=false;
 		if (this.isAnimationRunning())
 			this.stopAnimation();
-		this.setCurrentTileIndex(9);
+		this.setCurrentTileIndex(5);
 	}
 
-	public void setDeadSick() {
+	/*public void setDeadSick() {
 		isAlive=false;
 		if (this.isAnimationRunning())
 			this.stopAnimation();
 		this.setCurrentTileIndex(10);
-	}
+	}*/
 
 }

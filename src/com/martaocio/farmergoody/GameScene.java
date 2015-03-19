@@ -122,7 +122,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	@Override
 	public void createScene() {
 		createPhysicsWorld();
-		createLevel(UserState.getInstance().getCurrentLevel());
+		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
 		createLevelClearedScene();
 		createLevelFailedScene();
 		createPauseScene();
@@ -161,7 +161,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// ResourceManager.getInstance().tomatoIconTexture, vbom);
 		tomatoScoreIcon.setPosition(20, 20);
 		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-		textBestScore = new Text(20, 125, this.resourceManager.font, "    " + UserState.getInstance().getBestScore() + "   ",
+		textBestScore = new Text(20, 125, this.resourceManager.font, "    " + UserState.getInstance().getSelectedSession().getScore() + "   ",
 				new TextOptions(HorizontalAlign.CENTER), vbom);
 		textLevel = new Text(40, 170, this.resourceManager.font, "#" + levelNumber + "   ", vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
@@ -278,7 +278,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			}
 		};
 		// animate the player
-		player.setRunning();
+		Vehicle sessionVehicle=UserState.getInstance().getSelectedSession().getVehicleUsed();
+		if(sessionVehicle.equals(Vehicle.UNICYCLE)){
+			
+		}
+		else if(sessionVehicle.equals(Vehicle.BICYCLE)){}
+		else if(sessionVehicle.equals(Vehicle.SCOOTER)){}
+		else if(sessionVehicle.equals(Vehicle.HARLEY)){}
+		else{
+			player.setRunning();
+		}
 		this.attachChild(player);
 
 		// Attach bull
@@ -423,11 +432,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 						player.canEat = false;
 						player.canJump = true;
-						if (player.sickRunning) {
-							player.setRunningSick();
-						} else {
-							player.setRunning();
-						}
+						player.setRunning();
+						
 					}
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.GROUND, SpriteTag.BULL)) {
@@ -444,11 +450,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.FENCE)) {
-						if (player.sickRunning) {
-							player.setRunningSick();
-						} else {
 							player.setRunning();
-						}
+						
 
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.FENCE)) {
@@ -605,7 +608,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						//currentUserState.setCurrentAcumalatedPoints(score);
 						//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel() + 1);
 						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
-						currentUserState.getSelectedSession().setCurrentMoney(100);
+						int currentMoney=currentUserState.getSelectedSession().getCurrentMoney();
+						currentUserState.getSelectedSession().setCurrentMoney(currentMoney+100);
 						
 						currentUserState.saveToFile();
 						showLevelCleared();
@@ -617,7 +621,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						currentUserState.saveToFile();
 						endGameByRunOutPoints();
 					}
-					if (a.getUserData().equals(SpriteTag.PLAYER) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.PLAYER)
+					/*if (a.getUserData().equals(SpriteTag.PLAYER) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.PLAYER)
 							&& GameUtils.isBodyTomato(a)) {
 						if (!player.sickRunning && score <= Constants.SICK_LIMIT) {
 							player.setRunningSick();
@@ -625,7 +629,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 							player.setRunning();
 						}
 
-					}
+					}*/
 
 				}
 
@@ -726,7 +730,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 	
 	public void endGameByRunOutPoints() {
-		player.setDeadSick();
+		player.setDead();
 		resourceManager.vibrator.vibrate(250);
 		SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
 				new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
