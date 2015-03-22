@@ -53,6 +53,15 @@ public class SceneManager {
 		
 		pOnCreateSceneCallback.onCreateSceneFinished(mainMenu);
 	}
+	
+	public void updateMainMenu(){
+		mainMenu=new MainMenu();
+		
+		currentScene=mainMenu;
+		
+	}
+	
+	
 
 	public enum SceneType {
 		SCENE_MENU, SCENE_GAME

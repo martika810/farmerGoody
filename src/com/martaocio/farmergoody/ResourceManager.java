@@ -49,6 +49,7 @@ public class ResourceManager {
 	
 	private BuildableBitmapTextureAtlas subMenuShopTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
+	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
 
 	private BuildableBitmapTextureAtlas gameTexturesAtlas;
 
@@ -72,8 +73,17 @@ public class ResourceManager {
 	public ITextureRegion upArrowTexture;
 	public ITextureRegion rightArrowTexture;
 	public ITextureRegion leftArrowTexture;
-	public ITextureRegion shopItemMenuBackground;
+	public ITiledTextureRegion unicycleShopItem;
+	public ITiledTextureRegion bicycleShopItem;
+	public ITiledTextureRegion scooterShopItem;
+	public ITiledTextureRegion hardleyShopItem;
+	public ITextureRegion unicycleSessionMenuItem;
+	public ITextureRegion bicycleSessionMenuItem;
+	public ITextureRegion scooterSessionMenuItem;
+	public ITextureRegion harleySessionMenuItem;
 	public ITextureRegion sessionMenuBackground;
+	public ITextureRegion selectVehiculeMenuBackground;
+	public ITextureRegion lockIcon;
 	public ITextureRegion sessionMenuItem;
 	public ITextureRegion iconUnicycle;
 	public ITextureRegion vehicleNoImage;
@@ -241,6 +251,8 @@ public class ResourceManager {
 		
 		this.subMenuSessionTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		this.subMenuSelectVehicleTextureAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+				TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
 
 		// add the background to the canvas
@@ -248,15 +260,28 @@ public class ResourceManager {
 				"menubackground3.png");
 		this.shopMenuBackGround = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"shopPanel.png");
-		this.shopItemMenuBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"menuItem.png");
+		this.unicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
+				"unicycleShopItem.png", 2, 1);
+		this.bicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
+				"bicycleShopIconSheet.png", 2, 1);
+		this.scooterShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
+				"ScooterShopItem.png", 2, 1);
+		this.hardleyShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
+				"harleyShopIcon.png", 2, 1);
 		this.unycleImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"unicycle.png");
 		this.buyBtn=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"buyBtn.png");
+				"bagShopIcon.png");
 		
 		this.sessionMenuBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 			"sessionPanel.png");
+		
+		this.selectVehiculeMenuBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSelectVehicleTextureAtlas, activity.getAssets(),
+				"selectVehiclePanel.png");
+		
+		this.lockIcon = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSelectVehicleTextureAtlas, activity.getAssets(),
+				"lock.png");
+		
 		this.sessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"session_item.png");
 		this.levelIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
@@ -265,6 +290,18 @@ public class ResourceManager {
 				"icon_unicycle.png");
 		this.vehicleNoImage=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"vehicle_noimage.png");
+		this.unicycleSessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"unicycleSessionItem.png");
+
+		this.bicycleSessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"bycicleSessionIcon.png");
+
+		this.scooterSessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"scooterSessionItem.png");
+
+		this.harleySessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"harleySessionItem.png");
+
 
 		// add the play button
 		this.leftArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
@@ -283,6 +320,9 @@ public class ResourceManager {
 			
 			this.subMenuSessionTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.subMenuSessionTextureAtlas.load();
+			
+			this.subMenuSelectVehicleTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.subMenuSelectVehicleTextureAtlas.load();
 
 		} catch (TextureAtlasBuilderException e) {
 			Debug.e(e);

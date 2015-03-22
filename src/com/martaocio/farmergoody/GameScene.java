@@ -233,6 +233,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
 					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 50, 50, TomatoResourceHelper.getTomatoResource(object
 							.getName()), vbom);
+					tomatoType.setCullingEnabled(true);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType, BodyType.StaticBody, tomatoFixtureDef);
 					body.setUserData(object.getName());
@@ -798,6 +799,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.failedBG, vbom);
+		bg.setCullingEnabled(true);
 		//
 		levelFailed.attachChild(bg);
 		levelFailed.setBackgroundEnabled(false);// to see our scena throught the
@@ -823,6 +825,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.pauseBG, vbom);
+		bg.setCullingEnabled(true);
 		//
 		levelPause.attachChild(bg);
 		levelPause.setBackgroundEnabled(false);// to see our scena throught the
@@ -844,6 +847,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 
 		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
+	//	bg.setCullingEnabled(true);
 
 		levelCleared.attachChild(bg);
 		levelCleared.setBackgroundEnabled(false);
@@ -984,6 +988,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.camera.setBoundsEnabled(false);
 		resourceManager.camera.setCenter(400, 240);
 
+		SceneManager.getInstance().updateMainMenu();
+		System.gc();
 		SceneManager.getInstance().setMainMenu();
 
 	}
@@ -1031,16 +1037,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		Body physicBodyLine;
 		Line line = new Line(startX, startY, endX, endY, vbom);
+		Line lineTicker = new Line(startX, startY, endX, endY, vbom);
 
 		FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.5f, 0.5f);
 
 		physicBodyLine = PhysicsFactory.createLineBody(mPhysicsWorld, bodyLine, objectFixtureDef);
 		physicBodyLine.setUserData(SpriteTag.LINE);
 		bodyLine.setVisible(false);
-		line.setLineWidth(5);
-		line.setColor(1.0f, .2f, 0.2f);
+		line.setLineWidth(2);
+		lineTicker.setLineWidth(6);
+		line.setColor(0f, 102f, 0f);
+		lineTicker.setColor(102f,204f,0f);
 
 		this.attachChild(bodyLine);
+		this.attachChild(lineTicker);
 		this.attachChild(line);
 
 	}

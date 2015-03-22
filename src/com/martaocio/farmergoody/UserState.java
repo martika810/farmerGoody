@@ -95,8 +95,9 @@ public class UserState {
 	public GameSession getSelectedSession() {
 		if (sessions.isEmpty()) {
 			sessions.add(new GameSession());
+			indexSelectedSession=0;
 		}
-		indexSelectedSession=0;
+		
 		return sessions.get(indexSelectedSession);
 	}
 	public void setSelectedSession(int indexSelectedSession){
