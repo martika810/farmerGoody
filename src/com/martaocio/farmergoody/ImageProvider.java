@@ -1,9 +1,11 @@
 package com.martaocio.farmergoody;
 
+import org.andengine.opengl.texture.region.ITextureRegion;
+
 public class ImageProvider {
 
-	public static String getPointImage(String imageType, String levelType) {
-		if (levelType.equals(Constants.FARM)) {
+	public static String getPointImage(String imageType) {
+		
 			
 			if (imageType.equals(Constants.POINT5))
 				return "tomato_point5.png";
@@ -16,24 +18,23 @@ public class ImageProvider {
 			if (imageType.equals(Constants.MINUSPOINT20))
 				return "tomato_point_minus20.png";
 
-		}
-		if (levelType.equals(Constants.FOREST)) {
-			
-			if (imageType.equals(Constants.POINT5))
-				return "orange_point5.png";
-			if (imageType.equals(Constants.POINT10))
-				return "orange_point10.png";
-		}
-		if (levelType.equals(Constants.LONDON)) {
-			
-			if (imageType.equals(Constants.POINT5))
-				return "chip_point5.png";
-			
-			if (imageType.equals(Constants.POINT10))
-				return "chip_point10.png";
-		}
+		
 		
 		return "noimage";
+	}
+	
+	public static ITextureRegion getLevelIcon(String descriptionLevelType){
+		if(descriptionLevelType.equals(Constants.FOREST)){
+			return ResourceManager.getInstance().levelIconForest;
+		}else if(descriptionLevelType.equals(Constants.FARM_EVENING)){
+			return ResourceManager.getInstance().levelIconFarmEvening;
+		}
+		else if(descriptionLevelType.equals(Constants.FARM_DAY)){
+			return ResourceManager.getInstance().levelIconFarmDay;
+		}
+		else{
+			return ResourceManager.getInstance().levelIcon;
+		}
 	}
 
 }

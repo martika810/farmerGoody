@@ -19,11 +19,13 @@ public abstract class Player extends AnimatedSprite {
 	public boolean isAlive = true;
 	public boolean canJump = true;
 	public boolean canEat = false;
+	public Vehicle vehicleUsed;
 	
 
 	public Player(float pX, float pY, float width, float height, VertexBufferObjectManager vbom, BoundCamera camera,
 			PhysicsWorld physicsWorld) {
 		super(pX, pY, width, height, getSelectedPlayerTexture(UserState.getInstance().getSelectedSession().getVehicleUsed()), vbom);
+		vehicleUsed=UserState.getInstance().getSelectedSession().getVehicleUsed();
 		createPhysics(camera, physicsWorld);
 
 		camera.setChaseEntity(this);
@@ -64,7 +66,7 @@ public abstract class Player extends AnimatedSprite {
 					camera.setChaseEntity(null);
 				}
 
-				float velocityX = VelocityProvider.getVelocityByLevel(UserState.getInstance().getCurrentLevel());
+				float velocityX = VelocityProvider.getVelocityByLevel(vehicleUsed);
 				// the velocyty makes the player moves in certain direction
 				// we leave the y the same bcos we just want to move it across
 				body.setLinearVelocity(new Vector2(velocityX, body.getLinearVelocity().y));
@@ -77,10 +79,10 @@ public abstract class Player extends AnimatedSprite {
 		if(vehiculeSelected.equals(vehiculeSelected.UNICYCLE)){
 			return ResourceManager.getInstance().playerRidingUnicycleTexture;
 		}else if(vehiculeSelected.equals(vehiculeSelected.BICYCLE)){
-			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+			return ResourceManager.getInstance().playerRidingBicycleTexture;
 		}
 		else if(vehiculeSelected.equals(vehiculeSelected.SCOOTER)){
-			return ResourceManager.getInstance().playerRidingUnicycleTexture;
+			return ResourceManager.getInstance().playerRidingScooterTexture;
 		}
 		else if(vehiculeSelected.equals(vehiculeSelected.HARLEY)){
 			return ResourceManager.getInstance().playerRidingUnicycleTexture;
@@ -90,6 +92,7 @@ public abstract class Player extends AnimatedSprite {
 		}
 		
 	}
+	
 
 	public abstract void onDie();
 

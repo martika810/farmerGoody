@@ -6,25 +6,25 @@ public class LevelProvider {
 		
 		switch (levelNumber){
 			case 1:
-				//return "tmx/level_flat_new.tmx";
-				return "tmx/level3.tmx";
-			
+				return "tmx/level_flat_new.tmx";
 			case 2:
 				return "tmx/level2.tmx";
 			case 3:
-				return "tmx/level_flat_new.tmx";
+				return "tmx/level3.tmx";
 			case 4:
-				return "tmx/level_flat4.tmx";
+				return "tmx/level_flat_new.tmx";
 			case 5:
-				return "tmx/level_flat4_2.tmx";
+				return "tmx/level2.tmx";
 			case 6:
-				return "tmx/level_flat4_3.tmx";
+				return "tmx/level3.tmx";
 			case 7:
-				return "tmx/level_flat5.tmx";
+				return "tmx/level_flat_new.tmx";
 			case 8:
-				return "tmx/level_london_2.tmx";
+				return "tmx/level2.tmx";
 			case 9:
-				return "tmx/level_london_3.tmx";
+				return "tmx/level3.tmx";
+			case 10:
+				return "tmx/level_flat_new.tmx";
 			default:
 				return "";
 		}

@@ -3,22 +3,26 @@ package com.martaocio.farmergoody;
 public enum LevelType {
 	
 
-	LEVEL1(1,Constants.FARM),
-	LEVEL2(2,Constants.FARM),
-	LEVEL3(3,Constants.FARM),
-	LEVEL4(4,Constants.FOREST),
-	LEVEL5(5,Constants.FOREST),
-	LEVEL6(6,Constants.FOREST),
-	LEVEL7(7,Constants.LONDON),
-	LEVEL8(8,Constants.LONDON),
-	LEVEL9(9,Constants.LONDON),
-	LEVEL10(9,Constants.LONDON);
+	LEVEL1(1,Constants.FARM_DAY,270),
+	LEVEL2(2,Constants.FARM_EVENING,385),
+	LEVEL3(3,Constants.FOREST,295),
+	LEVEL4(4,Constants.FARM_DAY,270),
+	LEVEL5(5,Constants.FARM_EVENING,385),
+	LEVEL6(6,Constants.FOREST,295),
+	LEVEL7(7,Constants.FARM_DAY,270),
+	LEVEL8(8,Constants.FARM_EVENING,385),
+	LEVEL9(9,Constants.FOREST,295),
+	LEVEL10(9,Constants.FARM_DAY,270);
 	
 	private int number;
 	private String typeLevel;
-	LevelType(int number,String typeLevel){
+	private int totalPoints;
+	
+
+	LevelType(int number,String typeLevel,int totalPoints){
 		this.number=number;
 		this.typeLevel=typeLevel;
+		this.totalPoints=totalPoints;
 	}
 	
 	public static LevelType getLevelType(int levelNumber){
@@ -39,6 +43,10 @@ public enum LevelType {
 			return LEVEL7;
 		case 8:
 			return LEVEL8;
+		case 9:
+			return LEVEL9;
+		case 10:
+			return LEVEL10;
 
 		default:
 			return null;
@@ -49,6 +57,10 @@ public enum LevelType {
 
 	public String getTypeLevel() {
 		return typeLevel;
+	}
+	
+	public int getTotalPoints() {
+		return totalPoints;
 	}
 
 

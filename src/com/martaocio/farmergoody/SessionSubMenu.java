@@ -83,12 +83,16 @@ public class SessionSubMenu extends Sprite {
 			if (!vehicle.equals(Vehicle.NONE)) {
 				boolean isVehicleAvailable = UserState.getInstance().getAvailableVehicles().contains(vehicle);
 				Sprite vehiculeItem = null;
+				float originY=ORIGIN_SELECTVEHICLEMENU_Y
+						+ (PADDING_SELECTVEHICLEITEM + (DIM_HEIGHT_SELECTVEHICLEITEM * indexItemToPlace));
 				if (isVehicleAvailable) {
-					vehiculeItem = new Sprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom) {
+					vehiculeItem = new Sprite(ORIGIN_SELECTVEHICLEMENU_X, originY, Vehicle.getVehicleShopItem(vehicle), vbom) {
 						@Override
 						public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 							if (pSceneTouchEvent.isActionDown() && isSelectVehicleMenuOnScreen) {
-								UserState.getInstance().getSessions().get(indexSessionToUpdateVehicule).setVehicleUsed(Vehicle.BICYCLE);
+								String descriptionVehicleSelected=(String)this.getUserData();
+								Vehicle vehicleSelected=Vehicle.getByDescription(descriptionVehicleSelected);
+								UserState.getInstance().getSessions().get(indexSessionToUpdateVehicule).setVehicleUsed(vehicleSelected);
 								updateSessionItem(indexSessionToUpdateVehicule);
 								hideSelectVehicleMenu();
 								
@@ -98,14 +102,15 @@ public class SessionSubMenu extends Sprite {
 					};
 					this.parentScene.registerTouchArea(vehiculeItem);
 				} else {
-					vehiculeItem = new Sprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom);
+					vehiculeItem = new Sprite(ORIGIN_SELECTVEHICLEMENU_X, originY, Vehicle.getVehicleShopItem(vehicle), vbom);
 					Sprite lockSprite = new Sprite(vehiculeItem.getWidth() - 30, vehiculeItem.getHeight() - 30,
 							ResourceManager.getInstance().lockIcon, vbom);
 					lockSprite.setCullingEnabled(true);
 					vehiculeItem.attachChild(lockSprite);
 				}
-				vehiculeItem.setPosition(ORIGIN_SELECTVEHICLEMENU_X, ORIGIN_SELECTVEHICLEMENU_Y
-						+ (PADDING_SELECTVEHICLEITEM + (DIM_HEIGHT_SELECTVEHICLEITEM * indexItemToPlace)));
+				vehiculeItem.setUserData(vehicle.getDescription());
+			//	vehiculeItem.setPosition(ORIGIN_SELECTVEHICLEMENU_X, ORIGIN_SELECTVEHICLEMENU_Y
+				//		+ (PADDING_SELECTVEHICLEITEM + (DIM_HEIGHT_SELECTVEHICLEITEM * indexItemToPlace)));
 				vehiculeItem.setCullingEnabled(true);
 				
 				selectVehicleMenu.attachChild(vehiculeItem);
@@ -154,7 +159,7 @@ public class SessionSubMenu extends Sprite {
 	}
 
 	private Sprite createSessionMenuItem(GameSession session, int indexItem) {
-		Sprite sessionItem = new Sprite(0, 0, ResourceManager.getInstance().sessionMenuItem, vbom) {
+		Sprite sessionItem = new Sprite(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem), ResourceManager.getInstance().sessionMenuItem, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -169,8 +174,10 @@ public class SessionSubMenu extends Sprite {
 		};
 		sessionItem.setCullingEnabled(true);
 		sessionItem.setUserData(indexItem);
-		sessionItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem));
-		Sprite levelImage = new Sprite(20, 10, ResourceManager.getInstance().levelIcon, vbom);
+		//sessionItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem));
+		String levelType=LevelType.getLevelType(session.getCurrentLevel()).getTypeLevel();
+		Sprite levelImage = new Sprite(20, 10,ImageProvider.getLevelIcon(levelType), vbom);
+		levelImage.setCullingEnabled(true);
 		sessionItem.attachChild(levelImage);
 
 		Text levelText = new Text(120, 30, ResourceManager.getInstance().font, "LEVEL " + session.getCurrentLevel(), new TextOptions(
@@ -182,7 +189,7 @@ public class SessionSubMenu extends Sprite {
 		sessionItem.attachChild(moneyText);
 
 		Sprite vehicleIcon = createVehiculeIcon(session.getVehicleUsed());
-		vehicleIcon.setPosition(200, 10);
+		//vehicleIcon.setPosition(200, 10);
 		vehicleIcon.setUserData(indexItem);
 		sessionItem.attachChild(vehicleIcon);
 
@@ -221,7 +228,7 @@ public class SessionSubMenu extends Sprite {
 	private Sprite createVehiculeIcon(Vehicle vehicleSelected) {
 		Sprite vehiculeSprite = null;
 		if (vehicleSelected.equals(Vehicle.UNICYCLE)) {
-			vehiculeSprite = new Sprite(0, 0, ResourceManager.getInstance().unicycleSessionMenuItem, vbom) {
+			vehiculeSprite = new Sprite(200, 10, ResourceManager.getInstance().unicycleSessionMenuItem, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -233,7 +240,7 @@ public class SessionSubMenu extends Sprite {
 
 			};
 		} else if (vehicleSelected.equals(Vehicle.BICYCLE)) {
-			vehiculeSprite = new Sprite(0, 0, ResourceManager.getInstance().bicycleSessionMenuItem, vbom) {
+			vehiculeSprite = new Sprite(200, 10, ResourceManager.getInstance().bicycleSessionMenuItem, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -244,7 +251,7 @@ public class SessionSubMenu extends Sprite {
 				};
 			};
 		} else if (vehicleSelected.equals(Vehicle.SCOOTER)) {
-			vehiculeSprite = new Sprite(0, 0, ResourceManager.getInstance().scooterSessionMenuItem, vbom) {
+			vehiculeSprite = new Sprite(200, 10, ResourceManager.getInstance().scooterSessionMenuItem, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -255,7 +262,7 @@ public class SessionSubMenu extends Sprite {
 				};
 			};
 		} else if (vehicleSelected.equals(Vehicle.HARLEY)) {
-			vehiculeSprite = new Sprite(0, 0, ResourceManager.getInstance().harleySessionMenuItem, vbom) {
+			vehiculeSprite = new Sprite(200, 10, ResourceManager.getInstance().harleySessionMenuItem, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -266,7 +273,7 @@ public class SessionSubMenu extends Sprite {
 				};
 			};
 		} else {
-			vehiculeSprite = new Sprite(0, 0, ResourceManager.getInstance().vehicleNoImage, vbom) {
+			vehiculeSprite = new Sprite(200, 10, ResourceManager.getInstance().vehicleNoImage, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {

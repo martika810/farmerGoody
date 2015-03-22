@@ -51,7 +51,7 @@ public class ResourceManager {
 	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
 
-	private BuildableBitmapTextureAtlas gameTexturesAtlas;
+	private BuildableBitmapTextureAtlas gameTexturesAtlas,playerTexturesAtlas,tomatoScorerAtlas;
 
 	private BuildableBitmapTextureAtlas levelFailedAtlas, levelPassedAtlas, pauseAtlas;
 
@@ -63,8 +63,7 @@ public class ResourceManager {
 	// public ITextureRegion coinTexture;
 
 	public ITiledTextureRegion playerTexture;// this texture is gonna be tiled
-	public ITiledTextureRegion playerRidingUnicycleTexture;
-	public ITextureRegion stairTexture;
+	public ITiledTextureRegion playerRidingUnicycleTexture,playerRidingBicycleTexture,playerRidingScooterTexture;
 	public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
 
@@ -77,6 +76,7 @@ public class ResourceManager {
 	public ITiledTextureRegion bicycleShopItem;
 	public ITiledTextureRegion scooterShopItem;
 	public ITiledTextureRegion hardleyShopItem;
+	public ITiledTextureRegion tomatoScorer;
 	public ITextureRegion unicycleSessionMenuItem;
 	public ITextureRegion bicycleSessionMenuItem;
 	public ITextureRegion scooterSessionMenuItem;
@@ -87,7 +87,7 @@ public class ResourceManager {
 	public ITextureRegion sessionMenuItem;
 	public ITextureRegion iconUnicycle;
 	public ITextureRegion vehicleNoImage;
-	public ITextureRegion levelIcon;
+	public ITextureRegion levelIcon,levelIconForest,levelIconFarmDay,levelIconFarmEvening;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
 	public ITextureRegion pauseBtnTexture;
@@ -134,17 +134,31 @@ public class ResourceManager {
 
 		this.gameTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		this.playerTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		this.tomatoScorerAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		// this.coinTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas,
 		// activity.getAssets(), "coin.png");
-		this.playerTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
+		this.playerTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
 				"player.png", 6, 1);
-		this.playerRidingUnicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
+		this.playerRidingUnicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
 				"riding_unicycle.png", 6, 1);
+		this.playerRidingBicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
+				"player_riding_bicycle.png", 6, 1);
+		
+		this.playerRidingScooterTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
+				"player_riding_scooter.png", 6, 1);
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
 				4, 1);
 		this.tomatoTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"tomato.png", 5, 1);
+		
+		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
+				"tomatoScorerSheet.png", 3, 5);
 
 		this.correctIconTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"correct.png");
@@ -159,26 +173,24 @@ public class ResourceManager {
 		this.pauseBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"pausebtn.png");
 
-		this.stairTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "ladder.png");
-
 		String levelType = LevelType.getLevelType(UserState.getInstance().getCurrentLevel()).getTypeLevel();
 		this.tomatoIconTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"tomato_icon.png");
 		this.bestScoreIcon = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "star.png");
 
 		this.point5Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
-				ImageProvider.getPointImage(Constants.POINT5, levelType));
+				ImageProvider.getPointImage(Constants.POINT5));
 
 		this.point10Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
-				ImageProvider.getPointImage(Constants.POINT10, levelType));
+				ImageProvider.getPointImage(Constants.POINT10));
 
 		minusPoint5Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
-				ImageProvider.getPointImage(Constants.MINUSPOINT5, levelType));
+				ImageProvider.getPointImage(Constants.MINUSPOINT5));
 
 		minusPoint10Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
-				ImageProvider.getPointImage(Constants.MINUSPOINT10, levelType));
+				ImageProvider.getPointImage(Constants.MINUSPOINT10));
 		minusPoint20Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
-				ImageProvider.getPointImage(Constants.MINUSPOINT20, levelType));
+				ImageProvider.getPointImage(Constants.MINUSPOINT20));
 		// this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas,activity.getAssets(),"level_cleared_background.png");
 
 		this.failedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
@@ -202,6 +214,12 @@ public class ResourceManager {
 		try {
 			this.gameTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.gameTexturesAtlas.load();
+			
+			this.playerTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.playerTexturesAtlas.load();
+			
+			this.tomatoScorerAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.tomatoScorerAtlas.load();
 
 			this.levelFailedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.levelFailedAtlas.load();
@@ -286,6 +304,12 @@ public class ResourceManager {
 				"session_item.png");
 		this.levelIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"level_noimage.png");
+		this.levelIconForest=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"levelIcon_forest.png");
+		this.levelIconFarmDay=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"levelIcon_farm_day.png");
+		this.levelIconFarmEvening=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"levelIcon_farm_even.png");
 		this.iconUnicycle=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"icon_unicycle.png");
 		this.vehicleNoImage=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
