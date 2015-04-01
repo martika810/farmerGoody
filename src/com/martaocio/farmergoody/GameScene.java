@@ -12,6 +12,7 @@ import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.PathModifier;
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Line;
 import org.andengine.entity.primitive.Polygon;
@@ -88,37 +89,29 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private LinkedList<Sprite> pathScoreIndicators;
 
 	public Text textScore;
-//	public Text textBestScore;
+
 	public Text textLevel;
 	public boolean isDrawing = false;
 
 	public TomatoScorer tomatoScoreIcon;
-	//public Sprite bestScoreIcon;
+	public Sprite levelIcon;
 	public Sprite rightPathScoreIcon;
-	public Sprite upButton;
+	public Sprite jumpButton;
 	public Sprite pauseButton;
 	public Sprite restartButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
+	public int percentage=0;
 
 	public Sprite title;
 
 	private Player player;
 	private Bull bull;
 
-	private TimerHandler timerPlayer = null;
-	private DelayModifier keepRunningModifier = null;
-	private DelayModifier deleteAfterFadeModifier = null;
-	private final static int MAX_NUMBER_ERROR = 3;
-	
-
 	private int score = 10;
 	private int levelTotalPoints=300;
-//	private int rightPathScore = 0;
-//	private int wrongPathScore = 0;
-
 	// create 2 new menuScene
-	private MenuScene levelFailed, levelCleared, levelPause;
+	private MenuScene levelFailed, levelCleared, levelPause,levelNoMoney;
 
 	@Override
 	public void createScene() {
@@ -126,10 +119,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
 		createLevelClearedScene();
 		createLevelFailedScene();
+		createLevelNoMoneyScene();
 		createPauseScene();
 
-		// listen when someone touch the screen
-		// this.setOnSceneTouchListener(this);
+
 
 	}
 
@@ -158,13 +151,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int currentLevel=UserState.getInstance().getSelectedSession().getCurrentLevel();
 		levelTotalPoints=LevelType.getLevelType(currentLevel).getTotalPoints();
 		tomatoScoreIcon =new TomatoScorer(20, 100, 200, 80, vbom); 
-	//	bestScoreIcon = new Sprite(20, 100, 70, 70, ResourceManager.getInstance().bestScoreIcon, vbom);
+		levelIcon = new Sprite(20, 100, 70, 70, ResourceManager.getInstance().levelIcon, vbom);
+		levelIcon.setCullingEnabled(true);
 		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
+		title.setCullingEnabled(true);
 		tomatoScoreIcon.setPosition(20, 20);
 		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
 	//	textBestScore = new Text(20, 125, this.resourceManager.font, "    " + UserState.getInstance().getSelectedSession().getScore() + "   ",
 		//		new TextOptions(HorizontalAlign.CENTER), vbom);
-		textLevel = new Text(40, 100, this.resourceManager.font, "#" + levelNumber + "   ", vbom);
+		textLevel = new Text(20, 120, this.resourceManager.font, "#" + levelNumber + "    ",new TextOptions(HorizontalAlign.CENTER), vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
 		textScore.setTag(TAG_SCORE_TEXT);
 
@@ -263,7 +258,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 
 		// Attach player
-		player = new Player(400, 150, 130, 159, vbom, camera, mPhysicsWorld) {
+		player = new Player(400, 150, 130, 140, vbom, camera, mPhysicsWorld) {
 
 			@Override
 			public void onDie() {
@@ -286,17 +281,18 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// that heads up the display
 		HUD hud = new HUD();
 
+		hud.attachChild(levelIcon);
 		hud.attachChild(textLevel);
 		hud.attachChild(tomatoScoreIcon);
 		hud.attachChild(textScore);
-//		hud.attachChild(bestScoreIcon);
+		
 //		hud.attachChild(textBestScore);
 		hud.attachChild(title);
-		hud.attachChild(upButton);
+		hud.attachChild(jumpButton);
 		hud.attachChild(pauseButton);
 		hud.attachChild(restartButton);
 
-		hud.registerTouchArea(upButton);
+		hud.registerTouchArea(jumpButton);
 		hud.registerTouchArea(pauseButton);
 		hud.registerTouchArea(restartButton);
 
@@ -327,10 +323,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void createButtons() {
-		upButton = new Sprite(360, 400, 80, 80, ResourceManager.getInstance().upArrowTexture, vbom) {
+		jumpButton = new Sprite(320, 380, 164, 70, ResourceManager.getInstance().jumpBtnTextute, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp()) {
+					this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.3f, 1f, 1.2f),
+							new ScaleModifier(0.3f, 1f, 0.8f)));
 					player.jump();
 				}
 				return true;
@@ -341,7 +339,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-
+				this.registerEntityModifier(new ScaleModifier(0.5f, 1f, 1.2f));
 				showPause();
 
 				return true;
@@ -441,7 +439,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score += 5;
 						textScore.setText("" + score);
 						resourceManager.eatTomato.play();
-						int percentage=(score*100)/levelTotalPoints;
+						percentage=(score*100)/levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -457,7 +455,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score += 10;
 						textScore.setText("" + score);
 						resourceManager.eatTomato.play();
-						int percentage=(score/levelTotalPoints)*100;
+						percentage=(score/levelTotalPoints)*100;
 						tomatoScoreIcon.update(percentage);
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.TOMATO10)) {
@@ -471,7 +469,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						// update the score
 						score -= 5;
 						textScore.setText("" + score);
-						int percentage=(score/levelTotalPoints)*100;
+						percentage=(score/levelTotalPoints)*100;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -486,7 +484,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						// update the score
 						score -= 10;
 						textScore.setText("" + score);
-						int percentage=(score/levelTotalPoints)*100;
+						percentage=(score/levelTotalPoints)*100;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -501,7 +499,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						// update the score
 						score -= 20;
 						textScore.setText("" + score);
-						int percentage=(score/levelTotalPoints)*100;
+						percentage=(score/levelTotalPoints)*100;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -514,7 +512,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 					if (a.getUserData().equals(SpriteTag.BULL) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.BULL)
 							&& GameUtils.isBodyTomato(a)) {
-						String tomatoType = "";
+						
 						if (GameUtils.isBodyTomato(a)) {
 
 							removeBody(a);
@@ -522,69 +520,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 							removeBody(b);
 						}
 					}
-//					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.CORRECT)) {
-//						rightPathScore++;
-//						addRewardIcon(true);
-//						// textRightPathScore.setText(": " + rightPathScore);
-//						if (a.getUserData().equals(SpriteTag.CORRECT)) {
-//							removeBody(a);
-//						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
-//							removeBody(b);
-//						}
-//
-//					}
-//					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.WRONG)) {
-//						wrongPathScore++;
-//						addRewardIcon(false);
-//
-//						// textRightPathScore.setText(": " + rightPathScore);
-//						if (a.getUserData().equals(SpriteTag.WRONG)) {
-//							removeBody(a);
-//						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
-//							removeBody(b);
-//						}
-//						if (wrongPathScore >= MAX_NUMBER_ERROR) {
-//							if (currentUserState.getBestScore() < score) {
-//								currentUserState.setBestScore(score);
-//							}
-//							//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
-//							
-//						//	currentUserState.saveToFile();
-//							showLevelFailed();
-//						}
-//
-//					}
-//					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.CORRECT)) {
-//
-//						if (a.getUserData().equals(SpriteTag.CORRECT)) {
-//							removeBody(a);
-//						} else if (b.getUserData().equals(SpriteTag.CORRECT)) {
-//							removeBody(b);
-//						}
-//
-//					}
-//					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.WRONG)) {
-//
-//						if (a.getUserData().equals(SpriteTag.WRONG)) {
-//							removeBody(a);
-//						} else if (b.getUserData().equals(SpriteTag.WRONG)) {
-//							removeBody(b);
-//						}
-//
-//					}
+
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
 						// show success screen
-						if (currentUserState.getBestScore() < score) {
-							currentUserState.setBestScore(score);
+//						if (currentUserState.getBestScore() < score) {
+//							currentUserState.setBestScore(score);
+//						}
+						if(percentage<50){
+							showLevelNoMoney();
+							
+						}else{
+							currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
+							int currentMoney=currentUserState.getSelectedSession().getCurrentMoney();
+							currentUserState.getSelectedSession().setCurrentMoney(currentMoney+100);
+							currentUserState.saveToFile();
+							showLevelCleared();
 						}
-						//currentUserState.setCurrentAcumalatedPoints(score);
-						//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel() + 1);
-						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
-						int currentMoney=currentUserState.getSelectedSession().getCurrentMoney();
-						currentUserState.getSelectedSession().setCurrentMoney(currentMoney+100);
 						
-						currentUserState.saveToFile();
-						showLevelCleared();
+						
 
 					}
 
@@ -762,7 +715,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.failedBG, vbom);
-		bg.setCullingEnabled(true);
+		
 		//
 		levelFailed.attachChild(bg);
 		levelFailed.setBackgroundEnabled(false);// to see our scena throught the
@@ -777,6 +730,33 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		levelFailed.setOnMenuItemClickListener(this);
 	}
+	
+	private void createLevelNoMoneyScene() {
+
+		levelNoMoney = new MenuScene(camera);
+		levelNoMoney.setPosition(0, 0);
+		//
+		// Add menu item
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.2f, 0.9f);
+		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
+		//
+		// create the background
+		Sprite bg = new Sprite(0, 0, resourceManager.noMoneyBG, vbom);
+		
+		//
+		levelNoMoney.attachChild(bg);
+		levelNoMoney.setBackgroundEnabled(false);// to see our scena throught the
+		// background
+
+		levelNoMoney.addMenuItem(restartButton);
+		levelNoMoney.addMenuItem(quitButton);
+
+		levelNoMoney.buildAnimations();
+		restartButton.setPosition(470, 270);
+		quitButton.setPosition(470, 360);
+
+		levelNoMoney.setOnMenuItemClickListener(this);
+	}
 
 	private void createPauseScene() {
 
@@ -785,7 +765,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		//
 		// Add menu item
 		IMenuItem unpauseButton = new ScaleMenuItemDecorator(new SpriteMenuItem(UNPAUSE, resourceManager.playButton, vbom), 1.7f, 1.5f);
-
+		IMenuItem homeButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton , vbom), 0.6f, 0.8f);
+		
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.pauseBG, vbom);
 		bg.setCullingEnabled(true);
@@ -795,7 +776,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// background
 
 		levelPause.addMenuItem(unpauseButton);
-
+		levelPause.addMenuItem(homeButton);
+		homeButton.setPosition(700, 400);
+		
 		levelPause.buildAnimations();
 		// restartButton.setPosition(470, 250);
 
@@ -831,6 +814,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.hideControlButtons();
 		this.setChildScene(levelFailed, false, true, true);
 	}
+	
+	private void showLevelNoMoney() {
+		showGameIndicators(false);
+		this.hideControlButtons();
+		this.setChildScene(levelNoMoney, false, true, true);
+	}
 
 	private void showLevelCleared() {
 		showGameIndicators(false);
@@ -847,7 +836,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private void hideControlButtons() {
 		// this.leftButton.setVisible(false);
 		// this.rightButton.setVisible(false);
-		this.upButton.setVisible(false);
+		this.jumpButton.setVisible(false);
 
 	}
 
@@ -910,16 +899,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 //	}
 
 	private void showGameIndicators(boolean shouldShow) {
-		upButton.setVisible(shouldShow);
-		// leftButton.setVisible(shouldShow);
-		// rightButton.setVisible(shouldShow);
+		jumpButton.setVisible(shouldShow);
 		pauseButton.setVisible(shouldShow);
 		title.setVisible(shouldShow);
 		tomatoScoreIcon.setVisible(shouldShow);
-	//	bestScoreIcon.setVisible(shouldShow);
+	
 		textScore.setVisible(shouldShow);
+		levelIcon.setVisible(shouldShow);
 		textLevel.setVisible(shouldShow);
-	//	textBestScore.setVisible(shouldShow);
+	
 		for (Sprite rightWrongPathIcon : pathScoreIndicators) {
 			rightWrongPathIcon.setVisible(shouldShow);
 		}

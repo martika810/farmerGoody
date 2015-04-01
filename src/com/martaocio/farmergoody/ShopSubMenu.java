@@ -35,6 +35,7 @@ public class ShopSubMenu extends Sprite {
 	private Sprite backMenuItem;
 	private List<AnimatedSprite> shopItems = new ArrayList<>();
 	private Text creditText;
+	private boolean hasBoughtSomething;
 
 	public ShopSubMenu(float pX, float pY, ITextureRegion texture, VertexBufferObjectManager vbom, MenuScene parentScene, MainMenu parentMenu) {
 
@@ -47,7 +48,7 @@ public class ShopSubMenu extends Sprite {
 
 	public void createMenu() {
 
-		backMenuItem = new Sprite(0, 0, ResourceManager.getInstance().leftArrowTexture, vbom) {
+		backMenuItem = new Sprite(0, 0, ResourceManager.getInstance().backBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionDown() && parentMenu.isShopMenuOnScreen()) {
@@ -120,6 +121,7 @@ public class ShopSubMenu extends Sprite {
 						int itemTouched=(int)this.getUserData();
 						updateShopItem(itemTouched);
 						this.registerEntityModifier(getBuyBtnEntityModifier());
+						hasBoughtSomething=true;
 
 					}
 					return true;
@@ -189,6 +191,14 @@ public class ShopSubMenu extends Sprite {
 		// updateSessionItem(UserState.getInstance().getSelectedSession(), 0);
 		
 
+	}
+
+	public boolean isHasBoughtSomething() {
+		return hasBoughtSomething;
+	}
+
+	public void setHasBoughtSomething(boolean hasBoughtSomething) {
+		this.hasBoughtSomething = hasBoughtSomething;
 	}
 
 }

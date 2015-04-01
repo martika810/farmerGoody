@@ -3,7 +3,7 @@ package com.martaocio.farmergoody;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
 public enum Vehicle {
-	UNICYCLE(1,Constants.UNICYCLE,50), BICYCLE(2,Constants.BICYCLE,200), SCOOTER(3,Constants.SCOOTER,500), HARLEY(4,Constants.HARLEY,4000),NONE(0,"",0);
+	UNICYCLE(1,Constants.UNICYCLE,50), BICYCLE(2,Constants.BICYCLE,50), SCOOTER(3,Constants.SCOOTER,50), HARLEY(4,Constants.HARLEY,4000),NONE(0,"",0);
 
 	private int id;
 	private String description;

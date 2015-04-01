@@ -56,6 +56,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private boolean areMenuItemEnabled = true;
 	private boolean isShopMenuOnScreen = false;
 	private boolean isSessionMenuOnScreen = false;
+	private boolean hasBoughtSomething;
 
 	@Override
 	public void createScene() {
@@ -114,6 +115,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private void showShopMenuScene() {
 		// this.setChildScene(shopChildScene, false, true,true);
 		isShopMenuOnScreen = true;
+		bg.setHasBoughtSomething(false);
 		bg.registerEntityModifier(new MoveModifier(0.3f, camera.getWidth(), 0, 0, 0));
 		if (!bg.hasParent()) {
 			this.menuChildScene.attachChild(bg);
@@ -137,6 +139,9 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		bg.registerEntityModifier(new MoveModifier(0.3f, 0, camera.getWidth(), 0, 0));
 		showMainMenuControllers();
 		isShopMenuOnScreen = false;
+		if(bg.isHasBoughtSomething()){
+			sessionBg.updateSelectVehiculeMenu();
+		}
 		// shopMenuItem.setPosition(650, 370);
 
 	}
@@ -170,7 +175,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		// when the button is clicked , it is scaled it to 1.2
 		playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom), 1.7f, 1.5f);
 
-		shopMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE, resourceManager.continueMenuButton, vbom), 1.2f, 1);
+		shopMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE, resourceManager.shopMenuButton, vbom), 1.2f, 1);
 
 		this.menuChildScene.addMenuItem(playMenuItem);
 		this.menuChildScene.addMenuItem(shopMenuItem);

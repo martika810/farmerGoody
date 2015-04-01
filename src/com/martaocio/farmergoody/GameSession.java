@@ -54,6 +54,14 @@ public class GameSession {
 		}
 		return false;
 	}
+	
+	public void flush(){
+		this.currentLevel=1;
+		this.currentMoney=0;
+		this.score=0;
+		this.vehicleUsed=Vehicle.NONE;
+		this.lastModified=new GregorianCalendar();
+	}
 
 	public int getScore() {
 		return score;

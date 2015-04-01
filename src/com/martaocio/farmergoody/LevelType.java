@@ -3,16 +3,16 @@ package com.martaocio.farmergoody;
 public enum LevelType {
 	
 
-	LEVEL1(1,Constants.FARM_DAY,270),
+	LEVEL1(1,Constants.FARM_EVENING,385),
 	LEVEL2(2,Constants.FARM_EVENING,385),
 	LEVEL3(3,Constants.FOREST,295),
-	LEVEL4(4,Constants.FARM_DAY,270),
+	LEVEL4(4,Constants.FARM_EVENING,385),
 	LEVEL5(5,Constants.FARM_EVENING,385),
 	LEVEL6(6,Constants.FOREST,295),
-	LEVEL7(7,Constants.FARM_DAY,270),
+	LEVEL7(7,Constants.FARM_EVENING,385),
 	LEVEL8(8,Constants.FARM_EVENING,385),
 	LEVEL9(9,Constants.FOREST,295),
-	LEVEL10(9,Constants.FARM_DAY,270);
+	LEVEL10(10,Constants.FARM_EVENING,385);
 	
 	private int number;
 	private String typeLevel;

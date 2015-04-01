@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -50,7 +53,7 @@ public class SessionSubMenu extends Sprite {
 	}
 
 	public void createMenu() {
-		backMenuItem = new Sprite(0, 0, ResourceManager.getInstance().leftArrowTexture, vbom) {
+		backMenuItem = new Sprite(0, 0, ResourceManager.getInstance().backBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
@@ -74,6 +77,20 @@ public class SessionSubMenu extends Sprite {
 
 		selectVehicleMenu = new Sprite(0, 0, ResourceManager.getInstance().selectVehiculeMenuBackground, vbom);
 		selectVehicleMenu.setCullingEnabled(true);
+		
+		Sprite backSelectVehicleBtn=new Sprite(400,400,ResourceManager.getInstance().backBtnTexture,vbom){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionDown() && isSelectVehicleMenuOnScreen) {
+					this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 1f, 1.2f),new ScaleModifier(0.2f, 1f, 0.8f)));
+					hideSelectVehicleMenu();
+					
+				}
+				return true;
+			};
+		};
+		selectVehicleMenu.attachChild(backSelectVehicleBtn);
+		this.parentScene.registerTouchArea(backSelectVehicleBtn);
 		populateSelectVehicleMenu();
 	}
 
@@ -90,6 +107,7 @@ public class SessionSubMenu extends Sprite {
 						@Override
 						public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 							if (pSceneTouchEvent.isActionDown() && isSelectVehicleMenuOnScreen) {
+								this.registerEntityModifier(getScaleBtnEntityModifier());
 								String descriptionVehicleSelected=(String)this.getUserData();
 								Vehicle vehicleSelected=Vehicle.getByDescription(descriptionVehicleSelected);
 								UserState.getInstance().getSessions().get(indexSessionToUpdateVehicule).setVehicleUsed(vehicleSelected);
@@ -118,6 +136,13 @@ public class SessionSubMenu extends Sprite {
 			}
 		}
 
+	}
+	
+	public void updateSelectVehiculeMenu(){
+		for(int i=0;i<selectVehicleMenu.getChildCount();i++){
+			selectVehicleMenu.detachChild(selectVehicleMenu.getChildByIndex(0));
+		}
+		populateSelectVehicleMenu();
 	}
 
 	private void showSelectVehicleMenu() {
@@ -159,27 +184,53 @@ public class SessionSubMenu extends Sprite {
 	}
 
 	private Sprite createSessionMenuItem(GameSession session, int indexItem) {
-		Sprite sessionItem = new Sprite(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem), ResourceManager.getInstance().sessionMenuItem, vbom) {
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-					this.registerEntityModifier(new ScaleModifier(1f, 1f, 1.2f));
-					parentMenu.hideSessionMenuScene();
-					int indexItemSelected = (int) this.getUserData();
-					UserState.getInstance().setSelectedSession(indexItemSelected);
-					SceneManager.getInstance().createGameScene();
-				}
-				return true;
-			};
-		};
+		Sprite sessionItem = new Sprite(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem), ResourceManager.getInstance().sessionMenuItem, vbom) ;
 		sessionItem.setCullingEnabled(true);
-		sessionItem.setUserData(indexItem);
-		//sessionItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem));
+		
+		//create level icon
 		String levelType=LevelType.getLevelType(session.getCurrentLevel()).getTypeLevel();
 		Sprite levelImage = new Sprite(20, 10,ImageProvider.getLevelIcon(levelType), vbom);
 		levelImage.setCullingEnabled(true);
 		sessionItem.attachChild(levelImage);
-
+		
+		//create delete btn
+		Sprite deleteBtn=new Sprite(sessionItem.getWidth()-50,sessionItem.getHeight()-50,ResourceManager.getInstance().deleteSmallBtnTexture,vbom){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
+					int indexItemSelected = (int) this.getUserData();
+					this.registerEntityModifier(getDeleteBtnEntityModifier(indexItemSelected));
+					
+					
+					
+					
+					
+				}
+				return true;
+			};
+		};
+		deleteBtn.setCullingEnabled(true);
+		deleteBtn.setUserData(indexItem);
+		sessionItem.attachChild(deleteBtn);
+		
+		//create play btn
+		Sprite playBtn=new Sprite(sessionItem.getWidth()-50,0,ResourceManager.getInstance().playSmallBtnTexture,vbom){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
+					int indexItemSelected = (int) this.getUserData();
+					this.registerEntityModifier(getPlayBtnEntityModifier(indexItemSelected));
+					
+				}
+				return true;
+			};
+			
+		};
+		playBtn.setCullingEnabled(true);
+		playBtn.setUserData(indexItem);
+		sessionItem.attachChild(playBtn);
+		
+		
 		Text levelText = new Text(120, 30, ResourceManager.getInstance().font, "LEVEL " + session.getCurrentLevel(), new TextOptions(
 				HorizontalAlign.CENTER), vbom);
 		sessionItem.attachChild(levelText);
@@ -194,34 +245,39 @@ public class SessionSubMenu extends Sprite {
 		sessionItem.attachChild(vehicleIcon);
 
 		this.parentScene.registerTouchArea(vehicleIcon);
-		this.parentScene.registerTouchArea(sessionItem);
+		this.parentScene.registerTouchArea(playBtn);
+		this.parentScene.registerTouchArea(deleteBtn);
 
 		return sessionItem;
 
 	}
 
 	private Sprite createEmptySessionMenuItem(GameSession session, int indexItem) {
-		Sprite sessionItem = new Sprite(0, 0, ResourceManager.getInstance().sessionMenuItem, vbom) {
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-					this.registerEntityModifier(new ScaleModifier(1f, 1f, 1.2f));
-					parentMenu.hideSessionMenuScene();
-					int indexItemSelected = (int) this.getUserData();
-					UserState.getInstance().setSelectedSession(indexItemSelected);
-					SceneManager.getInstance().createGameScene();
-				}
-				return true;
-			};
-		};
+		Sprite sessionItem = new Sprite(0, 0, ResourceManager.getInstance().sessionMenuItem, vbom);
 		sessionItem.setCullingEnabled(true);
 		sessionItem.setUserData(indexItem);
 		sessionItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexItem));
+		
+		Sprite playBtn=new Sprite(sessionItem.getWidth()-50,sessionItem.getHeight()/2-25,ResourceManager.getInstance().playSmallBtnTexture,vbom){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
+					int indexItemSelected = (int) this.getUserData();
+					this.registerEntityModifier(getPlayBtnEntityModifier(indexItemSelected));
+					
+				}
+				return true;
+			};
+			
+		};
+		playBtn.setCullingEnabled(true);
+		playBtn.setUserData(indexItem);
+		sessionItem.attachChild(playBtn);
 
 		Text newSessionText = new Text(90, 30, ResourceManager.getInstance().font, "NEW GAME", new TextOptions(HorizontalAlign.CENTER),
 				vbom);
 		sessionItem.attachChild(newSessionText);
-		this.parentScene.registerTouchArea(sessionItem);
+		this.parentScene.registerTouchArea(playBtn);
 		return sessionItem;
 	}
 
@@ -296,7 +352,13 @@ public class SessionSubMenu extends Sprite {
 		sessionMenuItemToUpdate.detachSelf();
 		sessionMenuItemToUpdate.dispose();
 		sessionItems.remove(indexMenuItemToUpdate);
-		Sprite newSessionMenuItem = createSessionMenuItem(dataSession, indexMenuItemToUpdate);
+		Sprite newSessionMenuItem=null;
+		if(dataSession.isEmptySession()){
+			newSessionMenuItem = createEmptySessionMenuItem(dataSession, indexMenuItemToUpdate);
+		}else{
+			newSessionMenuItem = createSessionMenuItem(dataSession, indexMenuItemToUpdate);
+		}
+		
 		newSessionMenuItem.setPosition(ORIGIN_SESSIONMENU_X, ORIGIN_Y + PADDING_Y + (ITEM_SESSION_DIM_Y * indexMenuItemToUpdate));
 		this.attachChild(newSessionMenuItem);
 		sessionItems.add(newSessionMenuItem);
@@ -304,6 +366,57 @@ public class SessionSubMenu extends Sprite {
 
 	public boolean isSelectVehicleMenuOnScreen() {
 		return isSelectVehicleMenuOnScreen;
+	}
+	
+	private SequenceEntityModifier getScaleBtnEntityModifier() {
+
+		return new SequenceEntityModifier(new ScaleModifier(0.1f, 1f, 1.2f), new ScaleModifier(0.1f, 1.2f, 1f));
+	}
+	
+	private SequenceEntityModifier getDeleteBtnEntityModifier(final int indexSelected) {
+
+		return new SequenceEntityModifier(new ScaleModifier(0.1f, 1f, 1.2f), new ScaleModifier(0.1f, 1.2f, 1f))	{
+			
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				// Your action after starting modifier
+
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				UserState.getInstance().getSessions().get(indexSelected).flush();
+				updateSessionItem(indexSelected);
+				
+			}
+			
+		};
+	}
+	
+	private SequenceEntityModifier getPlayBtnEntityModifier(final int indexSelected) {
+
+		return new SequenceEntityModifier(new ScaleModifier(0.1f, 1f, 1.2f), new ScaleModifier(0.1f, 1.2f, 1f))	{
+			
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				// Your action after starting modifier
+
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				
+				parentMenu.hideSessionMenuScene();
+				UserState.getInstance().setSelectedSession(indexSelected);
+				SceneManager.getInstance().createGameScene();
+				
+			}
+			
+		};
 	}
 
 }

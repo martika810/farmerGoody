@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="31" height="15" tilewidth="32" tileheight="32">
- <tileset firstgid="1" name="farmer_tileset" tilewidth="32" tileheight="32">
-  <image source="gfx/farmer_tileset.png" width="192" height="832"/>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="farmer_tileset3" tilewidth="32" tileheight="32">
+  <image source="gfx/farmer_tileset3.png" width="792" height="1290"/>
  </tileset>
- <layer name="sky" width="31" height="15">
+ <layer name="sky" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   eJyzZGBgsBwgbD+AeKD8POrvUX+P+nvU36P+Hj7+BgCRRWyg
+   eJzt1NfDlgMcgOH3fRCRkiIVikIoFVFGJEqUvZPRMEOFyKZUVtnja9fX3nv3tffODCUqhazs3eVPcPo8v4Pr+D67C/K5XC9604e+9KM/AxjIIAoZzBCGMozhjGAkoxjNGMYyjvGckcvlClLSCCFk0wQPmMgkJjOFqUxjOjOYySxmM4ci5jKP+SxgIYtYzBKWsiyfrkYIIZuWe8AKVrKK1axhLetYzwbe4V3e430+4EM28hEf8wmb2MynbMmnqxFCyKbPPOBztrKN7XzBDnbyJV/xNbv4hm/5ju/5gd38yE/8zC/8ym/5dDVCCNn0uwf8wZ/8xd/8w7/kklwuT8Je7M0+FGNf9qM4+3MAJTiQkpTioCRdjRBCNpX2gIMpQ1kO4VDKcRjlqUBFDucIjqQSlTmKo6lCVY7hWI6jWpKuRgghm473gBM4kerU4CRqUovanMwp1OFUTqMu9Tj9v4dwJmdRn7M5hwZJuhohhGw61wMach7n04jGXEATLuQimtKMi7mES7mMy7mCK7mKq7mGa7kuSVcjhJBN13tAc26gBTdyEzdzCy1pRWvacCu3cTt3cCd30Za7uYd7aUf7JF2NEEI2dfCA+7ifB+jIgzxEJx7mER7lMR7nCZ7kKZ6mM114hq50ozvPJulqhBCy6TkPeJ4XeJEe9OQlXuYVXuU1XucN3uQt3qaAXvSmD33pR38GJOlqhBCyaaAHDKKQwQxhKMMYzghGMorRjGEs4xjPBCYyiclMYSrTmJ6kqxFCyKYZHjCTWcxmDkXMZR7zWcBCFrGYJSxlGctZwUpWsZo1rGVdkq5GCCGEEEIIIYTwf+0BN1KIxw==
   </data>
  </layer>
- <layer name="ground" width="31" height="15">
+ <layer name="ground" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   eJy90ckOgjAUheHuHBKVZZdOQTBOcXr/R/NnYWIa6T3S2sUXAuFyei7eOeczWWKFNTbYFprt1NihQYu9kaHOKuc64IgTzrgY51NnlU5X3HDHA0/jfOqs0knxmaH+W6XTr2I7/LfUHabIuUPLCGNMMC2cNcMcC1SFssLMHNmxXmFeldjb2mHf/ZDe6g6/fVt5NrSXtdPYu+/rC2fyLQM=
+   eJzt0TERACEMALDqQtrjAlw8JrHQhWuHDFGQEREDAAAAAAAAAAAAAAAAAACA5z5SZoMroMYiZTe4Amr8pJwGV0CNC4tjrxQ=
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="0" height="0">
-  <object name="ground" x="125" y="490" width="902" height="34" rotation="-14"/>
+ <objectgroup name="Object Layer 1"  width="0" height="0">
+  <object name="ground" x="0" y="399" width="1058" height="80"/>
  </objectgroup>
 </map>

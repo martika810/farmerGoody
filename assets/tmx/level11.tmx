@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset4" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset4.png" width="792" height="1290"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1FfjlgMcgOH3faiUSkKpEEnZUsqMCiF7JDuJ9G/vvffee5NdKbPsjJBVCpFNqVBZhRaXj+D0eX4H1/F9dhfkc7kWtKQVrWlDW9rRng50pBOd6UJXutGdHvSkF73pQ1/6cV0ulytISSOEkE39PWAAAxnEYIYwlGEMZwQjGcVoxjCWcYxnAhOZxGSmMJVp+XQ1QgjZNN0DZjCTWcxmDnOZx33cz3we4EEe4mEe4VEeYwELWcTjLGZJPl2NEEI2PeEBT/IUT/MMz7KUZTzH87zAi7zEy7zCcl7lNV7nDVbwJm/xdj5djRBCNq30gHd4l/d4nw9YxWo+ZA1r+YiP+YR1fMpnrOdzvuBLvuJrvsmnqxFCyKZvPeA7vmcDG/mBTWxmCz/yEz+zlW1s5xd+5Td+5w92sJM/+SufrkYIIZv+9oBd7GYPe9nHP+SSXC5Pwn7sTyEKU4QDKEoxDqQ4JSjJQZRK0tUIIWTTwR5QmkM4lMMoQ1kOpxzlqcARHMlRVORojqESx1KZ46hCVY5P0tUIIWTTCR5wIidxMqdwKqdRjdOpTg3OoCa1OJOzOJtzOJfzqM35XECdJF2NEEI21fWAelzIRVxMfS7hUi6jAZdzBVdyFVdzDdf+9xCu5wYaciONuClJVyOEkE03e8At3Mpt3M4dNOZOmnAXTbmbe2jGvTSngBa0pBWtaUNb2iXpaoQQsqm9B3SgI53oTBe60o3u9KAnvehNH/rSj/4MYCCDGMwQhjIsSVcjhJBNwz1gBCMZxWjGMJZxjGcCE5nEZKYwlWlMZwYzmcVs5jCXeUm6GiGEEEIIIYQQwv/1Lwg34RY=
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0TERACEMALD64F2AC37CvxgsdOHaIUMU5ETEAQAAAAAAAAAAAAAAAAAA4LlBytfgCqgxSVkNroAam5S/wRVQ4wIYtxar
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object name="ground" x="0" y="405" width="1055" height="73"/>
+ </objectgroup>
+</map>

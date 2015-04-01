@@ -9,6 +9,7 @@ public class TomatoScorer  extends AnimatedSprite{
 	
 	public TomatoScorer(float pX, float pY, float width, float height, VertexBufferObjectManager vbom){
 		super(pX, pY, width, height, ResourceManager.getInstance().tomatoScorer, vbom);
+		this.setCullingEnabled(true);
 		this.setCurrentTileIndex(0);
 	}
 	
@@ -23,19 +24,21 @@ public class TomatoScorer  extends AnimatedSprite{
 			this.setCurrentTileIndex(4);
 		}else if(percentage>PORTION*4 && percentage<=PORTION*5){
 			this.setCurrentTileIndex(5);
-		}else if(percentage>PORTION*5 && percentage<=PORTION*6){
+		}else if(percentage>PORTION*5 && percentage<=50){
+			this.setCurrentTileIndex(5);
+		}else if(percentage>50 && percentage<=PORTION*7){
 			this.setCurrentTileIndex(6);
-		}else if(percentage>PORTION*6 && percentage<=PORTION*7){
-			this.setCurrentTileIndex(7);
 		}else if(percentage>PORTION*7 && percentage<=PORTION*8){
-			this.setCurrentTileIndex(8);
+			this.setCurrentTileIndex(7);
 		}else if(percentage>PORTION*8 && percentage<=PORTION*9){
-			this.setCurrentTileIndex(9);
+			this.setCurrentTileIndex(8);
 		}else if(percentage>PORTION*9 && percentage<=PORTION*10){
-			this.setCurrentTileIndex(10);
+			this.setCurrentTileIndex(9);
 		}else if(percentage>PORTION*10 && percentage<=PORTION*11){
-			this.setCurrentTileIndex(11);
+			this.setCurrentTileIndex(10);
 		}else if(percentage>PORTION*11 && percentage<=PORTION*12){
+			this.setCurrentTileIndex(11);
+		}else if(percentage>PORTION*12 && percentage<=100){
 			this.setCurrentTileIndex(12);
 		}
 		
