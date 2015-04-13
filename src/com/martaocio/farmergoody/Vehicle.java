@@ -1,9 +1,10 @@
 package com.martaocio.farmergoody;
 
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
 public enum Vehicle {
-	UNICYCLE(1,Constants.UNICYCLE,50), BICYCLE(2,Constants.BICYCLE,50), SCOOTER(3,Constants.SCOOTER,50), HARLEY(4,Constants.HARLEY,4000),NONE(0,"",0);
+	UNICYCLE(1,Constants.UNICYCLE,50), BICYCLE(2,Constants.BICYCLE,100), SCOOTER(3,Constants.SCOOTER,600), HARLEY(4,Constants.HARLEY,4000),NONE(0,"",0);
 
 	private int id;
 	private String description;
@@ -34,11 +35,25 @@ public enum Vehicle {
 		} else if (vehicle.equals(Vehicle.BICYCLE)) {
 		return ResourceManager.getInstance().bicycleShopItem;
 		} else if (vehicle.equals(Vehicle.SCOOTER)) {
-			return ResourceManager.getInstance().scooterShopItem;
+			return ResourceManager.getInstance().bicycleShopItem;
 		} else if (vehicle.equals(Vehicle.HARLEY)) {
 			return ResourceManager.getInstance().hardleyShopItem;
 		}
 		return ResourceManager.getInstance().unicycleShopItem;
+	}
+	
+	public static ITextureRegion getVehicleSelectVehicleItem(Vehicle vehicle) {
+
+		if (vehicle.equals(Vehicle.UNICYCLE)) {
+			return ResourceManager.getInstance().unicycleSessionMenuItem;
+		} else if (vehicle.equals(Vehicle.BICYCLE)) {
+		return ResourceManager.getInstance().bicycleSessionMenuItem;
+		} else if (vehicle.equals(Vehicle.SCOOTER)) {
+			return ResourceManager.getInstance().scooterSessionMenuItem;
+		} else if (vehicle.equals(Vehicle.HARLEY)) {
+			return ResourceManager.getInstance().harleySessionMenuItem;
+		}
+		return ResourceManager.getInstance().vehicleNoImage;
 	}
 	
 	public static Vehicle getByDescription(String vehicleName){

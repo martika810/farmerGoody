@@ -9,7 +9,7 @@ public class TomatoScorer  extends AnimatedSprite{
 	
 	public TomatoScorer(float pX, float pY, float width, float height, VertexBufferObjectManager vbom){
 		super(pX, pY, width, height, ResourceManager.getInstance().tomatoScorer, vbom);
-		this.setCullingEnabled(true);
+		this.setIgnoreUpdate(true);
 		this.setCurrentTileIndex(0);
 	}
 	

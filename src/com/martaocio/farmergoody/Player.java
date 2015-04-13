@@ -82,7 +82,7 @@ public abstract class Player extends AnimatedSprite {
 			return ResourceManager.getInstance().playerRidingBicycleTexture;
 		}
 		else if(vehiculeSelected.equals(vehiculeSelected.SCOOTER)){
-			return ResourceManager.getInstance().playerRidingScooterTexture;
+			return ResourceManager.getInstance().playerRidingBicycleTexture;
 		}
 		else if(vehiculeSelected.equals(vehiculeSelected.HARLEY)){
 			return ResourceManager.getInstance().playerRidingUnicycleTexture;
@@ -105,8 +105,17 @@ public abstract class Player extends AnimatedSprite {
 																				// to
 																				// hold
 																				// the
-																				// animations
-				animate(PLAYER_ANIMATE, 0, 3, true);
+				boolean isPlayerWalkingOrMonocycle=UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.NONE)||UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.UNICYCLE);
+				if(isPlayerWalkingOrMonocycle)																// animations
+					animate(PLAYER_ANIMATE, 0, 3, true);
+				else{
+					if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.BICYCLE)){
+						animate(PLAYER_ANIMATE, 0, 3, true);
+					}else if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.SCOOTER)){
+						animate(PLAYER_ANIMATE, 6, 9, true);
+					}
+					
+				}
 			} else if (this.isAnimationRunning()) {
 				this.stopAnimation();
 				canEat = false;
@@ -115,24 +124,23 @@ public abstract class Player extends AnimatedSprite {
 																				// hold
 																				// the
 																				// animations
-				animate(PLAYER_ANIMATE, 0, 3, true);
+				boolean isPlayerWalkingOrMonocycle=UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.NONE)||UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.UNICYCLE);
+				if(isPlayerWalkingOrMonocycle)																// animations
+					animate(PLAYER_ANIMATE, 0, 3, true);
+				else{
+					if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.BICYCLE)){
+						animate(PLAYER_ANIMATE, 0, 3, true);
+					}else if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.SCOOTER)){
+						animate(PLAYER_ANIMATE, 6, 9, true);
+					}
+					
+				}
 			}
 			
 		}
 	}
 
-	/*public void setRunningSick() {
-		if (isAlive) {
-			this.sickRunning = true;
-			this.stopAnimation();
-			final long[] PLAYER_ANIMATE = new long[] { 100, 100, 100, 100 };// array
-			// to
-			// hold
-			// the
-			// animations
-			animate(PLAYER_ANIMATE, 5, 8, true);
-		}
-	}*/
+	
 
 	// make the player jumps
 	public void jump() {
@@ -143,8 +151,18 @@ public abstract class Player extends AnimatedSprite {
 			// comment this if the walking animation is gonna keep running while
 			// jumping
 			this.stopAnimation();
-			this.setCurrentTileIndex(4);// set the application to the jump
-										// picture
+			boolean isPlayerWalkingOrMonocycle=UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.NONE)||UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.UNICYCLE);
+			if(isPlayerWalkingOrMonocycle)																// animations
+				this.setCurrentTileIndex(4);
+			else{
+				if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.BICYCLE)){
+					this.setCurrentTileIndex(4);
+				}else if(UserState.getInstance().getSelectedSession().getVehicleUsed().equals(Vehicle.SCOOTER)){
+					this.setCurrentTileIndex(10);
+				}
+				
+			}
+			
 
 			canJump = false;
 
@@ -203,11 +221,6 @@ public abstract class Player extends AnimatedSprite {
 		this.setCurrentTileIndex(5);
 	}
 
-	/*public void setDeadSick() {
-		isAlive=false;
-		if (this.isAnimationRunning())
-			this.stopAnimation();
-		this.setCurrentTileIndex(10);
-	}*/
+
 
 }

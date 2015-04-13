@@ -25,6 +25,26 @@ public class LevelProvider {
 				return "tmx/level3.tmx";
 			case 10:
 				return "tmx/level2.tmx";
+			case 11:
+				return "tmx/level2.tmx";
+			case 12:
+				return "tmx/level2.tmx";
+			case 13:
+				return "tmx/level3.tmx";
+			case 14:
+				return "tmx/level2.tmx";
+			case 15:
+				return "tmx/level2.tmx";
+			case 16:
+				return "tmx/level3.tmx";
+			case 17:
+				return "tmx/level2.tmx";
+			case 18:
+				return "tmx/level2.tmx";
+			case 19:
+				return "tmx/level3.tmx";
+			case 20:
+				return "tmx/level3.tmx";
 			default:
 				return "";
 		}

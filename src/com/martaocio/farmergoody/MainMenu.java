@@ -60,7 +60,13 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public void createScene() {
-
+//		activity.runOnUiThread(new Runnable(){
+//			@Override
+//			public void run(){
+//				activity.showAdvert(true);
+//			}
+//		});
+	
 		createMenuScene();
 		createShopScene();
 		createSessionMenu();
@@ -77,6 +83,10 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		// resourceManager.themeMusic.play();
 
 	}
+	public void update(){
+		createShopScene();
+		createSessionMenu();
+	}
 
 	@Override
 	public void onBackKeyPressed() {
@@ -86,13 +96,19 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public SceneType getSceneType() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return SceneType.SCENE_MENU;
 	}
 
 	@Override
 	public void disposeScene() {
-		// TODO Auto-generated method stub
+		bg.detachSelf();
+		bg.dispose();
+		sessionBg.detachSelf();
+		sessionBg.dispose();
+		this.detachSelf();
+		this.dispose();
+		
 
 	}
 
@@ -106,8 +122,9 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	private void createSessionMenu() {
 
-		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera);
-		sessionBg.setCullingEnabled(true);
+		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera,engine);
+		//sessionBg = SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
+		//sessionBg.setCullingEnabled(true);
 		sessionBg.createMenu();
 
 	}
@@ -126,6 +143,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void showSessionMenuScene() {
+		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, camera.getHeight(), 0));
 		if (!sessionBg.hasParent()) {
 			this.menuChildScene.attachChild(sessionBg);
@@ -147,7 +165,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void hideSessionMenuScene() {
-		
+		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, 0, camera.getHeight()));
 		showMainMenuControllers();
 		isSessionMenuOnScreen = false;

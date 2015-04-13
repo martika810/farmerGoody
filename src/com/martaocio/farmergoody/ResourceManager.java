@@ -18,6 +18,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -40,7 +41,8 @@ public class ResourceManager {
 
 	// load sounds
 	public Music themeMusic;
-	public Sound eatTomato;
+	public Sound goodSound;
+	public Sound badSound;
 	public Sound jumpSound;
 
 	// TEXTURES
@@ -50,6 +52,7 @@ public class ResourceManager {
 	private BuildableBitmapTextureAtlas subMenuShopTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
+	private BuildableBitmapTextureAtlas splashTexturesAtlas;
 
 	private BuildableBitmapTextureAtlas gameTexturesAtlas,playerTexturesAtlas,tomatoScorerAtlas;
 
@@ -63,14 +66,14 @@ public class ResourceManager {
 	// public ITextureRegion coinTexture;
 
 	public ITiledTextureRegion playerTexture;// this texture is gonna be tiled
-	public ITiledTextureRegion playerRidingUnicycleTexture,playerRidingBicycleTexture,playerRidingScooterTexture;
-	public ITiledTextureRegion tomatoTexture;
+	public ITiledTextureRegion playerRidingUnicycleTexture,playerRidingBicycleTexture/*,playerRidingScooterTexture*/;
+	//public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
 
 
-	public ITextureRegion upArrowTexture,rightArrowTexture,leftArrowTexture;
+	public ITextureRegion upArrowTexture,rightArrowTexture;
 
-	public ITiledTextureRegion unicycleShopItem,bicycleShopItem,scooterShopItem,hardleyShopItem,tomatoScorer;
+	public ITiledTextureRegion unicycleShopItem,bicycleShopItem,hardleyShopItem,tomatoScorer;
 	
 	public ITextureRegion unicycleSessionMenuItem,bicycleSessionMenuItem,scooterSessionMenuItem,harleySessionMenuItem;
 	
@@ -80,11 +83,13 @@ public class ResourceManager {
 	public ITextureRegion sessionMenuItem;
 	public ITextureRegion iconUnicycle;
 	public ITextureRegion vehicleNoImage;
-	public ITextureRegion levelIcon,levelIconForest,levelIconFarmDay,levelIconFarmEvening;
+	public ITextureRegion levelIcon,levelIconForest,levelIconFarmEvening;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
-	public ITextureRegion pauseBtnTexture,jumpBtnTextute,backBtnTexture,playSmallBtnTexture,deleteSmallBtnTexture;
+	public ITextureRegion pauseBtnTexture,jumpBtnTextute,backBtnTexture,deleteSmallBtnTexture;
 
+	//SPLASH
+	public ITextureRegion splashMenuBackground;
 	public ITextureRegion tomatoIconTexture;
 		
 	public ITextureRegion minusPoint5Texture,minusPoint10Texture,minusPoint20Texture,point5Texture,point10Texture;
@@ -108,45 +113,41 @@ public class ResourceManager {
 		FontFactory.setAssetBasePath("fonts/");
 		final ITexture fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "BebasNeue.otf", 26, true,
+		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 28, true,
 				Color.BLACK);
 		font.load();
 
-		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-		this.pauseAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		this.gameTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.pauseAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		this.gameTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
-		this.playerTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.playerTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
-		this.tomatoScorerAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.tomatoScorerAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		// this.coinTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas,
-		// activity.getAssets(), "coin.png");
+
 		this.playerTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
 				"player.png", 6, 1);
 		this.playerRidingUnicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
 				"riding_unicycle.png", 6, 1);
 		this.playerRidingBicycleTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
-				"player_riding_bicycle.png", 6, 1);
+				"player_riding.png", 6, 2);
 		
-		this.playerRidingScooterTexture=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
-				"player_riding_scooter.png", 6, 1);
+
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
-				4, 1);
-		this.tomatoTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(),
-				"tomato.png", 5, 1);
+				2, 1);
 		
 		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
 				"tomatoScorerSheet.png", 3, 5);
@@ -228,8 +229,9 @@ public class ResourceManager {
 	private void loadGameSounds() {
 		try {
 
-			this.eatTomato = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/nom.wav");
+			this.goodSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/good_bell.wav");
 			this.jumpSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/jump.wav");
+			this.badSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/bad.wav");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -241,6 +243,29 @@ public class ResourceManager {
 		loadMenuGraphics();
 
 	}
+	
+	public void loadSplashResources(){
+		loadSplashGraphics();
+	}
+	
+	private void loadSplashGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.splashTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		this.splashMenuBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTexturesAtlas , activity.getAssets(),
+				"splash_screen.png");
+		
+		try {
+			this.splashTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+		} catch (TextureAtlasBuilderException e) {
+			
+			e.printStackTrace();
+		}
+		this.splashTexturesAtlas.load();
+		
+		
+	}
 
 	private void loadMenuGraphics() {
 		// Indicate the folder of the assetsf
@@ -250,20 +275,20 @@ public class ResourceManager {
 		FontFactory.setAssetBasePath("fonts/");
 		final ITexture fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "BebasNeue.otf", 26, true,
+		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 29, true,
 				Color.BLACK);
 		font.load();
 
-		this.mainMenuTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.mainMenuTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		
-		this.subMenuShopTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
+		this.subMenuShopTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
 				TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		
-		this.subMenuSessionTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
-				TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		this.subMenuSelectVehicleTextureAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,
-				TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		this.subMenuSessionTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.subMenuSelectVehicleTextureAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 
 		// add the background to the canvas
@@ -274,9 +299,9 @@ public class ResourceManager {
 		this.unicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"unicycleShopItem.png", 2, 1);
 		this.bicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"bicycleShopIconSheet.png", 2, 1);
-		this.scooterShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"ScooterShopItem.png", 2, 1);
+				"bicycleShopIconSheet.png", 2, 2);
+//		this.scooterShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
+//				"ScooterShopItem.png", 2, 1);
 		this.hardleyShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"harleyShopIcon.png", 2, 1);
 		this.unycleImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
@@ -296,16 +321,14 @@ public class ResourceManager {
 		this.sessionMenuItem=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"session_item.png");
 		
-		this.playSmallBtnTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
-				"play_50x50.png");
+		
 		this.deleteSmallBtnTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"deletebtn.png");
 		this.levelIcon=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"level_noimage.png");
 		this.levelIconForest=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"levelIcon_forest.png");
-		this.levelIconFarmDay=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
-				"levelIcon_farm_day.png");
+		
 		this.levelIconFarmEvening=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"levelIcon_farm_even.png");
 		this.iconUnicycle=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
@@ -325,9 +348,7 @@ public class ResourceManager {
 				"harleySessionItem.png");
 
 
-		// add the play button
-		this.leftArrowTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
-				"leftbtn.png");
+		
 		this.playMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
 				"playbtn.png");
 		this.backBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
@@ -354,6 +375,25 @@ public class ResourceManager {
 			Debug.e(e);
 		}
 	}
+	public void unloadMenuGraphics(){
+		this.mainMenuTexturesAtlas.unload();
+		this.subMenuShopTextureAtlas.unload();
+		this.subMenuSessionTextureAtlas.unload();
+		this.subMenuSelectVehicleTextureAtlas.unload();
+		setMenuResourcesToNull();
+		
+	}
+	
+	public void unloadGameGraphics(){
+		this.gameTexturesAtlas.unload();
+		this.playerTexturesAtlas.unload();
+		this.tomatoScorerAtlas.unload();
+		this.levelFailedAtlas.unload();
+		this.levelPassedAtlas.unload();
+		this.levelNoMoneyAtlas.unload();
+		setGameResourcesToNull();
+		
+	}
 
 	private void loadMenuSounds() {
 		// try {
@@ -364,6 +404,11 @@ public class ResourceManager {
 		// e.printStackTrace();
 		// }
 
+	}
+	
+	public void unloadSplashResource(){
+		this.splashTexturesAtlas.unload();
+		this.splashMenuBackground=null;
 	}
 
 	// method to prepare out manager
@@ -380,5 +425,68 @@ public class ResourceManager {
 	public static ResourceManager getInstance() {
 		return INSTANCE;
 	}
+	
+	private void setMenuResourcesToNull(){
+		this.mainMenuTexturesAtlas = null;
+		this.subMenuShopTextureAtlas = null;
+		this.subMenuSessionTextureAtlas = null;
+		this.subMenuSelectVehicleTextureAtlas=null;
+		this.mainMenuBackground = null;
+		this.shopMenuBackGround =null;
+		this.unicycleShopItem=null;
+		this.bicycleShopItem=null;
+		this.hardleyShopItem=null;
+		this.unycleImage = null;
+		this.buyBtn=null;
+		this.sessionMenuBackground=null;
+		this.selectVehiculeMenuBackground=null;
+		this.lockIcon = null;
+		this.sessionMenuItem=null;
+		this.deleteSmallBtnTexture=null;
+		this.levelIcon=null;
+		this.levelIconForest=null;
+		this.levelIconFarmEvening=null;
+		this.iconUnicycle=null;
+		this.vehicleNoImage=null;
+		this.unicycleSessionMenuItem=null;
+		this.bicycleSessionMenuItem=null;
+		this.scooterSessionMenuItem=null;
+		this.harleySessionMenuItem=null;
+		this.playMenuButton = null;
+		this.backBtnTexture = null;
+		this.continueMenuButton = null;
+		this.shopMenuButton = null;
+	}
+
+	private void setGameResourcesToNull(){
+		
+		this.playerTexture = null;
+		this.playerRidingUnicycleTexture=null;
+		this.playerRidingBicycleTexture=null;
+		this.bullTexture = null;
+		this.tomatoScorer = null;
+		this.pauseBtnTexture = null;
+		this.jumpBtnTextute = null;
+		this.tomatoIconTexture = null;
+		this.levelIcon = null;
+		this.point5Texture = null;
+		this.point10Texture = null;
+		this.minusPoint5Texture = null;
+		this.minusPoint10Texture = null;
+		this.minusPoint20Texture = null;
+		this.failedBG = null;
+		this.passedBG = null;
+		this.pauseBG = null;
+		this.noMoneyBG = null;
+		this.restartButton = null;
+		this.quitButton = null;
+		this.playButton = null;
+		this.pauseButton = null;
+
+		
+	}
+	
+	
+	
 
 }

@@ -29,9 +29,7 @@ public class ImageProvider {
 		}else if(descriptionLevelType.equals(Constants.FARM_EVENING)){
 			return ResourceManager.getInstance().levelIconFarmEvening;
 		}
-		else if(descriptionLevelType.equals(Constants.FARM_DAY)){
-			return ResourceManager.getInstance().levelIconFarmDay;
-		}
+		
 		else{
 			return ResourceManager.getInstance().levelIcon;
 		}

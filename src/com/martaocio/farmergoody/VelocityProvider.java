@@ -25,4 +25,10 @@ public static float getVelocityByLevel(Vehicle vehicle){
 				
 	}
 
+public static float getBullVelocityByLevel(int currentLevel){
+	if (currentLevel==1 || currentLevel ==2 ||currentLevel==3)return 4;
+	else return 4+(currentLevel*0.2f);
+						
+	}
+
 }

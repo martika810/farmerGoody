@@ -21,12 +21,12 @@ import org.andengine.util.HorizontalAlign;
 
 public class ShopSubMenu extends Sprite {
 
-	private static final int ORIGIN_X = 200;
-	private static final int ORIGIN_Y = 90;
+	private static final int ORIGIN_X = 240;
+	private static final int ORIGIN_Y = 110;
 	private static final int PADDING_X = 10;
 	private static final int PADDING_Y = 5;
-	private static final int ITEM_DIM_X = 190;
-	private static final int ITEM_DIM_Y = 190;
+	private static final int ITEM_DIM_X = 180;
+	private static final int ITEM_DIM_Y = 180;
 	private static final int NUMBER_COLUMNS = 2;
 
 	private MenuScene parentScene;
@@ -48,7 +48,7 @@ public class ShopSubMenu extends Sprite {
 
 	public void createMenu() {
 
-		backMenuItem = new Sprite(0, 0, ResourceManager.getInstance().backBtnTexture, vbom) {
+		backMenuItem = new Sprite(600, 50, ResourceManager.getInstance().backBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionDown() && parentMenu.isShopMenuOnScreen()) {
@@ -57,12 +57,12 @@ public class ShopSubMenu extends Sprite {
 				return true;
 			};
 		};
-		backMenuItem.setPosition(600, 50);
+		//backMenuItem.setPosition(600, 50);
 		backMenuItem.setCullingEnabled(true);
 		this.attachChild(backMenuItem);
 		this.parentScene.registerTouchArea(backMenuItem);
 
-		creditText = new Text(230, 80, ResourceManager.getInstance().font, "Credit: "
+		creditText = new Text(230, 90, ResourceManager.getInstance().font, "Credit: "
 				+ (UserState.getInstance().getLastModifiedSession() == null ? 0 : UserState.getInstance().getLastModifiedSession()
 						.getCurrentMoney()) + "$", new TextOptions(HorizontalAlign.CENTER), vbom);
 
@@ -84,15 +84,17 @@ public class ShopSubMenu extends Sprite {
 				boolean haveEnoughtMoneyToBuy = (UserState.getInstance().getLastModifiedSession() == null ? false : UserState.getInstance()
 						.getLastModifiedSession().getCurrentMoney() > vehicle.getPrice());
 				boolean canBuy = !alreadyHad && haveEnoughtMoneyToBuy;
+				
+				int colToPlaceItem = indexOfItemToPlace / NUMBER_COLUMNS;
+				int rowToPlaceItem = indexOfItemToPlace % NUMBER_COLUMNS;
+				int positionXToPlaceItem = ORIGIN_X + PADDING_X + (ITEM_DIM_X * rowToPlaceItem);
+				int positionYToPlaceItem = ORIGIN_Y + PADDING_Y + (ITEM_DIM_Y * colToPlaceItem);
 
 				AnimatedSprite item = createShopMenuItem(vehicle, alreadyHad, canBuy,indexOfItemToPlace);
 				item.setCullingEnabled(true);
 				shopItems.add(item);
 
-				int colToPlaceItem = indexOfItemToPlace / NUMBER_COLUMNS;
-				int rowToPlaceItem = indexOfItemToPlace % NUMBER_COLUMNS;
-				int positionXToPlaceItem = ORIGIN_X + PADDING_X + (ITEM_DIM_X * rowToPlaceItem);
-				int positionYToPlaceItem = ORIGIN_Y + PADDING_Y + (ITEM_DIM_Y * colToPlaceItem);
+				
 
 				item.setPosition(positionXToPlaceItem, positionYToPlaceItem);
 				this.attachChild(item);
@@ -103,16 +105,18 @@ public class ShopSubMenu extends Sprite {
 	}
 
 	private AnimatedSprite createShopMenuItem(final Vehicle vehicle, boolean alreadyHad, boolean canBuy,final int indexItem) {
-		AnimatedSprite itemBackground = new AnimatedSprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom);
-		itemBackground.setCullingEnabled(true);
+		//AnimatedSprite itemBackground = new AnimatedSprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom);
+		ShopVehiculeItem shopItem=new ShopVehiculeItem(0, 0, vbom, vehicle); 
+		shopItem.setCullingEnabled(true);
 		if(alreadyHad){
-			itemBackground.setCurrentTileIndex(1);
+			//itemBackground.setCurrentTileIndex(1);
+			shopItem.setSelectedState(vehicle);
 		}else{
-			itemBackground.setCurrentTileIndex(0);
+			shopItem.setNormalState(vehicle);
 		}
 		
 		if (canBuy && !alreadyHad) {
-			Sprite buyBtn = new Sprite(0, 0, ResourceManager.getInstance().buyBtn, vbom) {
+			Sprite buyBtn = new Sprite(shopItem.getWidth()-30, shopItem.getHeight()-30, ResourceManager.getInstance().buyBtn, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 					if (pSceneTouchEvent.isActionDown() && parentMenu.isShopMenuOnScreen()) {
@@ -130,20 +134,20 @@ public class ShopSubMenu extends Sprite {
 			buyBtn.setUserData(indexItem);
 			buyBtn.setCullingEnabled(true);
 
-			buyBtn.setPosition(itemBackground.getWidth()-30, itemBackground.getHeight()-30);
+			//buyBtn.setPosition(shopItem.getWidth()-30, shopItem.getHeight()-30);
 			this.parentScene.registerTouchArea(buyBtn);
 		
 			Text priceText = new Text(20, 25, ResourceManager.getInstance().font, new Integer(vehicle.getPrice()).toString() + "$",
 					new TextOptions(HorizontalAlign.CENTER), vbom);
 			buyBtn.attachChild(priceText);
-			itemBackground.attachChild(buyBtn);
+			shopItem.attachChild(buyBtn);
 		}
 
 		
 
 		
 
-		return itemBackground;
+		return shopItem;
 	}
 
 //	private static ITiledTextureRegion getVehicleShopItem(Vehicle vehicle) {
