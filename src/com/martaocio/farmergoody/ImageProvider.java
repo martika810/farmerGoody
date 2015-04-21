@@ -28,6 +28,8 @@ public class ImageProvider {
 			return ResourceManager.getInstance().levelIconForest;
 		}else if(descriptionLevelType.equals(Constants.FARM_EVENING)){
 			return ResourceManager.getInstance().levelIconFarmEvening;
+		}else if(descriptionLevelType.equals(Constants.DESERT)){
+			return ResourceManager.getInstance().levelIconDesert;
 		}
 		
 		else{

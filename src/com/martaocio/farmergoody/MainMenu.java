@@ -41,8 +41,9 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private static final int OUT_OF_SCREEN_Y = 900;
 	private static final int NUMBER_COLUMNS = 2;
 	private MenuScene menuChildScene;// menu that can have buttons
-	private IMenuItem shopMenuItem;
-	private IMenuItem playMenuItem;
+	private IMenuItem shopMenuItem,helpMenuItem;
+	//private IMenuItem playMenuItem;
+	private Sprite playMenuItem;
 	// private MenuScene shopChildScene;
 	private ShopSubMenu bg;
 	private SessionSubMenu sessionBg;
@@ -50,6 +51,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 								// played
 	private final int CONTINUE = 1;
 	private final int BACK = 2;
+	private final int HELP = 3;
 	private final int SELECT_SESSION1 = 3;
 	private final int SELECT_SESSION2 = 4;
 	private final int SELECT_SESSION3 = 5;
@@ -144,7 +146,9 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	public void showSessionMenuScene() {
 		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
+		this.menuChildScene.setOnSceneTouchListenerBindingOnActionDownEnabled(false);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, camera.getHeight(), 0));
+		
 		if (!sessionBg.hasParent()) {
 			this.menuChildScene.attachChild(sessionBg);
 		}
@@ -166,6 +170,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	public void hideSessionMenuScene() {
 		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
+		this.menuChildScene.setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, 0, camera.getHeight()));
 		showMainMenuControllers();
 		isSessionMenuOnScreen = false;
@@ -175,12 +180,14 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	public void showMainMenuControllers(){
 		shopMenuItem.setVisible(true);// move button back to screen
 		playMenuItem.setVisible(true);
+		helpMenuItem.setVisible(true);
 		areMenuItemEnabled = true;
 	}
 	
 	public void hideMainMenuControllers(){
 		shopMenuItem.setVisible(false);
 		playMenuItem.setVisible(false);
+		helpMenuItem.setVisible(false);
 		areMenuItemEnabled = false;
 	}
 
@@ -191,20 +198,39 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 		// create the menu buttons
 		// when the button is clicked , it is scaled it to 1.2
-		playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom), 1.7f, 1.5f);
-
+		//playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom), 1.7f, 1.5f);
+		playMenuItem = new Sprite(0,0,150,150,resourceManager.playMenuButton,vbom){
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
+				if(!isSessionMenuOnScreen && !isShopMenuOnScreen){
+					showSessionMenuScene();
+					
+				}
+				return true;
+			}
+			
+		};
+		playMenuItem.setVisible(true);
 		shopMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE, resourceManager.shopMenuButton, vbom), 1.2f, 1);
+		
+		helpMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.HELP, resourceManager.helpButton, vbom), 1.2f, 1);
 
-		this.menuChildScene.addMenuItem(playMenuItem);
-		this.menuChildScene.addMenuItem(shopMenuItem);
+		
 
 		this.menuChildScene.buildAnimations();
 		this.menuChildScene.setBackgroundEnabled(false);
+		
+		//this.menuChildScene.addMenuItem(playMenuItem);
+		this.menuChildScene.attachChild(playMenuItem);
+		this.menuChildScene.addMenuItem(shopMenuItem);
+		this.menuChildScene.addMenuItem(helpMenuItem);
 
-		playMenuItem.setPosition(360, 260);
-		shopMenuItem.setPosition(650, 370);
+		playMenuItem.setPosition(325,165);
+		shopMenuItem.setPosition(530, 370);
+		helpMenuItem.setPosition(650, 370);
 		this.menuChildScene.setOnMenuItemClickListener(this);
 		this.menuChildScene.setOnSceneTouchListener(this);
+		this.menuChildScene.registerTouchArea(playMenuItem);
 
 		// attach the play menu to the scene
 		this.setChildScene(menuChildScene, false, true, true);
@@ -220,6 +246,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				// SceneManager.getInstance().createGameScene();
 				showSessionMenuScene();
 				return true;
+				
+			case HELP:
+				// load game
+				// SceneManager.getInstance().createGameScene();
+				SceneManager.getInstance().createInstructions(engine);
+				return true;
 			case CONTINUE:
 				// UserState.getInstance().clear();
 				// SceneManager.getInstance().createGameScene();
@@ -228,12 +260,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 			case BACK:
 				hideShopMenuScene();
 				return true;
-				// case SELECT_SESSION1:
-				// SceneManager.getInstance().createGameScene();
-				// case SELECT_SESSION2:
-				// SceneManager.getInstance().createGameScene();
-				// case SELECT_SESSION3:
-				// SceneManager.getInstance().createGameScene();
+				
 			default:
 				return false;
 			}
@@ -245,7 +272,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		// TODO Auto-generated method stub
+		
 		return true;
 	}
 

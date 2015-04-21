@@ -100,13 +100,13 @@ public class UserState {
 		
 		return sessions.get(indexSelectedSession);
 	}
-	public void setSelectedSession(int indexSelectedSession){
+	public void setSelectedSession(final int indexSelectedSession){
 		this.indexSelectedSession=indexSelectedSession;
 	}
 
 	public void saveToFile() {
 
-		File data_file = new File(DATA_FILE);
+		
 		FileOutputStream fos;
 		try {
 			fos = ResourceManager.getInstance().activity.openFileOutput(DATA_FILE, ResourceManager.getInstance().activity.MODE_PRIVATE);
@@ -116,7 +116,7 @@ public class UserState {
 			pw.print(strUserState);
 			pw.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

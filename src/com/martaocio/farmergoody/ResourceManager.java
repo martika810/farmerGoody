@@ -36,7 +36,7 @@ public class ResourceManager {
 	public MainGameActivity activity;
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
-	public Font font;
+	public Font font,font38;
 	public Vibrator vibrator;
 
 	// load sounds
@@ -52,13 +52,13 @@ public class ResourceManager {
 	private BuildableBitmapTextureAtlas subMenuShopTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
-	private BuildableBitmapTextureAtlas splashTexturesAtlas;
+	private BuildableBitmapTextureAtlas splashTexturesAtlas,instructionTexturesAtlas;
 
 	private BuildableBitmapTextureAtlas gameTexturesAtlas,playerTexturesAtlas,tomatoScorerAtlas;
 
 	private BuildableBitmapTextureAtlas levelFailedAtlas, levelPassedAtlas, pauseAtlas,levelNoMoneyAtlas;
 
-	public ITextureRegion playMenuButton, continueMenuButton,shopMenuButton, mainMenuBackground, shopMenuBackGround;
+	public ITextureRegion playMenuButton, continueMenuButton,shopMenuButton,helpButton, mainMenuBackground, shopMenuBackGround;
 	// public ITextureRegion restartButton,quitButton,failedBG,passedBG;
 	public ITextureRegion restartButton, quitButton, playButton, pauseButton, failedBG, passedBG, pauseBG,noMoneyBG;
 
@@ -83,13 +83,13 @@ public class ResourceManager {
 	public ITextureRegion sessionMenuItem;
 	public ITextureRegion iconUnicycle;
 	public ITextureRegion vehicleNoImage;
-	public ITextureRegion levelIcon,levelIconForest,levelIconFarmEvening;
+	public ITextureRegion levelIcon,levelIconForest,levelIconFarmEvening,levelIconDesert;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
 	public ITextureRegion pauseBtnTexture,jumpBtnTextute,backBtnTexture,deleteSmallBtnTexture;
-
+	public ITextureRegion backInstructionBtnTexture;
 	//SPLASH
-	public ITextureRegion splashMenuBackground;
+	public ITextureRegion splashMenuBackground,instructionBackground;
 	public ITextureRegion tomatoIconTexture;
 		
 	public ITextureRegion minusPoint5Texture,minusPoint10Texture,minusPoint20Texture,point5Texture,point10Texture;
@@ -115,7 +115,11 @@ public class ResourceManager {
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 28, true,
 				Color.BLACK);
+		
+		font38 = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 38, true,
+				Color.BLACK);
 		font.load();
+		font38.load();
 
 		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -266,6 +270,29 @@ public class ResourceManager {
 		
 		
 	}
+	
+	public void loadInstructionsResources(){
+		loadInstructionGraphics();
+	}
+	
+	private void loadInstructionGraphics(){
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.instructionTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.instructionBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(instructionTexturesAtlas , activity.getAssets(),
+				"instructions.png");
+		this.backInstructionBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(instructionTexturesAtlas, activity.getAssets(),
+				"backbtn.png");
+		try {
+			this.instructionTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+		} catch (TextureAtlasBuilderException e) {
+			
+			e.printStackTrace();
+		}
+		this.instructionTexturesAtlas.load();
+		
+		
+	}
 
 	private void loadMenuGraphics() {
 		// Indicate the folder of the assetsf
@@ -331,6 +358,9 @@ public class ResourceManager {
 		
 		this.levelIconFarmEvening=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"levelIcon_farm_even.png");
+		
+		this.levelIconDesert=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
+				"level_icon_dessert.png");
 		this.iconUnicycle=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
 				"icon_unicycle.png");
 		this.vehicleNoImage=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuSessionTextureAtlas, activity.getAssets(),
@@ -357,6 +387,8 @@ public class ResourceManager {
 				"restartbtn.png");
 		this.shopMenuButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
 				"shopbtn.png");
+		this.helpButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mainMenuTexturesAtlas, activity.getAssets(),
+				"help.png");
 
 		try {
 			this.mainMenuTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
@@ -409,6 +441,12 @@ public class ResourceManager {
 	public void unloadSplashResource(){
 		this.splashTexturesAtlas.unload();
 		this.splashMenuBackground=null;
+	}
+	
+	public void unloadInstructionsResource(){
+		this.instructionTexturesAtlas.unload();
+		this.instructionBackground=null;
+		this.backInstructionBtnTexture=null;
 	}
 
 	// method to prepare out manager

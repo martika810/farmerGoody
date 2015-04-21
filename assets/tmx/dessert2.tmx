@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="desert_tileset" tilewidth="32" tileheight="32">
+  <image source="../gfx/desert_tileset.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1MMSbFkUBNCqatu2bdvPtm3btm3bttq2bdv2W/0VJ+L2HqxxDjIyi+RzuaIUozglKEkpSlOGspSjPBWoSCUqU4WqVKM6NahJLWpThyIZyTgqF0L4P6pr//WoTwMa0ojGNKEpzWhOC1rSita0oS3taE8HOtKJznShaz47Gam7CiGk0c3+u9ODnvSiN33oSz/6M4CBDGIwQxjKMIYzgpGMYjRjGMu4fHYyUncVQkhjvP1PYCKTmMwUpjKN6cxgJrOYzRzmMo/5LGAhi1jMEpayjOX57GSk7iqEkMYK+1/JKlazhrWsYz0b2MgmNrOFrWxjOzvYyS7u5h7u5T7u54F8djJSdxVCSONB+3+Ih3mER3mMx3mCJ3mKp3mGZ3mO53mBF3mJl3mFV3mN13mDN/PZyUjdVQghjbfs/23e4V3e430+4EM+4mM+4VM+43O+4Eu+4mu+4Vu+43t+4Ed+ymcnI3VXIYQ0frb/X/iV3/idP/iTv/ibf/iXXCGXy1NgD/ZkL/ZmH/ZlP/bnAA7koEJ2MlJ3FUJI42D7P4RDOYzDOYIj//sFjuYYjuU4jucETuQkTuYUTuU0TucMzuQszi5kJyN1VyGENM6x/3M5j/O5gAu5iIu5hEu5jMu5giu5iqu5hmu5juu5gRu5iZu5pZCdjNRdhRDSuNX+b+N27uBO7qIIRSlGcUpQklKUpgxlKUd5KlCRSlSmClWpVshORuquQghpVLf/GtSkFrWpQ13qUZ8GNKQRjWlCU5rRnBa0pBWtaUNb2tG+kJ2M1F2FENLoYP8d6URnutCVbnSnBz3pRW/60Jd+9GcAAxnEYIYwlGEMZ0QhOxmpuwohpDHS/kcxmjGMZRzjmcBEJjGZKUxlGtOZwUxmMZs5zGUe81nAwkJ2MlJ3FUJIY5H9L2YJS1nGclawklWsZg1rWcd6NrCRTWxmC1vZxnZ2sJNdhexkpO4qhJDGbvwCcvQ=
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKFL8f2jLsdAwVVTVVVVVVVVVVVVVVVVVVVVVVVVffwAC6apdA==
+  </data>
+ </layer>
+ <objectgroup name="objects" width="0" height="0">
+  <object id="1" name="ground" x="2" y="401" width="1972" height="76"/>
+ </objectgroup>
+</map>

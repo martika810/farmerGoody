@@ -13,6 +13,7 @@ public class SceneManager {
 	private BaseScene gameScene;
 	private BaseScene splashScene;
 	private BaseScene loadingScene;
+	private BaseScene instructionScene;
 
 	private BaseScene currentScene;
 	private SceneType currentSceneType = SceneType.SCENE_SPLASH;
@@ -46,6 +47,9 @@ public class SceneManager {
 			break;
 		case SCENE_SPLASH:
 			setScene(splashScene);
+			break;
+		case SCENE_INSTRUCTION:
+			setScene(instructionScene);
 			break;
 		default:
 			break;
@@ -97,6 +101,12 @@ public class SceneManager {
 		splashScene=null;
 	}
 	
+	public void disposeInstructionScene(){
+		ResourceManager.getInstance().unloadInstructionsResource();
+		instructionScene.disposeScene();
+		instructionScene=null;
+	}
+	
 	//to set our main menu back
 	public void setMainMenu(){
 		ResourceManager.getInstance().engine.setScene(mainMenu);
@@ -117,9 +127,48 @@ public class SceneManager {
 		//pOnCreateSceneCallback.onCreateSceneFinished(mainMenu);
 	}
 	
+	public void createInstructions(final Engine mEngine){
+		
+		setScene(loadingScene);
+		ResourceManager.getInstance().unloadMenuGraphics();
+		mainMenu.disposeScene();
+		
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				
+				ResourceManager.getInstance().loadInstructionsResources();
+				instructionScene=new InstructionScene();
+				setScene(instructionScene);
+				
+			}
+		}));
+		
+	}
+	
+	
 	public void loadMainMenu(final Engine mEngine){
 		setScene(loadingScene);
 		ResourceManager.getInstance().unloadGameGraphics();
+		//gameScene.disposeScene();
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+			
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				ResourceManager.getInstance().loadMenuResources();
+				mainMenu=new MainMenu();
+				setScene(mainMenu);
+				
+			}
+		}));
+	}
+	
+	public void loadMainMenuFromInstruction(final Engine mEngine){
+		setScene(loadingScene);
+		ResourceManager.getInstance().unloadInstructionsResource();
 		//gameScene.disposeScene();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
 			
@@ -144,7 +193,7 @@ public class SceneManager {
 	
 
 	public enum SceneType {
-		SCENE_MENU, SCENE_GAME , SCENE_SPLASH, SCENE_LOADING
+		SCENE_MENU, SCENE_GAME , SCENE_SPLASH, SCENE_LOADING, SCENE_INSTRUCTION
 	}
 
 	public SceneType getSceneType() {

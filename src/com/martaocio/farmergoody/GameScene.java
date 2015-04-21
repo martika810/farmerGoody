@@ -53,6 +53,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -84,6 +85,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private LinkedList<Sprite> tomatos;
 	Rectangle[] rec = new Rectangle[250];
 	private int i = 0;
+	
 	// private LinkedList<Stair> stairs;
 
 	private LinkedList<Sprite> pathScoreIndicators;
@@ -173,10 +175,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		fencesBodies = new LinkedList<Body>();
 		pathScoreIndicators = new LinkedList<Sprite>();
 		try {
-			final TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
-					TextureOptions.NEAREST_PREMULTIPLYALPHA, vbom);
-
+			TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
+					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
+		
 			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(levelNumber));
+			
+			
 		} catch (TMXLoadException e) {
 
 			Debug.e(e);
@@ -244,6 +248,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 
 		// /////////////////////////////////////////
+		
 		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);// to get the first
 															// layer
 
@@ -455,7 +460,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score += 10;
 						textScore.setText("" + score);
 						resourceManager.goodSound.play();
-						percentage=(score/levelTotalPoints)*100;
+						percentage=(score*100)/levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.TOMATO10)) {
@@ -470,7 +475,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 5;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score/levelTotalPoints)*100;
+						percentage=(score*100)/levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -486,7 +491,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 10;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score/levelTotalPoints)*100;
+						percentage=(score*100)/levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -502,7 +507,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 20;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score/levelTotalPoints)*100;
+						percentage=(score*100)/levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -529,12 +534,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 //						if (currentUserState.getBestScore() < score) {
 //							currentUserState.setBestScore(score);
 //						}
+						Log.d("MRB", "The percentage is:"+percentage);
 						if(percentage<50){
 							showLevelNoMoney();
 							
 						}else{
+							Log.d("MRB", "The percentage is:"+percentage);
 							currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
 							int currentMoney=currentUserState.getSelectedSession().getCurrentMoney();
+							
 							int moneyWon=0;
 							if(percentage>=50 && percentage<70){
 								moneyWon=100;
@@ -708,8 +716,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelFailed.addMenuItem(quitButton);
 
 		levelFailed.buildAnimations();
-		restartButton.setPosition(470, 270);
-		quitButton.setPosition(470, 360);
+		restartButton.setPosition(300, 360);
+		quitButton.setPosition(400, 360);
 
 		
 		levelFailed.setOnMenuItemClickListener(this);
@@ -737,8 +745,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelNoMoney.addMenuItem(quitButton);
 
 		levelNoMoney.buildAnimations();
-		restartButton.setPosition(470, 270);
-		quitButton.setPosition(470, 360);
+		restartButton.setPosition(300, 270);
+		quitButton.setPosition(400, 270);
 
 		levelNoMoney.setOnMenuItemClickListener(this);
 	}
@@ -789,8 +797,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		levelCleared.buildAnimations();
 
-		playButton.setPosition(470, 270);
-		quitButton.setPosition(470, 360);
+		playButton.setPosition(300, 270);
+		quitButton.setPosition(400, 270);
 
 		levelCleared.setOnMenuItemClickListener(this);
 	}
@@ -815,20 +823,20 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				activity.showAdvert(true);
 			}
 		});
-	
+		createNoMonetMessages();
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelNoMoney, false, true, true);
 	}
 
-	private void showLevelCleared(int moneyWon) {
+	private void showLevelCleared(final int moneyWon) {
 		activity.runOnUiThread(new Runnable(){
 			@Override
 			public void run(){
 				activity.showAdvert(true);
 			}
 		});
-	
+		createWinningMesages(moneyWon);
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelCleared, false, true, true);
@@ -1061,6 +1069,24 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			};
 		}
 		return player;
+	}
+	
+	private void createWinningMesages(final int moneyWon){
+		int nextLevel=UserState.getInstance().getSelectedSession().getCurrentLevel()+1;
+		Text textYouWon=new Text(340, 370, this.resourceManager.font, "You won "+moneyWon+" $  " , new TextOptions(HorizontalAlign.CENTER), vbom);
+		Text textNextLevel= new Text(340,400,this.resourceManager.font, "Next Level: "+nextLevel + " ",new TextOptions(HorizontalAlign.CENTER), vbom);
+		
+		levelCleared.attachChild(textNextLevel);
+		levelCleared.attachChild(textYouWon);
+		
+		
+	}
+	
+	private void createNoMonetMessages(){
+		Text textNotEnoughTomatos=new Text(340, 350, this.resourceManager.font, "Just "+percentage+" % of tomatos!", new TextOptions(HorizontalAlign.CENTER), vbom);
+		Text textComeBack=new Text(340, 380, this.resourceManager.font, "Come back for more!", new TextOptions(HorizontalAlign.CENTER), vbom);
+		levelNoMoney.attachChild(textNotEnoughTomatos);
+		levelNoMoney.attachChild(textComeBack);
 	}
 	
 	
