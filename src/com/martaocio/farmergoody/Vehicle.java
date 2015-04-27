@@ -28,18 +28,22 @@ public enum Vehicle {
 		return price;
 	}
 	
-	public static ITiledTextureRegion getVehicleShopItem(Vehicle vehicle) {
+	public static ITextureRegion getVehicleShopItem(Vehicle vehicle) {
 
 		if (vehicle.equals(Vehicle.UNICYCLE)) {
-			return ResourceManager.getInstance().unicycleShopItem;
+			//return ResourceManager.getInstance().unicycleShopItem;
+			return ResourceManager.getInstance().unicycleSessionMenuItem;
 		} else if (vehicle.equals(Vehicle.BICYCLE)) {
-		return ResourceManager.getInstance().bicycleShopItem;
+			//return ResourceManager.getInstance().bicycleShopItem;
+			return ResourceManager.getInstance().bicycleSessionMenuItem;
 		} else if (vehicle.equals(Vehicle.SCOOTER)) {
-			return ResourceManager.getInstance().bicycleShopItem;
+			//return ResourceManager.getInstance().bicycleShopItem;
+			return ResourceManager.getInstance().scooterSessionMenuItem;
 		} else if (vehicle.equals(Vehicle.HARLEY)) {
-			return ResourceManager.getInstance().hardleyShopItem;
+			//return ResourceManager.getInstance().hardleyShopItem;
+			return ResourceManager.getInstance().harleySessionMenuItem;
 		}
-		return ResourceManager.getInstance().unicycleShopItem;
+		return ResourceManager.getInstance().unicycleSessionMenuItem;
 	}
 	
 	public static ITextureRegion getVehicleSelectVehicleItem(Vehicle vehicle) {

@@ -1,10 +1,11 @@
 package com.martaocio.farmergoody;
 
 public class LevelProvider {
+	public static int NUM_TOTAL_LEVELS=20;
 	
 	public static String getTXMLevel(int levelNumber){
-		
-		switch (levelNumber){
+		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
+		switch (convertedLevelNumber){
 			case 1:
 				return "tmx/level2.tmx";
 			case 2:

@@ -52,9 +52,9 @@ public class ResourceManager {
 	private BuildableBitmapTextureAtlas subMenuShopTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSessionTextureAtlas;
 	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
-	private BuildableBitmapTextureAtlas splashTexturesAtlas,instructionTexturesAtlas;
+	private BuildableBitmapTextureAtlas splashTexturesAtlas,instructionTexturesAtlas,storyTexturesAtlas;
 
-	private BuildableBitmapTextureAtlas gameTexturesAtlas,playerTexturesAtlas,tomatoScorerAtlas;
+	public BuildableBitmapTextureAtlas gameTexturesAtlas,playerTexturesAtlas,tomatoScorerAtlas;
 
 	private BuildableBitmapTextureAtlas levelFailedAtlas, levelPassedAtlas, pauseAtlas,levelNoMoneyAtlas;
 
@@ -86,10 +86,10 @@ public class ResourceManager {
 	public ITextureRegion levelIcon,levelIconForest,levelIconFarmEvening,levelIconDesert;
 	public ITextureRegion unycleImage;
 	public ITextureRegion buyBtn;
-	public ITextureRegion pauseBtnTexture,jumpBtnTextute,backBtnTexture,deleteSmallBtnTexture;
-	public ITextureRegion backInstructionBtnTexture;
+	public ITextureRegion pauseBtnTexture,jumpBtnTextute,backBtnTexture,deleteSmallBtnTexture,rockLineTexture;
+	public ITextureRegion backInstructionBtnTexture,playStoryBtnTexture;
 	//SPLASH
-	public ITextureRegion splashMenuBackground,instructionBackground;
+	public ITextureRegion splashMenuBackground,instructionBackground,storyBackground;
 	public ITextureRegion tomatoIconTexture;
 		
 	public ITextureRegion minusPoint5Texture,minusPoint10Texture,minusPoint20Texture,point5Texture,point10Texture;
@@ -162,6 +162,9 @@ public class ResourceManager {
 		
 		this.jumpBtnTextute = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"jump.png");
+		
+		this.rockLineTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"rock_line.png");
 		
 		
 
@@ -293,6 +296,29 @@ public class ResourceManager {
 		
 		
 	}
+	
+	public void loadStoryResources(){
+		loadStoryGraphics();
+	}
+	
+	private void loadStoryGraphics(){
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.storyTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024,BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.storyBackground=BitmapTextureAtlasTextureRegionFactory.createFromAsset(storyTexturesAtlas , activity.getAssets(),
+				"story_page.png");
+		this.playStoryBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(storyTexturesAtlas, activity.getAssets(),
+				"playbtn.png");
+		try {
+			this.storyTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+		} catch (TextureAtlasBuilderException e) {
+			
+			e.printStackTrace();
+		}
+		this.storyTexturesAtlas.load();
+		
+		
+	}
 
 	private void loadMenuGraphics() {
 		// Indicate the folder of the assetsf
@@ -323,14 +349,7 @@ public class ResourceManager {
 				"menubackground3.png");
 		this.shopMenuBackGround = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"shopPanel.png");
-		this.unicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"unicycleShopItem.png", 2, 1);
-		this.bicycleShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"bicycleShopIconSheet.png", 2, 2);
-//		this.scooterShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-//				"ScooterShopItem.png", 2, 1);
-		this.hardleyShopItem=BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
-				"harleyShopIcon.png", 2, 1);
+
 		this.unycleImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
 				"unicycle.png");
 		this.buyBtn=BitmapTextureAtlasTextureRegionFactory.createFromAsset(subMenuShopTextureAtlas, activity.getAssets(),
@@ -447,6 +466,12 @@ public class ResourceManager {
 		this.instructionTexturesAtlas.unload();
 		this.instructionBackground=null;
 		this.backInstructionBtnTexture=null;
+	}
+	
+	public void unloadStoryResource(){
+		this.storyTexturesAtlas.unload();
+		this.storyBackground=null;
+		this.playStoryBtnTexture=null;
 	}
 
 	// method to prepare out manager

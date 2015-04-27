@@ -20,6 +20,8 @@ import com.google.android.gms.ads.InterstitialAd;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.opengl.Visibility;
 import android.util.Log;
 import android.view.Gravity;
@@ -167,7 +169,7 @@ public class MainGameActivity extends BaseGameActivity {
 //	}
 	
 	public void showAdvert(boolean shouldShowAdvert){
-		if (mInterstitialAd.isLoaded()) {
+		if (isNetworkAvailable() && mInterstitialAd.isLoaded()) {
 			mInterstitialAd.show();
 		}
 	}
@@ -177,6 +179,13 @@ public class MainGameActivity extends BaseGameActivity {
 			.addTestDevice("xxxxx")
 			.build();
 		mInterstitialAd.loadAd(adRequest);
+	}
+	
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 }

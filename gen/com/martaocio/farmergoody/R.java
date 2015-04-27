@@ -615,6 +615,7 @@ containing a value of this type.
     }
     public static final class style {
         public static final int Theme_IAPTheme=0x7f050000;
+        public static final int Theme_NoBackground=0x7f050005;
         public static final int WalletFragmentDefaultButtonTextAppearance=0x7f050003;
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f050002;
         public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f050001;

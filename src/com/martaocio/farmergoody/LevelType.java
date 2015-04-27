@@ -44,7 +44,8 @@ public enum LevelType {
 	
 
 	public static LevelType getLevelType(int levelNumber){
-		switch(levelNumber){
+		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
+		switch(convertedLevelNumber){
 		case 1:
 			return LEVEL1;
 		case 2:

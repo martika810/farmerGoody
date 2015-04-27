@@ -32,6 +32,7 @@ import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.sprite.batch.SpriteBatch;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -86,6 +87,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	Rectangle[] rec = new Rectangle[250];
 	private int i = 0;
 	
+	private boolean isGameVisible=true;
+	
+	private  RockPool rockPool;
+	
 	// private LinkedList<Stair> stairs;
 
 	private LinkedList<Sprite> pathScoreIndicators;
@@ -103,6 +108,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	public Sprite restartButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
+	//public final SpriteBatch rockLine=new SpriteBatch(resourceManager.gameTexturesAtlas, 1000, vbom);
+	public SpriteBatch tomatoSprite=new SpriteBatch(resourceManager.gameTexturesAtlas,100,vbom);
+	
 	public int percentage=0;
 
 	public Sprite title;
@@ -126,8 +134,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	
 		createPhysicsWorld();
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
-		createLevelClearedScene();
 		createLevelFailedScene();
+		createLevelClearedScene();
 		createLevelNoMoneyScene();
 		createPauseScene();
 
@@ -154,6 +162,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void createLevel(int levelNumber) {
+		
+		//
+		RockPool.prepareRockPool(resourceManager.rockLineTexture, vbom,camera,this);
+		rockPool=RockPool.getInstance();
 
 		// create the tex for the score
 		score = 10;
@@ -228,6 +240,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
 					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 50, 50, TomatoResourceHelper.getTomatoResource(object
 							.getName()), vbom);
+					
+					
 					tomatoType.setCullingEnabled(true);
 					tomatoType.setIgnoreUpdate(true);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
@@ -235,6 +249,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					body.setUserData(object.getName());
 					tomatos.add(tomatoType);
 					tomatoType.setUserData(body);
+					
+//					tomatoSprite.draw(TomatoResourceHelper.getTomatoResource(object.getName()), object.getX(), object.getY(), 50, 50, 0, 1, 1, 1, 1);
+//					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+//					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, object.getX()+25,object.getY()+25,50,50, BodyType.StaticBody, tomatoFixtureDef);
+//					body.setUserData(object.getName());
+					
 				} else if (object.getName().equals(SpriteTag.END)) {
 
 					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
@@ -312,7 +332,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				if(bull.getX()>player.getX()){
+				boolean isBullAheadPlayer=bull.getX()>player.getX();
+				if(isBullAheadPlayer){
 					endGameByBullCatch();
 				}
 
@@ -325,13 +346,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			}
 
 		});
+		
 	}
 
 	private void createButtons() {
 		jumpButton = new Sprite(320, 380, 164, 70, ResourceManager.getInstance().jumpBtnTextute, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				if (pSceneTouchEvent.isActionUp()) {
+				if (pSceneTouchEvent.isActionUp() && isGameVisible) {
 					this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.3f, 1f, 1.2f),
 							new ScaleModifier(0.3f, 1f, 0.8f)));
 					player.jump();
@@ -344,8 +366,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				this.registerEntityModifier(new ScaleModifier(0.5f, 1f, 1.2f));
-				showPause();
+				if (pSceneTouchEvent.isActionUp() && isGameVisible) {
+					this.registerEntityModifier(new ScaleModifier(0.5f, 1f, 1.2f));
+					showPause();
+				}
 
 				return true;
 			};
@@ -354,9 +378,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		restartButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-				pause(false);
-				restartButton.setVisible(false);
-				pauseButton.setVisible(true);
+				if (pSceneTouchEvent.isActionUp() && isGameVisible) {
+					pause(false);
+					restartButton.setVisible(false);
+					pauseButton.setVisible(true);
+				}
 				return true;
 			};
 		};
@@ -618,6 +644,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			@Override
 			public void run() {
 				mPhysicsWorld.destroyBody(body);
+				
 
 			}
 
@@ -699,7 +726,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelFailed.setPosition(0, 0);
 		//
 		// Add menu item
-		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.2f, 0.9f);
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f, 0.9f);
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 		//
 		// create the background
@@ -716,8 +743,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelFailed.addMenuItem(quitButton);
 
 		levelFailed.buildAnimations();
-		restartButton.setPosition(300, 360);
-		quitButton.setPosition(400, 360);
+		restartButton.setPosition(300, 330);
+		quitButton.setPosition(400, 330);
 
 		
 		levelFailed.setOnMenuItemClickListener(this);
@@ -729,7 +756,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelNoMoney.setPosition(0, 0);
 		//
 		// Add menu item
-		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(RESTART, resourceManager.restartButton, vbom), 1.2f, 0.9f);
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f, 0.9f);
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 		//
 		// create the background
@@ -762,19 +789,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.pauseBG, vbom);
-		bg.setCullingEnabled(true);
+		//bg.setCullingEnabled(true);
 		//
 		levelPause.attachChild(bg);
 		levelPause.setBackgroundEnabled(false);// to see our scena throught the
 		// background
-
+		
+	
 		levelPause.addMenuItem(unpauseButton);
 		levelPause.addMenuItem(homeButton);
-		homeButton.setPosition(700, 400);
+		
 		
 		levelPause.buildAnimations();
-		// restartButton.setPosition(470, 250);
-
+		unpauseButton.setPosition(350, 190);
+		homeButton.setPosition(650, 350);
+		
 		levelPause.setOnMenuItemClickListener(this);
 	}
 
@@ -810,10 +839,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				activity.showAdvert(true);
 			}
 		});
-	
+		isGameVisible=false;
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelFailed, false, true, true);
+		
+		
 	}
 	
 	private void showLevelNoMoney() {
@@ -823,6 +854,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				activity.showAdvert(true);
 			}
 		});
+		isGameVisible=false;
 		createNoMonetMessages();
 		showGameIndicators(false);
 		this.hideControlButtons();
@@ -836,6 +868,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				activity.showAdvert(true);
 			}
 		});
+		isGameVisible=false;
 		createWinningMesages(moneyWon);
 		showGameIndicators(false);
 		this.hideControlButtons();
@@ -849,7 +882,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 //				activity.showAdvert(true);
 //			}
 //		});
-//		
+		isGameVisible=false;
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelPause, false, true, true);
@@ -864,6 +897,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public void reset() {
+		isGameVisible=true;
 		super.reset();
 
 		showGameIndicators(true);
@@ -980,7 +1014,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.clearUpdateHandlers();
 		this.dispose();
 
-		SceneManager.getInstance().loadNextGameScene();
+		SceneManager.getInstance().loadNextGameScene(engine);
 	}
 
 	@Override
@@ -993,7 +1027,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			isDrawing = false;
 		}
 		if (isDrawing = true) {
-			rec[i] = new Rectangle(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), 1, 1, vbom);
+			rec[i] = new Rectangle(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), 6f, 6f, vbom);
 			if (i != 0) {
 
 				drawLine(rec[i - 1].getX(), rec[i - 1].getY(), rec[i].getX(), rec[i].getY());
@@ -1014,31 +1048,28 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void drawLine(final float startX, final float startY, final float endX, final float endY) {
-		Line bodyLine = new Line(startX, startY, endX, endY, vbom);
-
-		Body physicBodyLine;
-		//Line line = new Line(startX, startY, endX, endY, vbom);
 		
-		Line lineTicker = new Line(startX, startY, endX, endY, vbom);
+		RockSprite rockLine=rockPool.obtainPoolItem();
+		rockLine.setPosition(startX, startY);
+		rockLine.setIgnoreUpdate(true);
+		
+		Line bodyLine = new Line(startX, startY, endX, endY, vbom);
+		bodyLine.setLineWidth(RockPool.LINE_BODY_WIDTH);
 
 		FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0.0f, 0.5f, 0.5f);
-
-		physicBodyLine = PhysicsFactory.createLineBody(mPhysicsWorld, bodyLine, objectFixtureDef);
+		Body physicBodyLine = PhysicsFactory.createLineBody(mPhysicsWorld, bodyLine, objectFixtureDef);
 		physicBodyLine.setUserData(SpriteTag.LINE);
 		bodyLine.setVisible(false);
-		//line.setLineWidth(2);
-		lineTicker.setLineWidth(6);
-		//line.setColor(0f, 102f, 0f)
-		LevelType currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
-		lineTicker.setColor(currentLevelType.getColorGround());
+		rockLine.setBody(physicBodyLine);
+		
+		//LevelType currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
+		
 	
 
 		this.attachChild(bodyLine);
-		this.attachChild(lineTicker);
-		//this.attachChild(line);
 		
-	//	line.setCullingEnabled(true);
-	//	lineTicker.setCullingEnabled(true);
+		this.attachChild(rockLine);
+		
 
 	}
 
@@ -1088,6 +1119,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelNoMoney.attachChild(textNotEnoughTomatos);
 		levelNoMoney.attachChild(textComeBack);
 	}
+	
 	
 	
 

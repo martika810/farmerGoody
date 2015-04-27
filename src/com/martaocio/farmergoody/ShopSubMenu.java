@@ -33,7 +33,7 @@ public class ShopSubMenu extends Sprite {
 	private MainMenu parentMenu;
 	private VertexBufferObjectManager vbom;
 	private Sprite backMenuItem;
-	private List<AnimatedSprite> shopItems = new ArrayList<>();
+	private List<Sprite> shopItems = new ArrayList<>();
 	private Text creditText;
 	private boolean hasBoughtSomething;
 
@@ -58,7 +58,7 @@ public class ShopSubMenu extends Sprite {
 			};
 		};
 		//backMenuItem.setPosition(600, 50);
-		backMenuItem.setCullingEnabled(true);
+		backMenuItem.setIgnoreUpdate(true);
 		this.attachChild(backMenuItem);
 		this.parentScene.registerTouchArea(backMenuItem);
 
@@ -90,8 +90,8 @@ public class ShopSubMenu extends Sprite {
 				int positionXToPlaceItem = ORIGIN_X + PADDING_X + (ITEM_DIM_X * rowToPlaceItem);
 				int positionYToPlaceItem = ORIGIN_Y + PADDING_Y + (ITEM_DIM_Y * colToPlaceItem);
 
-				AnimatedSprite item = createShopMenuItem(vehicle, alreadyHad, canBuy,indexOfItemToPlace);
-				item.setCullingEnabled(true);
+				Sprite item = createShopMenuItem(vehicle, alreadyHad, canBuy,indexOfItemToPlace);
+				
 				shopItems.add(item);
 
 				
@@ -104,15 +104,15 @@ public class ShopSubMenu extends Sprite {
 		}
 	}
 
-	private AnimatedSprite createShopMenuItem(final Vehicle vehicle, boolean alreadyHad, boolean canBuy,final int indexItem) {
+	private Sprite createShopMenuItem(final Vehicle vehicle, boolean alreadyHad, boolean canBuy,final int indexItem) {
 		//AnimatedSprite itemBackground = new AnimatedSprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom);
-		ShopVehiculeItem shopItem=new ShopVehiculeItem(0, 0, vbom, vehicle); 
+		//ShopVehiculeItem shopItem=new ShopVehiculeItem(0, 0, vbom, vehicle);
+		Sprite shopItem=new Sprite(0,0,Vehicle.getVehicleShopItem(vehicle),vbom);
 		shopItem.setCullingEnabled(true);
-		if(alreadyHad){
-			//itemBackground.setCurrentTileIndex(1);
-			shopItem.setSelectedState(vehicle);
-		}else{
-			shopItem.setNormalState(vehicle);
+
+		if(!canBuy && !alreadyHad){
+			Sprite lockBtn = new Sprite(shopItem.getWidth()-30, shopItem.getHeight()-30, ResourceManager.getInstance().lockIcon, vbom);
+			shopItem.attachChild(lockBtn);
 		}
 		
 		if (canBuy && !alreadyHad) {
@@ -123,7 +123,7 @@ public class ShopSubMenu extends Sprite {
 						// setScale(1.2f);
 						buyVehiculeAction(vehicle);
 						int itemTouched=(int)this.getUserData();
-						updateShopItem(itemTouched);
+						//updateShopItem(itemTouched);
 						this.registerEntityModifier(getBuyBtnEntityModifier());
 						hasBoughtSomething=true;
 
@@ -139,7 +139,9 @@ public class ShopSubMenu extends Sprite {
 		
 			Text priceText = new Text(20, 25, ResourceManager.getInstance().font, new Integer(vehicle.getPrice()).toString() + "$",
 					new TextOptions(HorizontalAlign.CENTER), vbom);
+			
 			buyBtn.attachChild(priceText);
+			
 			shopItem.attachChild(buyBtn);
 		}
 
@@ -182,9 +184,9 @@ public class ShopSubMenu extends Sprite {
 		};
 	}
 	
-	public void updateShopItem(int indexItem){
-		shopItems.get(indexItem).setCurrentTileIndex(1);
-	}
+//	public void updateShopItem(int indexItem){
+//		shopItems.get(indexItem).setCurrentTileIndex(1);
+//	}
 
 	public void buyVehiculeAction(Vehicle vehicle) {
 		int newCurrentCreadit = UserState.getInstance().getSelectedSession().getCurrentMoney() - vehicle.getPrice();

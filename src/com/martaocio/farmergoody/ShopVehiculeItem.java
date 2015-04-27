@@ -6,7 +6,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class ShopVehiculeItem  extends AnimatedSprite {
 	public ShopVehiculeItem(int pX,int pY, VertexBufferObjectManager vbom,Vehicle vehicleSelected){
-		super(0, 0, Vehicle.getVehicleShopItem(vehicleSelected), vbom);
+		super(0, 0, null, vbom);
 		
 	}
 	

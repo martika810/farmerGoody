@@ -483,7 +483,14 @@ public class SessionSubMenu extends Sprite {
 				
 				parentMenu.hideSessionMenuScene();
 				UserState.getInstance().setSelectedSession(indexSelected);
-				SceneManager.getInstance().createGameScene(engine);
+				GameSession selectedSession=UserState.getInstance().getSelectedSession();
+				boolean isNewGame=selectedSession.getCurrentLevel()==1 && selectedSession.getCurrentMoney()==0;
+				if(isNewGame){
+					SceneManager.getInstance().createStory(engine);
+				}else{
+					SceneManager.getInstance().createGameScene(engine);
+				}
+				
 				
 			}
 			
