@@ -68,32 +68,31 @@ import com.martaocio.farmergoody.SceneManager.SceneType;
 
 public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMenuItemClickListener {
 
-	private final int RESTART = 0;
-	private final int QUIT = 1;
-	private final int KEEP_PLAYING = 2;
-	private final int UNPAUSE = 3;
+	protected final int RESTART = 0;
+	protected final int QUIT = 1;
+	protected final int KEEP_PLAYING = 2;
+	protected final int UNPAUSE = 3;
 	private final int TAG_REWARD_ICON = 999;
-	private final int TAG_TOMAT_ICON = 998;
-	private final int TAG_SCORE_TEXT = 997;
+	protected final int TAG_TOMAT_ICON = 998;
+	protected final int TAG_SCORE_TEXT = 997;
 
-	private TMXTiledMap mTMXTiledMap;
-	private TMXLayer tmxLayer;
+	protected TMXTiledMap mTMXTiledMap;
+	protected TMXLayer tmxLayer;
 
-	private PhysicsWorld mPhysicsWorld;
+	protected PhysicsWorld mPhysicsWorld;
 
-	private LinkedList<Sprite> vegetables;
-	private LinkedList<Body> fencesBodies;
-	private LinkedList<Sprite> tomatos;
+	protected LinkedList<Body> fencesBodies;
+	protected LinkedList<Sprite> tomatos;
+	protected LinkedList<Sprite> pathScoreIndicators;
+
 	Rectangle[] rec = new Rectangle[250];
 	private int i = 0;
-	
-	private boolean isGameVisible=true;
-	
-	private  RockPool rockPool;
-	
-	// private LinkedList<Stair> stairs;
 
-	private LinkedList<Sprite> pathScoreIndicators;
+	protected boolean isGameVisible = true;
+
+	protected RockPool rockPool;
+
+	// private LinkedList<Stair> stairs;
 
 	public Text textScore;
 
@@ -108,38 +107,37 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	public Sprite restartButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
-	//public final SpriteBatch rockLine=new SpriteBatch(resourceManager.gameTexturesAtlas, 1000, vbom);
-	public SpriteBatch tomatoSprite=new SpriteBatch(resourceManager.gameTexturesAtlas,100,vbom);
-	
-	public int percentage=0;
+	// public final SpriteBatch rockLine=new
+	// SpriteBatch(resourceManager.gameTexturesAtlas, 1000, vbom);
+	public SpriteBatch tomatoSprite = new SpriteBatch(resourceManager.gameTexturesAtlas, 100, vbom);
+
+	public int percentage = 0;
 
 	public Sprite title;
 
-	private Player player;
-	private Bull bull;
+	protected Player player;
+	protected Bull bull;
 
-	private int score = 10;
-	private int levelTotalPoints=300;
+	protected int score = 10;
+	protected int levelTotalPoints = 300;
 	// create 2 new menuScene
-	private MenuScene levelFailed, levelCleared, levelPause,levelNoMoney;
+	protected MenuScene levelFailed, levelCleared, levelPause, levelNoMoney;
 
 	@Override
 	public void createScene() {
-//		activity.runOnUiThread(new Runnable(){
-//			@Override
-//			public void run(){
-//				activity.showAdvert(false);
-//			}
-//		});
-	
+		// activity.runOnUiThread(new Runnable(){
+		// @Override
+		// public void run(){
+		// activity.showAdvert(false);
+		// }
+		// });
+
 		createPhysicsWorld();
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
 		createLevelFailedScene();
 		createLevelClearedScene();
 		createLevelNoMoneyScene();
 		createPauseScene();
-
-
 
 	}
 
@@ -151,7 +149,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public SceneType getSceneType() {
-		
+
 		return SceneType.SCENE_GAME;
 	}
 
@@ -162,24 +160,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void createLevel(int levelNumber) {
-		
-		//
-		RockPool.prepareRockPool(resourceManager.rockLineTexture, vbom,camera,this);
-		rockPool=RockPool.getInstance();
 
-		// create the tex for the score
-		score = 10;
-		int currentLevel=UserState.getInstance().getSelectedSession().getCurrentLevel();
-		levelTotalPoints=LevelType.getLevelType(currentLevel).getTotalPoints();
-		tomatoScoreIcon =new TomatoScorer(20, 100, 200, 80, vbom); 
-		levelIcon = new Sprite(20, 100, 70, 70, ResourceManager.getInstance().levelIcon, vbom);
-		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
+		RockPool.prepareRockPool(resourceManager.rockLineTexture, vbom, camera, this);
+		rockPool = RockPool.getInstance();
 
-		tomatoScoreIcon.setPosition(20, 20);
-		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-		textLevel = new Text(30, 120, this.resourceManager.font, "#" + levelNumber + "    ",new TextOptions(HorizontalAlign.CENTER), vbom);
-		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
-		textScore.setTag(TAG_SCORE_TEXT);
+		// create the text for the score
+
+		createGameIndicators(levelNumber);
 
 		createButtons();
 
@@ -189,10 +176,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		try {
 			TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
-		
+
 			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(levelNumber));
-			
-			
+
 		} catch (TMXLoadException e) {
 
 			Debug.e(e);
@@ -200,75 +186,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 
 		// Create all the objects from the TMXLayer
-		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {// loop
-																					// over
-																					// the
-																					// objectgroups
-			for (final TMXObject object : group.getTMXObjects()) {
-				if (object.getName().equals(SpriteTag.GROUND)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
-
-					FixtureDef groundFixtureDef = PhysicsFactory.createFixtureDef(0, 0, .2f);
-					// BodyType to static if u dont want the body moves
-					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, groundFixtureDef).setUserData(SpriteTag.GROUND);
-
-					// store data in userData so it can be retrieved later on
-
-					rect.setVisible(false);
-					attachChild(rect);
-				}else if (object.getName().equals(SpriteTag.FENCE)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
-
-					FixtureDef spikeFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					Body fenceBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, spikeFixtureDef);
-					fenceBody.setUserData(SpriteTag.FENCE);
-					fencesBodies.add(fenceBody);
-				} else if (object.getName().equals(SpriteTag.CORRECT)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
-					FixtureDef correctFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					Body correctBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, correctFixtureDef);
-					correctBody.setUserData(SpriteTag.CORRECT);
-
-				} else if (object.getName().equals(SpriteTag.WRONG)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
-					FixtureDef wrongFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					Body wrongBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, wrongFixtureDef);
-					wrongBody.setUserData(SpriteTag.WRONG);
-
-				}
-
-				else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
-					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 50, 50, TomatoResourceHelper.getTomatoResource(object
-							.getName()), vbom);
-					
-					
-					tomatoType.setCullingEnabled(true);
-					tomatoType.setIgnoreUpdate(true);
-					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType, BodyType.StaticBody, tomatoFixtureDef);
-					body.setUserData(object.getName());
-					tomatos.add(tomatoType);
-					tomatoType.setUserData(body);
-					
-//					tomatoSprite.draw(TomatoResourceHelper.getTomatoResource(object.getName()), object.getX(), object.getY(), 50, 50, 0, 1, 1, 1, 1);
-//					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-//					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, object.getX()+25,object.getY()+25,50,50, BodyType.StaticBody, tomatoFixtureDef);
-//					body.setUserData(object.getName());
-					
-				} else if (object.getName().equals(SpriteTag.END)) {
-
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
-					FixtureDef endLineDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, endLineDef).setUserData(SpriteTag.END);
-
-				}
-
-			}
-
-		}
+		createObjectTMXLayer();
 
 		// /////////////////////////////////////////
-		
+
 		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);// to get the first
 															// layer
 
@@ -287,20 +208,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		}
 
-		// Attach player
-		player = createPlayer();
-		// animate the player
-		
-		player.setRunning();
-		
-		this.attachChild(player);
+		kickoffPlayer();
 
-		// Attach bull
-		bull = new Bull(50, 150, 150, 150, vbom, camera, mPhysicsWorld);
-
-		// animate the player
-		bull.setRunning();
-		this.attachChild(bull);
+		kickoffBull();
 
 		// that heads up the display
 		HUD hud = new HUD();
@@ -309,7 +219,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		hud.attachChild(textLevel);
 		hud.attachChild(tomatoScoreIcon);
 		hud.attachChild(textScore);
-		
+
 		hud.attachChild(title);
 		hud.attachChild(jumpButton);
 		hud.attachChild(pauseButton);
@@ -318,8 +228,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		hud.registerTouchArea(jumpButton);
 		hud.registerTouchArea(pauseButton);
 		hud.registerTouchArea(restartButton);
-		
-		//setSpriteCulling();
+
+		// setSpriteCulling();
 
 		setOnSceneTouchListener(this);
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
@@ -327,13 +237,17 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		this.camera.setHUD(hud);
 
-		
+		createUpdateHandler();
+
+	}
+
+	protected void createUpdateHandler() {
 		this.registerUpdateHandler(new IUpdateHandler() {
 
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				boolean isBullAheadPlayer=bull.getX()>player.getX();
-				if(isBullAheadPlayer){
+				boolean isBullAheadPlayer = bull.getX() > player.getX();
+				if (isBullAheadPlayer) {
 					endGameByBullCatch();
 				}
 
@@ -349,20 +263,39 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		
 	}
 
-	private void createButtons() {
+	protected void kickoffPlayer() {
+
+		player = createPlayer();
+		// animate the player
+
+		player.setRunning();
+
+		this.attachChild(player);
+
+	}
+
+	protected void kickoffBull() {
+		// Attach bull
+		bull = new Bull(50, 150, 150, 150, vbom, camera, mPhysicsWorld);
+
+		// animate the player
+		bull.setRunning();
+		this.attachChild(bull);
+	}
+
+	protected void createButtons() {
 		jumpButton = new Sprite(320, 380, 164, 70, ResourceManager.getInstance().jumpBtnTextute, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp() && isGameVisible) {
-					this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.3f, 1f, 1.2f),
-							new ScaleModifier(0.3f, 1f, 0.8f)));
+					this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.3f, 1f, 1.2f), new ScaleModifier(0.3f, 1f,
+							0.8f)));
 					player.jump();
 				}
 				return true;
 			};
 		};
 
-		
 		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
@@ -390,12 +323,28 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	}
 
+	private void createGameIndicators(int levelNumber) {
+		score = 10;
+		int currentLevel = UserState.getInstance().getSelectedSession().getCurrentLevel();
+		levelTotalPoints = LevelType.getLevelType(currentLevel).getTotalPoints();
+		tomatoScoreIcon = new TomatoScorer(20, 100, 200, 80, vbom);
+		levelIcon = new Sprite(20, 100, 70, 70, ResourceManager.getInstance().levelIcon, vbom);
+		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
+
+		tomatoScoreIcon.setPosition(20, 20);
+		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
+		textLevel = new Text(30, 120, this.resourceManager.font, "#" + levelNumber + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
+		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
+		textScore.setTag(TAG_SCORE_TEXT);
+
+	}
+
 	private void pause(boolean shouldPause) {
 		this.setIgnoreUpdate(shouldPause);
 
 	}
 
-	private void createPhysicsWorld() {
+	protected void createPhysicsWorld() {
 
 		this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
 
@@ -419,7 +368,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						player.canEat = false;
 						player.canJump = true;
 						player.setRunning();
-						
+
 					}
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.GROUND, SpriteTag.BULL)) {
@@ -433,18 +382,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
 						endGameByBullCatch();
-						
+
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.FENCE)) {
-							player.setRunning();
-						
+						player.setRunning();
 
 					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.LINE)) {
 						player.setRunning();
-					
 
-				}
+					}
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.BULL, SpriteTag.FENCE)) {
 
 						if (a.getUserData().equals(SpriteTag.FENCE)) {
@@ -470,7 +417,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score += 5;
 						textScore.setText("" + score);
 						resourceManager.goodSound.play();
-						percentage=(score*100)/levelTotalPoints;
+						percentage = (score * 100) / levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -486,7 +433,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score += 10;
 						textScore.setText("" + score);
 						resourceManager.goodSound.play();
-						percentage=(score*100)/levelTotalPoints;
+						percentage = (score * 100) / levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.TOMATO10)) {
@@ -501,7 +448,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 5;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score*100)/levelTotalPoints;
+						percentage = (score * 100) / levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -517,7 +464,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 10;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score*100)/levelTotalPoints;
+						percentage = (score * 100) / levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -533,7 +480,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 						score -= 20;
 						textScore.setText("" + score);
 						resourceManager.badSound.play();
-						percentage=(score*100)/levelTotalPoints;
+						percentage = (score * 100) / levelTotalPoints;
 						tomatoScoreIcon.update(percentage);
 
 						// detect which body was colaided
@@ -546,7 +493,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 					if (a.getUserData().equals(SpriteTag.BULL) && GameUtils.isBodyTomato(b) || b.getUserData().equals(SpriteTag.BULL)
 							&& GameUtils.isBodyTomato(a)) {
-						
+
 						if (GameUtils.isBodyTomato(a)) {
 
 							removeBody(a);
@@ -557,46 +504,39 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
 						// show success screen
-//						if (currentUserState.getBestScore() < score) {
-//							currentUserState.setBestScore(score);
-//						}
-						Log.d("MRB", "The percentage is:"+percentage);
-						if(percentage<50){
+						// if (currentUserState.getBestScore() < score) {
+						// currentUserState.setBestScore(score);
+						// }
+						Log.d("MRB", "The percentage is:" + percentage);
+						if (percentage < 50) {
 							showLevelNoMoney();
-							
-						}else{
-							Log.d("MRB", "The percentage is:"+percentage);
-							currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel()+1);
-							int currentMoney=currentUserState.getSelectedSession().getCurrentMoney();
-							
-							int moneyWon=0;
-							if(percentage>=50 && percentage<70){
-								moneyWon=100;
+
+						} else {
+							Log.d("MRB", "The percentage is:" + percentage);
+							currentUserState.getSelectedSession().setCurrentLevel(
+									currentUserState.getSelectedSession().getCurrentLevel() + 1);
+							int currentMoney = currentUserState.getSelectedSession().getCurrentMoney();
+
+							int moneyWon = 100;
+							if (percentage >= 70 && percentage <= 100) {
+								moneyWon = 200;
 							}
-							else if(percentage>=70 && percentage<=100){
-								moneyWon=200;
-							}
-							currentUserState.getSelectedSession().setCurrentMoney(currentMoney+moneyWon);
+							currentUserState.getSelectedSession().setCurrentMoney(currentMoney + moneyWon);
 							currentUserState.saveToFile();
 							showLevelCleared(moneyWon);
 						}
-						
-						
 
 					}
 
 					if (score <= 0) {
-						//currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
+						// currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
 						endGameByRunOutPoints();
 					}
-					
 
 				}
 
 			}
-
-			
 
 			@Override
 			public void endContact(Contact contact) {
@@ -644,7 +584,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			@Override
 			public void run() {
 				mPhysicsWorld.destroyBody(body);
-				
 
 			}
 
@@ -662,80 +601,66 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		});
 	}
-	
+
 	public void endGameByBullCatch() {
-	//	player.setDead();
+		// player.setDead();
 		resourceManager.vibrator.vibrate(250);
-		SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
-				new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
-				new RotationModifier(0.5f,0,360),
-				new MoveYModifier(1f, player.getY(), 1000)
-				){
-			 @Override
-		        protected void onModifierStarted(IEntity pItem)
-		        {
-		                super.onModifierStarted(pItem);
-		                // Your action after starting modifier
-		                player.setDead();
-		        }
-		       
-		        @Override
-		        protected void onModifierFinished(IEntity pItem)
-		        {
-		                super.onModifierFinished(pItem);
-		                showLevelFailed();
-		        }
+		SequenceEntityModifier rotationModifier = new SequenceEntityModifier(new MoveYModifier(0.5f, player.getY(), player.getY() - 200),
+				new RotationModifier(0.5f, 0, 360), new MoveYModifier(1f, player.getY(), 1000)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				// Your action after starting modifier
+				player.setDead();
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				showLevelFailed();
+			}
 		};
 		player.registerEntityModifier(rotationModifier);
-		
-		
+
 	}
-	
+
 	public void endGameByRunOutPoints() {
 		player.setDead();
 		resourceManager.vibrator.vibrate(250);
-		SequenceEntityModifier rotationModifier=new SequenceEntityModifier(
-				new MoveYModifier(0.5f, player.getY(), player.getY()-200) ,
-				new RotationModifier(0.5f,0,360),
-				new MoveYModifier(1f, player.getY(), 1000)){
-			 @Override
-		        protected void onModifierStarted(IEntity pItem)
-		        {
-		                super.onModifierStarted(pItem);
-		                // Your action after starting modifier
-		        }
-		       
-		        @Override
-		        protected void onModifierFinished(IEntity pItem)
-		        {
-		                super.onModifierFinished(pItem);
-		                showLevelFailed();
-		        }
+		SequenceEntityModifier rotationModifier = new SequenceEntityModifier(new MoveYModifier(0.5f, player.getY(), player.getY() - 200),
+				new RotationModifier(0.5f, 0, 360), new MoveYModifier(1f, player.getY(), 1000)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				// Your action after starting modifier
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				showLevelFailed();
+			}
 		};
 		player.registerEntityModifier(rotationModifier);
-		
-		
+
 	}
 
+	protected void createLevelFailedScene() {
 
-
-	private void createLevelFailedScene() {
-
-		
 		levelFailed = new MenuScene(camera);
 		levelFailed.setPosition(0, 0);
 		//
 		// Add menu item
-		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f, 0.9f);
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f,
+				0.9f);
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.failedBG, vbom);
-		
-		
+
 		//
 		levelFailed.attachChild(bg);
-		//bg.setCullingEnabled(true);
+		// bg.setCullingEnabled(true);
 		levelFailed.setBackgroundEnabled(false);// to see our scena throught the
 		// background
 
@@ -746,26 +671,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		restartButton.setPosition(300, 330);
 		quitButton.setPosition(400, 330);
 
-		
 		levelFailed.setOnMenuItemClickListener(this);
 	}
-	
-	private void createLevelNoMoneyScene() {
+
+	protected void createLevelNoMoneyScene() {
 
 		levelNoMoney = new MenuScene(camera);
 		levelNoMoney.setPosition(0, 0);
 		//
 		// Add menu item
-		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f, 0.9f);
+		IMenuItem restartButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.restartButton, vbom), 1.2f,
+				0.9f);
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 		//
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.noMoneyBG, vbom);
-		
+
 		//
 		levelNoMoney.attachChild(bg);
-		//bg.setCullingEnabled(true);
-		levelNoMoney.setBackgroundEnabled(false);// to see our scena throught the
+		// bg.setCullingEnabled(true);
+		levelNoMoney.setBackgroundEnabled(false);// to see our scena throught
+													// the
 		// background
 
 		levelNoMoney.addMenuItem(restartButton);
@@ -778,36 +704,34 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		levelNoMoney.setOnMenuItemClickListener(this);
 	}
 
-	private void createPauseScene() {
+	protected void createPauseScene() {
 
 		levelPause = new MenuScene(camera);
 		levelPause.setPosition(0, 0);
 		//
 		// Add menu item
 		IMenuItem unpauseButton = new ScaleMenuItemDecorator(new SpriteMenuItem(UNPAUSE, resourceManager.playButton, vbom), 1.7f, 1.5f);
-		IMenuItem homeButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton , vbom), 0.6f, 0.8f);
-		
+		IMenuItem homeButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 0.6f, 0.8f);
+
 		// create the background
 		Sprite bg = new Sprite(0, 0, resourceManager.pauseBG, vbom);
-		//bg.setCullingEnabled(true);
+		// bg.setCullingEnabled(true);
 		//
 		levelPause.attachChild(bg);
 		levelPause.setBackgroundEnabled(false);// to see our scena throught the
 		// background
-		
-	
+
 		levelPause.addMenuItem(unpauseButton);
 		levelPause.addMenuItem(homeButton);
-		
-		
+
 		levelPause.buildAnimations();
 		unpauseButton.setPosition(350, 190);
 		homeButton.setPosition(650, 350);
-		
+
 		levelPause.setOnMenuItemClickListener(this);
 	}
 
-	private void createLevelClearedScene() {
+	protected void createLevelClearedScene() {
 		levelCleared = new MenuScene(camera);
 		levelCleared.setPosition(0, 0);
 
@@ -815,10 +739,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
 
 		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
-	
 
 		levelCleared.attachChild(bg);
-		//bg.setCullingEnabled(true);
+		// bg.setCullingEnabled(true);
 		levelCleared.setBackgroundEnabled(false);
 
 		levelCleared.addMenuItem(playButton);
@@ -833,28 +756,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showLevelFailed() {
-		activity.runOnUiThread(new Runnable(){
+		activity.runOnUiThread(new Runnable() {
 			@Override
-			public void run(){
+			public void run() {
 				activity.showAdvert(true);
 			}
 		});
-		isGameVisible=false;
+		isGameVisible = false;
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelFailed, false, true, true);
-		
-		
+
 	}
-	
+
 	private void showLevelNoMoney() {
-		activity.runOnUiThread(new Runnable(){
+		activity.runOnUiThread(new Runnable() {
 			@Override
-			public void run(){
+			public void run() {
 				activity.showAdvert(true);
 			}
 		});
-		isGameVisible=false;
+		isGameVisible = false;
 		createNoMonetMessages();
 		showGameIndicators(false);
 		this.hideControlButtons();
@@ -862,13 +784,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showLevelCleared(final int moneyWon) {
-		activity.runOnUiThread(new Runnable(){
+		activity.runOnUiThread(new Runnable() {
 			@Override
-			public void run(){
+			public void run() {
 				activity.showAdvert(true);
 			}
 		});
-		isGameVisible=false;
+		isGameVisible = false;
 		createWinningMesages(moneyWon);
 		showGameIndicators(false);
 		this.hideControlButtons();
@@ -876,13 +798,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showPause() {
-//		activity.runOnUiThread(new Runnable(){
-//			@Override
-//			public void run(){
-//				activity.showAdvert(true);
-//			}
-//		});
-		isGameVisible=false;
+		// activity.runOnUiThread(new Runnable(){
+		// @Override
+		// public void run(){
+		// activity.showAdvert(true);
+		// }
+		// });
+		isGameVisible = false;
 		showGameIndicators(false);
 		this.hideControlButtons();
 		this.setChildScene(levelPause, false, true, true);
@@ -897,7 +819,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public void reset() {
-		isGameVisible=true;
+		isGameVisible = true;
 		super.reset();
 
 		showGameIndicators(true);
@@ -912,7 +834,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 			// restart
 			restartLevel();
-			
+
 			break;
 		case QUIT:
 			// go to main menu
@@ -922,12 +844,11 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 		case KEEP_PLAYING:
 			restartLevel();
-			
 
 			break;
 
 		case UNPAUSE:
-			
+
 			reset();
 
 			break;
@@ -936,40 +857,42 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		return false;
 	}
 
-//	private void addRewardIcon(boolean wasGoodPath) {
-//		Sprite icon = null;
-//		int totalIconAlreadyAdded = rightPathScore + wrongPathScore;
-//		int rowToPlaceIcon = totalIconAlreadyAdded % 10 + 1;
-//		float positionX = 760 - 35 * totalIconAlreadyAdded;
-//		if (wasGoodPath) {
-//			icon = new Sprite(positionX, 10, 35, 35, ResourceManager.getInstance().correctIconTexture, vbom);
-//
-//		} else {
-//			icon = new Sprite(positionX, 10, 35, 35, ResourceManager.getInstance().wrongIconTexture, vbom);
-//		}
-//		icon.setTag(TAG_REWARD_ICON);
-//		this.camera.getHUD().attachChild(icon);
-//		this.pathScoreIndicators.add(icon);
-//
-//	}
+	// private void addRewardIcon(boolean wasGoodPath) {
+	// Sprite icon = null;
+	// int totalIconAlreadyAdded = rightPathScore + wrongPathScore;
+	// int rowToPlaceIcon = totalIconAlreadyAdded % 10 + 1;
+	// float positionX = 760 - 35 * totalIconAlreadyAdded;
+	// if (wasGoodPath) {
+	// icon = new Sprite(positionX, 10, 35, 35,
+	// ResourceManager.getInstance().correctIconTexture, vbom);
+	//
+	// } else {
+	// icon = new Sprite(positionX, 10, 35, 35,
+	// ResourceManager.getInstance().wrongIconTexture, vbom);
+	// }
+	// icon.setTag(TAG_REWARD_ICON);
+	// this.camera.getHUD().attachChild(icon);
+	// this.pathScoreIndicators.add(icon);
+	//
+	// }
 
 	private void showGameIndicators(boolean shouldShow) {
 		jumpButton.setVisible(shouldShow);
 		pauseButton.setVisible(shouldShow);
 		title.setVisible(shouldShow);
 		tomatoScoreIcon.setVisible(shouldShow);
-	
+
 		textScore.setVisible(shouldShow);
 		levelIcon.setVisible(shouldShow);
 		textLevel.setVisible(shouldShow);
-	
+
 		for (Sprite rightWrongPathIcon : pathScoreIndicators) {
 			rightWrongPathIcon.setVisible(shouldShow);
 		}
 
 	}
 
-	private void quit() {
+	protected void quit() {
 		// do some clean up
 		this.mPhysicsWorld.clearForces();
 		this.mPhysicsWorld.clearPhysicsConnectors();
@@ -995,9 +918,9 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		this.camera.setBoundsEnabled(false);
 		resourceManager.camera.setCenter(400, 240);
 
-		//SceneManager.getInstance().updateMainMenu();
-		
-		//SceneManager.getInstance().setMainMenu();
+		// SceneManager.getInstance().updateMainMenu();
+
+		// SceneManager.getInstance().setMainMenu();
 
 	}
 
@@ -1019,6 +942,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		if (!isDrawing && isPlayerArea(pSceneTouchEvent.getX(), pSceneTouchEvent.getY())) {
+			player.runFaster(camera);
+			return true;
+		}
 		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN) {
 			isDrawing = true;
 			i = 0;
@@ -1038,21 +965,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 		return true;
 	}
-	
-	private void setSpriteCulling(){
+
+	private void setSpriteCulling() {
 		levelIcon.setCullingEnabled(true);
 		title.setCullingEnabled(true);
-		
-		
-		
+
 	}
 
 	private void drawLine(final float startX, final float startY, final float endX, final float endY) {
-		
-		RockSprite rockLine=rockPool.obtainPoolItem();
+
+		RockSprite rockLine = rockPool.obtainPoolItem();
 		rockLine.setPosition(startX, startY);
 		rockLine.setIgnoreUpdate(true);
-		
+
 		Line bodyLine = new Line(startX, startY, endX, endY, vbom);
 		bodyLine.setLineWidth(RockPool.LINE_BODY_WIDTH);
 
@@ -1061,37 +986,99 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		physicBodyLine.setUserData(SpriteTag.LINE);
 		bodyLine.setVisible(false);
 		rockLine.setBody(physicBodyLine);
-		
-		//LevelType currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
-		
-	
+
+		// LevelType
+		// currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
 
 		this.attachChild(bodyLine);
-		
+
 		this.attachChild(rockLine);
-		
 
 	}
 
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	private Player createPlayer(){
-		Player player=null;
-		Vehicle vehicleSelected=UserState.getInstance().getSelectedSession().getVehicleUsed();
-		if(vehicleSelected.equals(Vehicle.NONE)){
-			player=new Player(400, 150, 100, 110, vbom, camera, mPhysicsWorld) {
+
+	protected void createObjectTMXLayer() {
+		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {// loop
+			// over
+			// the
+			// objectgroups
+			for (final TMXObject object : group.getTMXObjects()) {
+				if (object.getName().equals(SpriteTag.GROUND)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+
+					FixtureDef groundFixtureDef = PhysicsFactory.createFixtureDef(0, 0, .2f);
+					// BodyType to static if u dont want the body moves
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, groundFixtureDef).setUserData(SpriteTag.GROUND);
+
+					// store data in userData so it can be retrieved later on
+
+					rect.setVisible(false);
+					attachChild(rect);
+				} else if (object.getName().equals(SpriteTag.FENCE)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+
+					FixtureDef spikeFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body fenceBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, spikeFixtureDef);
+					fenceBody.setUserData(SpriteTag.FENCE);
+					fencesBodies.add(fenceBody);
+				} else if (object.getName().equals(SpriteTag.CORRECT)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef correctFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body correctBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, correctFixtureDef);
+					correctBody.setUserData(SpriteTag.CORRECT);
+
+				} else if (object.getName().equals(SpriteTag.WRONG)) {
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef wrongFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body wrongBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, wrongFixtureDef);
+					wrongBody.setUserData(SpriteTag.WRONG);
+
+				}
+
+				else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
+					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 50, 50, TomatoResourceHelper.getTomatoResource(object
+							.getName()), vbom);
+
+					tomatoType.setCullingEnabled(true);
+					tomatoType.setIgnoreUpdate(true);
+					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType, BodyType.StaticBody, tomatoFixtureDef);
+					body.setUserData(object.getName());
+					tomatos.add(tomatoType);
+					tomatoType.setUserData(body);
+
+				} else if (object.getName().equals(SpriteTag.END)) {
+
+					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					FixtureDef endLineDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, endLineDef).setUserData(SpriteTag.END);
+
+				}
+
+			}
+
+		}
+
+	}
+
+	protected Player createPlayer() {
+		Player player = null;
+		Vehicle vehicleSelected = UserState.getInstance().getSelectedSession().getVehicleUsed();
+		if (vehicleSelected.equals(Vehicle.NONE)) {
+			player = new Player(400, 150, 100, 110, vbom, camera, mPhysicsWorld) {
 
 				@Override
 				public void onDie() {
 					// showLevelFailed();
 				}
-			};	
-		}else{
-			player=new Player(400, 150, 130, 140, vbom, camera, mPhysicsWorld) {
+			};
+		} else {
+			player = new Player(400, 150, 130, 140, vbom, camera, mPhysicsWorld) {
 
 				@Override
 				public void onDie() {
@@ -1101,26 +1088,35 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 		return player;
 	}
-	
-	private void createWinningMesages(final int moneyWon){
-		int nextLevel=UserState.getInstance().getSelectedSession().getCurrentLevel()+1;
-		Text textYouWon=new Text(340, 370, this.resourceManager.font, "You won "+moneyWon+" $  " , new TextOptions(HorizontalAlign.CENTER), vbom);
-		Text textNextLevel= new Text(340,400,this.resourceManager.font, "Next Level: "+nextLevel + " ",new TextOptions(HorizontalAlign.CENTER), vbom);
-		
+
+	private void createWinningMesages(final int moneyWon) {
+		int nextLevel = UserState.getInstance().getSelectedSession().getCurrentLevel();
+		Text textYouWon = new Text(340, 370, this.resourceManager.font, "You won " + moneyWon + " $  ", new TextOptions(
+				HorizontalAlign.CENTER), vbom);
+		Text textNextLevel = new Text(340, 400, this.resourceManager.font, "Next Level: " + nextLevel + " ", new TextOptions(
+				HorizontalAlign.CENTER), vbom);
+
 		levelCleared.attachChild(textNextLevel);
 		levelCleared.attachChild(textYouWon);
-		
-		
+
 	}
-	
-	private void createNoMonetMessages(){
-		Text textNotEnoughTomatos=new Text(340, 350, this.resourceManager.font, "Just "+percentage+" % of tomatos!", new TextOptions(HorizontalAlign.CENTER), vbom);
-		Text textComeBack=new Text(340, 380, this.resourceManager.font, "Come back for more!", new TextOptions(HorizontalAlign.CENTER), vbom);
+
+	private void createNoMonetMessages() {
+		Text textNotEnoughTomatos = new Text(340, 350, this.resourceManager.font, "Just " + percentage + " % of tomatos!", new TextOptions(
+				HorizontalAlign.CENTER), vbom);
+		Text textComeBack = new Text(340, 380, this.resourceManager.font, "Come back for more!", new TextOptions(HorizontalAlign.CENTER),
+				vbom);
 		levelNoMoney.attachChild(textNotEnoughTomatos);
 		levelNoMoney.attachChild(textComeBack);
 	}
-	
-	
-	
+
+	private boolean isPlayerArea(float f, float g) {
+		if ((f > player.getX() + 3 && f < (player.getX() + player.getWidth() - 3))
+				&& (g > player.getY() + 3 && (g < player.getY() + player.getHeight() - 3))) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

@@ -6,6 +6,8 @@ public class LevelProvider {
 	public static String getTXMLevel(int levelNumber){
 		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
 		switch (convertedLevelNumber){
+			case 0: 
+				return "tmx/training.tmx";
 			case 1:
 				return "tmx/level2.tmx";
 			case 2:

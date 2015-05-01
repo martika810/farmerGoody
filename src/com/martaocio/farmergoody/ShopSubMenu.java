@@ -36,6 +36,7 @@ public class ShopSubMenu extends Sprite {
 	private List<Sprite> shopItems = new ArrayList<>();
 	private Text creditText;
 	private boolean hasBoughtSomething;
+	private List<Sprite> buyButtons = new ArrayList<>();
 
 	public ShopSubMenu(float pX, float pY, ITextureRegion texture, VertexBufferObjectManager vbom, MenuScene parentScene, MainMenu parentMenu) {
 
@@ -57,7 +58,7 @@ public class ShopSubMenu extends Sprite {
 				return true;
 			};
 		};
-		//backMenuItem.setPosition(600, 50);
+		
 		backMenuItem.setIgnoreUpdate(true);
 		this.attachChild(backMenuItem);
 		this.parentScene.registerTouchArea(backMenuItem);
@@ -85,10 +86,7 @@ public class ShopSubMenu extends Sprite {
 						.getLastModifiedSession().getCurrentMoney() > vehicle.getPrice());
 				boolean canBuy = !alreadyHad && haveEnoughtMoneyToBuy;
 				
-				int colToPlaceItem = indexOfItemToPlace / NUMBER_COLUMNS;
-				int rowToPlaceItem = indexOfItemToPlace % NUMBER_COLUMNS;
-				int positionXToPlaceItem = ORIGIN_X + PADDING_X + (ITEM_DIM_X * rowToPlaceItem);
-				int positionYToPlaceItem = ORIGIN_Y + PADDING_Y + (ITEM_DIM_Y * colToPlaceItem);
+				
 
 				Sprite item = createShopMenuItem(vehicle, alreadyHad, canBuy,indexOfItemToPlace);
 				
@@ -96,7 +94,7 @@ public class ShopSubMenu extends Sprite {
 
 				
 
-				item.setPosition(positionXToPlaceItem, positionYToPlaceItem);
+			//	item.setPosition(positionXToPlaceItem, positionYToPlaceItem);
 				this.attachChild(item);
 				indexOfItemToPlace++;
 
@@ -107,8 +105,20 @@ public class ShopSubMenu extends Sprite {
 	private Sprite createShopMenuItem(final Vehicle vehicle, boolean alreadyHad, boolean canBuy,final int indexItem) {
 		//AnimatedSprite itemBackground = new AnimatedSprite(0, 0, Vehicle.getVehicleShopItem(vehicle), vbom);
 		//ShopVehiculeItem shopItem=new ShopVehiculeItem(0, 0, vbom, vehicle);
-		Sprite shopItem=new Sprite(0,0,Vehicle.getVehicleShopItem(vehicle),vbom);
+		
+		int colToPlaceItem = indexItem/ NUMBER_COLUMNS;
+		int rowToPlaceItem = indexItem % NUMBER_COLUMNS;
+		int positionXToPlaceItem = ORIGIN_X + PADDING_X + (ITEM_DIM_X * rowToPlaceItem);
+		int positionYToPlaceItem = ORIGIN_Y + PADDING_Y + (ITEM_DIM_Y * colToPlaceItem);
+		Sprite shopItem=new Sprite(positionXToPlaceItem,positionYToPlaceItem,Vehicle.getVehicleShopItem(vehicle),vbom);
+		
 		shopItem.setCullingEnabled(true);
+		
+		Sprite priceTag=new Sprite(-64,shopItem.getHeight()-25,ResourceManager.getInstance().priceTagIcon,vbom);
+		Text priceText = new Text(40, 10, ResourceManager.getInstance().font, new Integer(vehicle.getPrice()).toString() + "$",
+				new TextOptions(HorizontalAlign.CENTER), vbom);
+		priceTag.attachChild(priceText);
+		shopItem.attachChild(priceTag);
 
 		if(!canBuy && !alreadyHad){
 			Sprite lockBtn = new Sprite(shopItem.getWidth()-30, shopItem.getHeight()-30, ResourceManager.getInstance().lockIcon, vbom);
@@ -116,31 +126,29 @@ public class ShopSubMenu extends Sprite {
 		}
 		
 		if (canBuy && !alreadyHad) {
-			Sprite buyBtn = new Sprite(shopItem.getWidth()-30, shopItem.getHeight()-30, ResourceManager.getInstance().buyBtn, vbom) {
-				@Override
-				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-					if (pSceneTouchEvent.isActionDown() && parentMenu.isShopMenuOnScreen()) {
-						// setScale(1.2f);
-						buyVehiculeAction(vehicle);
-						int itemTouched=(int)this.getUserData();
-						//updateShopItem(itemTouched);
-						this.registerEntityModifier(getBuyBtnEntityModifier());
-						hasBoughtSomething=true;
-
-					}
-					return true;
-				};
-			};
-			buyBtn.setUserData(indexItem);
-			buyBtn.setCullingEnabled(true);
+			Sprite buyBtn = new Sprite(shopItem.getWidth()-30, shopItem.getHeight()-30, ResourceManager.getInstance().buyBtn, vbom);
+//			{
+//				@Override
+//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+//					if (pSceneTouchEvent.isActionDown() && parentMenu.isShopMenuOnScreen()) {
+//						
+//						buyVehiculeAction(vehicle);
+//						this.registerEntityModifier(getBuyBtnEntityModifier());
+//						hasBoughtSomething=true;
+//
+//					}
+//					return true;
+//				};
+//			};
+			buyBtn.setUserData(vehicle);
+			//buyBtn.setCullingEnabled(true);
+			buyButtons.add(buyBtn);
 
 			//buyBtn.setPosition(shopItem.getWidth()-30, shopItem.getHeight()-30);
-			this.parentScene.registerTouchArea(buyBtn);
+			//this.parentScene.registerTouchArea(buyBtn);
 		
-			Text priceText = new Text(20, 25, ResourceManager.getInstance().font, new Integer(vehicle.getPrice()).toString() + "$",
-					new TextOptions(HorizontalAlign.CENTER), vbom);
 			
-			buyBtn.attachChild(priceText);
+			
 			
 			shopItem.attachChild(buyBtn);
 		}
@@ -205,6 +213,23 @@ public class ShopSubMenu extends Sprite {
 
 	public void setHasBoughtSomething(boolean hasBoughtSomething) {
 		this.hasBoughtSomething = hasBoughtSomething;
+	}
+	
+	public Sprite wasBuyButtonTouched(float x,float y){
+		for(Sprite buyBtn:buyButtons){
+			if(Util.isPointWithinSprite(x, y, buyBtn)){
+				return buyBtn;
+			}
+		}
+	
+		return null;
+	}
+	
+	public void buyVehicle(Sprite touchedSprite){
+		Vehicle vehicleSelected= (Vehicle)touchedSprite.getUserData();
+		buyVehiculeAction(vehicleSelected);
+		touchedSprite.registerEntityModifier(getBuyBtnEntityModifier());
+		hasBoughtSomething=true;
 	}
 
 }

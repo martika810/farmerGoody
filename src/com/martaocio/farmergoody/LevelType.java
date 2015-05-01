@@ -4,7 +4,7 @@ import org.andengine.util.color.Color;
 
 public enum LevelType {
 	
-	
+	TRAINING_LEVEL(0,Constants.FARM_EVENING,150,Constants.FARM_GROUND_COLOR),
 	LEVEL1(1,Constants.FARM_EVENING,385,Constants.FARM_GROUND_COLOR),
 	LEVEL2(2,Constants.DESERT,350,Constants.DESERT_COLOR),
 	LEVEL3(3,Constants.FOREST,295,Constants.FOREST_GROUND_COLOR),
@@ -46,6 +46,8 @@ public enum LevelType {
 	public static LevelType getLevelType(int levelNumber){
 		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
 		switch(convertedLevelNumber){
+		case 0:
+			return TRAINING_LEVEL;
 		case 1:
 			return LEVEL1;
 		case 2:

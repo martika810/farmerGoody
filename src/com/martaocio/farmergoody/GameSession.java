@@ -4,7 +4,7 @@ import java.util.GregorianCalendar;
 
 public class GameSession {
 	
-	private int currentLevel=1;
+	private int currentLevel=0;
 	private int currentMoney=0;
 	private int score =0;
 	private Vehicle vehicleUsed=Vehicle.NONE;

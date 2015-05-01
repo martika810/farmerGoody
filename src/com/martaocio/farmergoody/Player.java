@@ -25,11 +25,17 @@ public abstract class Player extends AnimatedSprite {
 	public Player(float pX, float pY, float width, float height, VertexBufferObjectManager vbom, BoundCamera camera,
 			PhysicsWorld physicsWorld) {
 		super(pX, pY, width, height, getSelectedPlayerTexture(UserState.getInstance().getSelectedSession().getVehicleUsed()), vbom);
-		vehicleUsed=UserState.getInstance().getSelectedSession().getVehicleUsed();
+		GameSession selectedSession=UserState.getInstance().getSelectedSession();
+		vehicleUsed=selectedSession.getVehicleUsed();
+		boolean isTraningLevel=selectedSession.getCurrentLevel()==0;
 		createPhysics(camera, physicsWorld);
 
 		camera.setChaseEntity(this);
-		camera.setBounds(0, 190, 10560, 290);
+		if(isTraningLevel){
+			camera.setBounds(0, 190, 5920, 290);
+		}else{
+			camera.setBounds(0, 190, 10560, 290);
+		}
 		camera.setBoundsEnabled(true);
 		camera.offsetCenter(0, 0);
 

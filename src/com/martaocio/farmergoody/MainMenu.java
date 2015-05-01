@@ -45,7 +45,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	//private IMenuItem playMenuItem;
 	private Sprite playMenuItem;
 	// private MenuScene shopChildScene;
-	private ShopSubMenu bg;
+	private ShopSubMenu shopBg;
 	private SessionSubMenu sessionBg;
 	private final int PLAY = 0;// to recognize when the play buttons is gonna be
 								// played
@@ -104,11 +104,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public void disposeScene() {
-		bg.detachSelf();
-		bg.dispose();
-		sessionBg.detachSelf();
+		
+		this.clearTouchAreas();
+		this.clearEntityModifiers();
+		this.clearUpdateHandlers();
+		shopBg.dispose();
 		sessionBg.dispose();
-		this.detachSelf();
 		this.dispose();
 		
 
@@ -116,15 +117,15 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	private void createShopScene() {
 
-		bg = new ShopSubMenu(0, 0, resourceManager.shopMenuBackGround, vbom, menuChildScene, this);
-		bg.setCullingEnabled(true);
-		bg.createMenu();
+		shopBg = new ShopSubMenu(0, 0, resourceManager.shopMenuBackGround, vbom, menuChildScene, this);
+		shopBg.setCullingEnabled(true);
+		shopBg.createMenu();
 
 	}
 
 	private void createSessionMenu() {
 
-		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera,engine);
+		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera,engine,activity);
 		//sessionBg = SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
 		//sessionBg.setCullingEnabled(true);
 		sessionBg.createMenu();
@@ -134,10 +135,10 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private void showShopMenuScene() {
 		// this.setChildScene(shopChildScene, false, true,true);
 		isShopMenuOnScreen = true;
-		bg.setHasBoughtSomething(false);
-		bg.registerEntityModifier(new MoveModifier(0.3f, camera.getWidth(), 0, 0, 0));
-		if (!bg.hasParent()) {
-			this.menuChildScene.attachChild(bg);
+		shopBg.setHasBoughtSomething(false);
+		shopBg.registerEntityModifier(new MoveModifier(0.3f, camera.getWidth(), 0, 0, 0));
+		if (!shopBg.hasParent()) {
+			this.menuChildScene.attachChild(shopBg);
 		}
 		hideMainMenuControllers();
 		// shopMenuItem.setPosition(OUT_OF_SCREEN_X, OUT_OF_SCREEN_Y);
@@ -158,10 +159,10 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void hideShopMenuScene() {
-		bg.registerEntityModifier(new MoveModifier(0.3f, 0, camera.getWidth(), 0, 0));
+		shopBg.registerEntityModifier(new MoveModifier(0.3f, 0, camera.getWidth(), 0, 0));
 		showMainMenuControllers();
 		isShopMenuOnScreen = false;
-		if(bg.isHasBoughtSomething()){
+		if(shopBg.isHasBoughtSomething()){
 			sessionBg.updateSelectVehiculeMenu();
 		}
 		// shopMenuItem.setPosition(650, 370);
@@ -199,17 +200,18 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		// create the menu buttons
 		// when the button is clicked , it is scaled it to 1.2
 		//playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom), 1.7f, 1.5f);
-		playMenuItem = new Sprite(0,0,150,150,resourceManager.playMenuButton,vbom){
-			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-				if(!isSessionMenuOnScreen && !isShopMenuOnScreen){
-					showSessionMenuScene();
-					
-				}
-				return true;
-			}
-			
-		};
+		playMenuItem = new Sprite(325,165,150,150,resourceManager.playMenuButton,vbom);
+//		{
+//			@Override
+//			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
+//				if(!isSessionMenuOnScreen && !isShopMenuOnScreen && !sessionBg.isSelectVehicleMenuOnScreen() ){
+//					showSessionMenuScene();
+//					
+//				}
+//				return true;
+//			}
+//			
+//		};
 		playMenuItem.setVisible(true);
 		shopMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE, resourceManager.shopMenuButton, vbom), 1.2f, 1);
 		
@@ -225,12 +227,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		this.menuChildScene.addMenuItem(shopMenuItem);
 		this.menuChildScene.addMenuItem(helpMenuItem);
 
-		playMenuItem.setPosition(325,165);
+		//playMenuItem.setPosition(325,165);
 		shopMenuItem.setPosition(530, 370);
 		helpMenuItem.setPosition(650, 370);
 		this.menuChildScene.setOnMenuItemClickListener(this);
 		this.menuChildScene.setOnSceneTouchListener(this);
-		this.menuChildScene.registerTouchArea(playMenuItem);
+		//this.menuChildScene.registerTouchArea(playMenuItem);
 
 		// attach the play menu to the scene
 		this.setChildScene(menuChildScene, false, true, true);
@@ -272,6 +274,42 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		float x = pSceneTouchEvent.getX();
+		float y = pSceneTouchEvent.getY();
+		
+		boolean isMainMenuOnScreen = !isSessionMenuOnScreen && !isShopMenuOnScreen && ! sessionBg.isSelectVehicleMenuOnScreen();
+		
+		if(isMainMenuOnScreen){
+			if(isPlayButton(x, y)){
+				showSessionMenuScene();
+			}
+			return true;
+		}
+		if(isSessionMenuOnScreen){
+			if(sessionBg.wasDeleteButtonTouched(x, y)!=null){
+				sessionBg.deleteGameSession(sessionBg.wasDeleteButtonTouched(x, y));
+			}
+			if(sessionBg.wasPlayButtonTouched(x, y)!=null){
+				sessionBg.playGame(sessionBg.wasPlayButtonTouched(x, y));
+			}
+			if(sessionBg.wasVehiculeButtonTouched(x, y)!=null){
+				sessionBg.displaySelectVehicleMenu(sessionBg.wasVehiculeButtonTouched(x, y));
+			}
+			
+			return true;
+		}
+		if(isShopMenuOnScreen){
+			if(shopBg.wasBuyButtonTouched(x, y)!=null){
+				shopBg.buyVehicle(shopBg.wasBuyButtonTouched(x, y));
+			}
+			return true;
+		}
+		if(sessionBg.isSelectVehicleMenuOnScreen()){
+			if(sessionBg.wasVehiculeToSelectButtonTouched(x, y)!=null){
+				sessionBg.selectVehicle(sessionBg.wasVehiculeToSelectButtonTouched(x, y));
+			}
+			return true;
+		}
 		
 		return true;
 	}
@@ -291,5 +329,11 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	public boolean isSessionMenuOnScreen() {
 		return isSessionMenuOnScreen;
 	}
+	
+	private boolean isPlayButton(float x,float y){
+		return Util.isPointWithinSprite(x, y, playMenuItem);
+	}
+	
+	
 
 }

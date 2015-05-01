@@ -39,6 +39,7 @@ public class UserState {
 		this.sessions.add(new GameSession());
 		this.sessions.add(new GameSession());
 		this.sessions.add(new GameSession());
+		
 		this.indexSelectedSession = 0;
 		
 	}
@@ -97,7 +98,9 @@ public class UserState {
 			sessions.add(new GameSession());
 			indexSelectedSession=0;
 		}
-		
+		if(indexSelectedSession>sessions.size()-1){
+			indexSelectedSession=sessions.size()-1;
+		}
 		return sessions.get(indexSelectedSession);
 	}
 	public void setSelectedSession(final int indexSelectedSession){

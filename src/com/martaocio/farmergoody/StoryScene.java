@@ -63,7 +63,7 @@ public class StoryScene extends BaseScene {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionDown()) {
-					SceneManager.getInstance().createGameFromStoryScene(engine);
+					SceneManager.getInstance().createTrainingGameScene(engine);
 					
 				}
 				return true;

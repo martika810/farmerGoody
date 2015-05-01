@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="15" tilewidth="32" tileheight="32" nextobjectid="34">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32">
+  <image source="gfx/tileset.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="200" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1/mTyHUcx/GvVSg146qQohwzFOuIHGGGyn0kqhm3FCLHjFspR0kzrnbdu85c2XWtte6rdt33FWYQ0kE5asbRweNf8ON35vPDY+b1y+f9/PmTGEVRZZJyRVEyU5nGdGYwk1nMJoVU5jCXecxnAQv5lkUsZglLWUZiaIRGTBuN3W9Cmp3OClayitWsIYO1ZLKOLNazgY1sYjNb2Mo2trODnaERGjFudHW/G9l2DrvYzR72so/9HOAghzjMEY5yjOOc4CSn+JHTnOFsaIRGjBvD3R/BOfs8F/iJi1ziMj9zhV/4ld/4natc4w/+5Do3uMkt/uLv0AiNGDeS3E/mtn2Hu9zjH/7lP/7nPlFCFOUigdw8wqPkIS/5eIzHyc8TPJkQGqER30aap+kUsAtSiMIU4Sme5hmKUoziPEsJnuN5SlKKF3iR0pShLOVCIzRi3Mh2P4fydgVe4mUqUolEKlOFqlTjFapTg1epSS1qU4fXqEs96odGaMS4cc798zSwG/I6b/AmjWhME5rSjOa0oCWtaM1btOFt2tKOd3iX90IjNGLcuO3+HdrbHehIJzrTha5043268wEf0oOe9OIjetOHj+lLP/ozIDRCI8aNAv4uBRloD2IwQxjKMIYzgk/4lJF8xueMYjRjGMsXfMk4vmI8X4dGaMS4Ud79CkywJzKJyUzhG5JIZirTmM4MZjKL2aSQyhzmMo/5LGBhaIRGjBsN3G/IYnsJS1nGdywnjXRWsJJVrGYNGawlk3VksZ4NbGQTm0MjNGLcaO9+B7bZ29nBTr7nB7LJYRe72cNe9rGfAxzkEIc5wlGOcZwToREaMW7Ui4IgCILg4T0Axp/fTA==
+  </data>
+ </layer>
+ <layer name="ground" width="200" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt06dSQ0EYxfGdxNLBEUsL4MDSwRFLhxeghf4ClITuwNC7A0NJ6A4sHRy8Ab3N8OcFIInI3nvzid+s2ZmzM3uOUynlFEIIE2hEE5rRgla4DfAuIYygF33oxwA88IYpW/c2decL4//1FKYxg1nMYT5Mb9a5TSPkC+P/9Sa2sI0d+OAP05t1btMI+UL++i86t6kj/9Gm1BOe8YJXvOEdH/i06f8Tq9LdNfG/KLtS0YhBLOIQjwQkIsmu/41C6JJC/1ORhnRk/O4BmchCtuxDRLA8+p+PAhSiCMUoQSnKZB8iglXQ/0pUoRo1qEUd6tEg+7CsCUxGYHYwWum/G21oRwc60YVu9Mg+LGsdGxGYHQwP/fdiEEMYxghGMYZxJCthRSc4NXm2I8R7jgDPOfo/jwUsYgnLWMEq1pCjhBXd48Hk2bkh3ssN8PTRfz92sYd9HOAQRzhGuRJW9IVvk2e7QrznCvA8o//nuMAlrnCNG9ziDj9QiFY8
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object id="1" name="ground" x="0" y="406" width="6399" height="74"/>
+  <object id="2" name="end" x="6177" y="10" width="63" height="392"/>
+  <object id="3" name="t10" x="577" y="287" width="60" height="61"/>
+  <object id="4" name="t10" x="819" y="287" width="60" height="61"/>
+  <object id="5" name="t10" x="1086" y="129" width="60" height="61"/>
+  <object id="6" name="mt20" x="1378" y="288" width="60" height="61"/>
+  <object id="7" name="t10" x="1722" y="116" width="60" height="61"/>
+  <object id="8" name="t10" x="2140" y="275" width="60" height="61"/>
+  <object id="9" name="t10" x="2383" y="107" width="60" height="61"/>
+  <object id="10" name="ground" x="2769" y="131" width="137" height="60"/>
+  <object id="11" name="ground" x="3216" y="68" width="137" height="60"/>
+  <object id="13" name="ground" x="4210" y="103" width="137" height="60"/>
+  <object id="14" name="ground" x="5232" y="106" width="137" height="60"/>
+  <object id="15" name="fence" x="3792" y="339" width="29" height="66"/>
+  <object id="16" name="fence" x="4786" y="339" width="29" height="66"/>
+  <object id="19" name="t10" x="2806" y="41" width="60" height="61"/>
+  <object id="20" name="mt20" x="2805" y="314" width="60" height="61"/>
+  <object id="21" name="mt20" x="3010" y="119" width="60" height="61"/>
+  <object id="22" name="t10" x="3257" y="-10" width="60" height="61"/>
+  <object id="23" name="t10" x="3503" y="303" width="60" height="61"/>
+  <object id="24" name="t10" x="3776" y="213" width="60" height="61"/>
+  <object id="25" name="t10" x="4003" y="54" width="60" height="61"/>
+  <object id="26" name="t10" x="4215" y="290" width="60" height="61"/>
+  <object id="27" name="t10" x="4496" y="166" width="60" height="61"/>
+  <object id="28" name="mt20" x="4677" y="329" width="60" height="61"/>
+  <object id="29" name="mt20" x="4226" y="16" width="60" height="61"/>
+  <object id="30" name="mt20" x="4304" y="14" width="60" height="61"/>
+  <object id="31" name="t10" x="5255" y="310" width="60" height="61"/>
+  <object id="32" name="mt20" x="5275" y="23" width="60" height="61"/>
+  <object id="33" name="t10" x="5709" y="157" width="60" height="61"/>
+ </objectgroup>
+</map>
