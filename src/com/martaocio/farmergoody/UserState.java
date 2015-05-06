@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 
 public class UserState {
 
-	private int currentLevel = 1;
+	private int currentLevel = 0;
 	private int currentAcumalatedPoints = 0;
 	private int bestScore = 0;
 	private static UserState INSTANCE = null;
@@ -31,7 +31,7 @@ public class UserState {
 	private int indexSelectedSession = 0;
 	
 	public UserState(){
-		this.currentLevel = 1;
+		this.currentLevel = 0;
 		this.currentAcumalatedPoints = 0;
 		this.bestScore = 0;
 		this.availableVehicles = new ArrayList<>();
@@ -98,9 +98,7 @@ public class UserState {
 			sessions.add(new GameSession());
 			indexSelectedSession=0;
 		}
-		if(indexSelectedSession>sessions.size()-1){
-			indexSelectedSession=sessions.size()-1;
-		}
+		
 		return sessions.get(indexSelectedSession);
 	}
 	public void setSelectedSession(final int indexSelectedSession){
@@ -151,7 +149,7 @@ public class UserState {
 	}
 
 	public void clear() {
-		currentLevel = 1;
+		currentLevel = 0;
 		currentAcumalatedPoints = 0;
 	}
 

@@ -6,13 +6,15 @@ public class GameSession {
 	
 	private int currentLevel=0;
 	private int currentMoney=0;
+	private int numberLifes = 0;
 	private int score =0;
 	private Vehicle vehicleUsed=Vehicle.NONE;
 	private GregorianCalendar lastModified=new GregorianCalendar();
 	
 	public GameSession(){
-		this.currentLevel=1;
+		this.currentLevel=0;
 		this.currentMoney=0;
+		this.numberLifes=0;
 		this.score=0;
 		this.vehicleUsed=Vehicle.NONE;
 		this.lastModified=new GregorianCalendar();
@@ -27,6 +29,14 @@ public class GameSession {
 	}
 	public int getCurrentMoney() {
 		return currentMoney;
+	}
+	
+	public void setNumberLifes(int numberLifes) {
+		this.numberLifes = numberLifes;
+		this.lastModified=new GregorianCalendar();
+	}
+	public int getNumberLifes() {
+		return numberLifes;
 	}
 	public void setCurrentMoney(int currentMoney) {
 		this.currentMoney = currentMoney;
@@ -49,14 +59,14 @@ public class GameSession {
 	
 	public boolean isEmptySession(){
 		
-		if(currentLevel==1 && currentMoney==0 && vehicleUsed.equals(Vehicle.NONE)){
+		if(currentLevel==0 && currentMoney==0 && vehicleUsed.equals(Vehicle.NONE)){
 			return true;
 		}
 		return false;
 	}
 	
 	public void flush(){
-		this.currentLevel=1;
+		this.currentLevel=0;
 		this.currentMoney=0;
 		this.score=0;
 		this.vehicleUsed=Vehicle.NONE;

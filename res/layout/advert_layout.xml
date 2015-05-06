@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/advert_fragment"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left|bottom"
+
+    android:clickable="true">
+
+    <ImageView
+        android:id="@+id/advert_image"
+        android:layout_width="250dp"
+        android:layout_height="78dp"
+        android:src="@drawable/adpanel" />
+
+    <TextView
+        android:id="@+id/advert_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="@string/free_ads_app_text"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+    
+    <Button
+        android:id="@+id/close_advert_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/closebtn"
+        android:layout_gravity="right|top"></Button>
+
+</FrameLayout>

@@ -44,7 +44,12 @@ public enum LevelType {
 	
 
 	public static LevelType getLevelType(int levelNumber){
-		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
+		int convertedLevelNumber;
+		if(levelNumber>=20){
+			 convertedLevelNumber=levelNumber%LevelProvider.NUM_TOTAL_LEVELS+1;
+		}else{
+			convertedLevelNumber=levelNumber;
+		}
 		switch(convertedLevelNumber){
 		case 0:
 			return TRAINING_LEVEL;

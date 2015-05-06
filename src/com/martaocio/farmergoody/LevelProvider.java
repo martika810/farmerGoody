@@ -4,10 +4,17 @@ public class LevelProvider {
 	public static int NUM_TOTAL_LEVELS=20;
 	
 	public static String getTXMLevel(int levelNumber){
-		int convertedLevelNumber =levelNumber%LevelProvider.NUM_TOTAL_LEVELS;
+		int convertedLevelNumber;
+		if(levelNumber>=20){
+			 convertedLevelNumber=levelNumber%LevelProvider.NUM_TOTAL_LEVELS+1;
+		}else{
+			convertedLevelNumber=levelNumber;
+		}
 		switch (convertedLevelNumber){
 			case 0: 
+				
 				return "tmx/training.tmx";
+				
 			case 1:
 				return "tmx/level2.tmx";
 			case 2:

@@ -19,6 +19,8 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 
+import com.martaocio.farmergoody.scenes.MainMenu;
+
 public class ShopSubMenu extends Sprite {
 
 	private static final int ORIGIN_X = 240;

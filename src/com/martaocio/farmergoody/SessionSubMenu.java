@@ -19,6 +19,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 
+import com.martaocio.farmergoody.scenes.MainMenu;
+
 import android.app.Activity;
 
 public class SessionSubMenu extends Sprite {
@@ -37,7 +39,7 @@ public class SessionSubMenu extends Sprite {
 	private static final int DIM_HEIGHT_OLD_MOTO_SESSION_ITEM = 70;
 	private static final int DIM_WIDTH_SCOOTER_SESSION_ITEM = 105;
 	private static final int DIM_HEIGHT_SCOOTER_SESSION_ITEM = 70;
-	private static final int DIM_WIDTH_HARDLEY_SESSION_ITEM = 161;
+	private static final int DIM_WIDTH_HARDLEY_SESSION_ITEM = 105;
 	private static final int DIM_HEIGHT_HARDLEY_SESSION_ITEM = 70;
 
 	private MenuScene parentScene;
@@ -168,10 +170,7 @@ public class SessionSubMenu extends Sprite {
 				}
 
 				vehiculeItem.setUserData(vehicle.getDescription());
-				// vehiculeItem.setPosition(ORIGIN_SELECTVEHICLEMENU_X,
-				// ORIGIN_SELECTVEHICLEMENU_Y
-				// + (PADDING_SELECTVEHICLEITEM + (DIM_HEIGHT_SELECTVEHICLEITEM
-				// * indexItemToPlace)));
+			
 				vehicleToSelectBtns.add(vehiculeItem);
 
 				selectVehicleMenu.attachChild(vehiculeItem);
@@ -242,14 +241,7 @@ public class SessionSubMenu extends Sprite {
 			sessionItem.dispose();
 			sessionItem.setVisible(false);
 			
-//			activity.runOnUiThread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					sessionItem.detachSelf();
-//					
-//				}
-//			});
+
 			
 			
 
@@ -307,18 +299,7 @@ public class SessionSubMenu extends Sprite {
 		// create delete btn
 		Sprite deleteBtn = new Sprite(sessionItem.getWidth() - 50, sessionItem.getHeight() - 50,
 				ResourceManager.getInstance().deleteSmallBtnTexture, vbom);
-//		{
-//			@Override
-//			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-//				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//					int indexItemSelected = Integer.parseInt(this.getUserData().toString());
-//					this.registerEntityModifier(getDeleteBtnEntityModifier(indexItemSelected));
-//
-//				}
-//				return true;
-//			};
-//		};
-		// deleteBtn.setIgnoreUpdate(true);
+
 		deleteBtn.setUserData(indexItem);
 		sessionItem.attachChild(deleteBtn);
 		deleteBtns.add(deleteBtn);
@@ -332,19 +313,7 @@ public class SessionSubMenu extends Sprite {
 
 		// create play btn
 		Sprite playBtn = new Sprite(sessionItem.getWidth() - 50, 0, 50, 50, ResourceManager.getInstance().playMenuButton, vbom); 
-//		{
-//			@Override
-//			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-//				if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//					int indexItemSelected = Integer.parseInt(this.getUserData().toString());
-//					this.registerEntityModifier(getPlayBtnEntityModifier(indexItemSelected));
-//
-//				}
-//				return true;
-//			};
-//
-//		};
-		// playBtn.setIgnoreUpdate(true);
+
 		playBtn.setUserData(indexItem);
 		sessionItem.attachChild(playBtn);
 
@@ -361,9 +330,7 @@ public class SessionSubMenu extends Sprite {
 		sessionItem.attachChild(moneyBagIcon);
 		sessionItem.attachChild(moneyText);
 
-		//this.parentScene.registerTouchArea(vehicleIcon);
-		//this.parentScene.registerTouchArea(playBtn);
-		//this.parentScene.registerTouchArea(deleteBtn);
+		
 
 		return sessionItem;
 
@@ -397,7 +364,7 @@ public class SessionSubMenu extends Sprite {
 		Text newSessionText = new Text(90, 30, ResourceManager.getInstance().font, "NEW GAME", new TextOptions(HorizontalAlign.CENTER),
 				vbom);
 		sessionItem.attachChild(newSessionText);
-		//this.parentScene.registerTouchArea(playBtn);
+		
 		return sessionItem;
 	}
 
@@ -406,68 +373,22 @@ public class SessionSubMenu extends Sprite {
 		if (vehicleSelected.equals(Vehicle.UNICYCLE)) {
 			vehiculeSprite = new Sprite(200, 10, DIM_WIDTH_UNICYCLE_SESSION_ITEM, DIM_HEIGHT_UNICYCLE_SESSION_ITEM,
 					ResourceManager.getInstance().unicycleSessionMenuItem, vbom);
-//			{
-//				@Override
-//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//						showSelectVehicleMenu();
-//						indexSessionToUpdateVehicule = Integer.parseInt(this.getUserData().toString());
-//					}
-//					return true;
-//				};
-//
-//			};
+
 		} else if (vehicleSelected.equals(Vehicle.BICYCLE)) {
 			vehiculeSprite = new Sprite(200, 10, DIM_WIDTH_OLD_MOTO_SESSION_ITEM, DIM_HEIGHT_OLD_MOTO_SESSION_ITEM,
 					ResourceManager.getInstance().bicycleSessionMenuItem, vbom) ;
-//			{
-//				@Override
-//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//						showSelectVehicleMenu();
-//						indexSessionToUpdateVehicule = Integer.parseInt(this.getUserData().toString());
-//					}
-//					return true;
-//				};
-//			};
+
 		} else if (vehicleSelected.equals(Vehicle.SCOOTER)) {
 			vehiculeSprite = new Sprite(200, 10, DIM_WIDTH_SCOOTER_SESSION_ITEM, DIM_HEIGHT_SCOOTER_SESSION_ITEM,
 					ResourceManager.getInstance().scooterSessionMenuItem, vbom); 
-//			{
-//				@Override
-//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//						showSelectVehicleMenu();
-//						indexSessionToUpdateVehicule = Integer.parseInt(this.getUserData().toString());
-//					}
-//					return true;
-//				};
-//			};
+
 		} else if (vehicleSelected.equals(Vehicle.HARLEY)) {
 			vehiculeSprite = new Sprite(200, 10, DIM_WIDTH_HARDLEY_SESSION_ITEM, DIM_HEIGHT_HARDLEY_SESSION_ITEM,
 					ResourceManager.getInstance().harleySessionMenuItem, vbom);
-//			{
-//				@Override
-//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//						showSelectVehicleMenu();
-//						indexSessionToUpdateVehicule = Integer.parseInt(this.getUserData().toString());
-//					}
-//					return true;
-//				};
-//			};
+
 		} else {
 			vehiculeSprite = new Sprite(200, 10, 80, 80, ResourceManager.getInstance().vehicleNoImage, vbom) ;
-//			{
-//				@Override
-//				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//					if (pSceneTouchEvent.isActionDown() && parentMenu.isSessionMenuOnScreen()) {
-//						showSelectVehicleMenu();
-//						indexSessionToUpdateVehicule = Integer.parseInt(this.getUserData().toString());
-//					}
-//					return true;
-//				};
-//			};
+
 		}
 
 		return vehiculeSprite;
@@ -524,7 +445,7 @@ public class SessionSubMenu extends Sprite {
 				//parentMenu.hideSessionMenuScene();
 				UserState.getInstance().setSelectedSession(indexSelected);
 				GameSession selectedSession = UserState.getInstance().getSelectedSession();
-				boolean isNewGame = selectedSession.getCurrentLevel() == 1 && selectedSession.getCurrentMoney() == 0;
+				boolean isNewGame = selectedSession.isEmptySession();
 				if (isNewGame) {
 					SceneManager.getInstance().createStory(engine);
 				} else {

@@ -19,6 +19,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 import android.app.ActionBar.LayoutParams;
+import android.app.Fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,55 +32,63 @@ import android.widget.FrameLayout;
 import com.google.android.gms.ads.AdRequest;
 
 public class MainGameActivity extends BaseGameActivity {
-	
-	//private AdView adView;
+
+	// private AdView adView;
+	FrameLayout frameLayout;
 	InterstitialAd mInterstitialAd;
 	private final static String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
-	private final static String BANNER_INTERSTITIAL_AD_UNIT_ID ="ca-app-pub-3940256099942544/1033173712";
-	private boolean shouldShowAdvert=false;
+	private final static String BANNER_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-5407859542823392/6486370465";
+	private static final int CONTENT_VIEW_ID = 10101010;
+	private boolean shouldShowAdvert = false;
+	FrameLayout fatJackPanelAdvert;
+	FatJackAdvertFragment fatjackAdvertFragment;
 
 	@Override
 	protected void onSetContentView() {
 		// TODO Auto-generated method stub
-		//super.onSetContentView();
+		// super.onSetContentView();
 		Log.i("onSetContentView", "enter onSetContentView");
 		this.mRenderSurfaceView = new RenderSurfaceView(this);
 
 		final LayoutParams layoutParams = new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-		layoutParams.gravity=Gravity.CENTER;
-		
-		final android.widget.FrameLayout.LayoutParams surfaceViewLayoutParams=new FrameLayout.LayoutParams(layoutParams);
-		
-		//adView=new AdView(this);
-		//adView.setAdSize(AdSize.FULL_BANNER);
-		//adView.setAdUnitId(BANNER_AD_UNIT_ID);
-		//adView.setAdListener(new GoogleAdListener(getApplicationContext(), adView));
-		mInterstitialAd=new InterstitialAd(this);
+		layoutParams.gravity = Gravity.CENTER;
+
+		final android.widget.FrameLayout.LayoutParams surfaceViewLayoutParams = new FrameLayout.LayoutParams(layoutParams);
+
+		// adView=new AdView(this);
+		// adView.setAdSize(AdSize.FULL_BANNER);
+		// adView.setAdUnitId(BANNER_AD_UNIT_ID);
+		// adView.setAdListener(new GoogleAdListener(getApplicationContext(),
+		// adView));
+		mInterstitialAd = new InterstitialAd(this);
 		mInterstitialAd.setAdUnitId(BANNER_INTERSTITIAL_AD_UNIT_ID);
 		requestNewInterstitial();
 		mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-               
-            }
-        });
-		
-		//AdRequest adRequest =new AdRequest.Builder().build();
-		//adView.loadAd(adRequest);
-		
-		final FrameLayout.LayoutParams adViewLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT,Gravity.BOTTOM);
-		
-		
-		final FrameLayout frameLayout=new FrameLayout(this);
-		final FrameLayout.LayoutParams frameLayoutLayoutParams=new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT,Gravity.CENTER);
-		
-		frameLayout.addView(this.mRenderSurfaceView,surfaceViewLayoutParams);
-		//frameLayout.addView(this.adView,adViewLayoutParams);
-		
-		this.setContentView(frameLayout,frameLayoutLayoutParams);
-		this.mRenderSurfaceView.setRenderer(this.mEngine,this);
+			@Override
+			public void onAdClosed() {
+				requestNewInterstitial();
+
+			}
+		});
+
+		// AdRequest adRequest =new AdRequest.Builder().build();
+		// adView.loadAd(adRequest);
+
+		final FrameLayout.LayoutParams adViewLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
+
+		frameLayout = new FrameLayout(this);
+		frameLayout.setId(CONTENT_VIEW_ID);
+		final FrameLayout.LayoutParams frameLayoutLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+				FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER);
+
+		frameLayout.addView(this.mRenderSurfaceView, surfaceViewLayoutParams);
+		// frameLayout.addView(this.adView,adViewLayoutParams);
+
+		this.setContentView(frameLayout, frameLayoutLayoutParams);
+		this.mRenderSurfaceView.setRenderer(this.mEngine, this);
+
 	}
 
 	private BoundCamera camera;// camera that allow us to set the bounds
@@ -144,6 +153,18 @@ public class MainGameActivity extends BaseGameActivity {
 	}
 
 	@Override
+	public synchronized void onResumeGame() {
+		// TODO Auto-generated method stub
+		super.onResumeGame();
+	}
+
+	@Override
+	public synchronized void onGameDestroyed() {
+		// TODO Auto-generated method stub
+		super.onGameDestroyed();
+	}
+
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		// if(keyCode ==KeyEvent.KEYCODE_BACK){
@@ -151,41 +172,54 @@ public class MainGameActivity extends BaseGameActivity {
 		// }
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	public boolean isShouldShowAdvert(){
+
+	public boolean isShouldShowAdvert() {
 		return shouldShowAdvert;
 	}
-	
-	public void setShouldShowAdvert(boolean mShouldShowAdvert){
-		this.shouldShowAdvert=mShouldShowAdvert;
+
+	public void setShouldShowAdvert(boolean mShouldShowAdvert) {
+		this.shouldShowAdvert = mShouldShowAdvert;
 	}
-	
-//	public void showAdvert(boolean shouldShowAdvert){
-//		if(shouldShowAdvert){
-//			adView.setVisibility(View.VISIBLE);
-//		}else{
-//			adView.setVisibility(View.GONE);
-//		}
-//	}
-	
-	public void showAdvert(boolean shouldShowAdvert){
+
+	// public void showAdvert(boolean shouldShowAdvert){
+	// if(shouldShowAdvert){
+	// adView.setVisibility(View.VISIBLE);
+	// }else{
+	// adView.setVisibility(View.GONE);
+	// }
+	// }
+
+	public void showAdvert(boolean shouldShowAdvert) {
 		if (isNetworkAvailable() && mInterstitialAd.isLoaded()) {
 			mInterstitialAd.show();
 		}
 	}
-	
-	private void requestNewInterstitial(){
-		AdRequest adRequest = new AdRequest.Builder()
-			.addTestDevice("xxxxx")
-			.build();
+
+	private void requestNewInterstitial() {
+		AdRequest adRequest = new AdRequest.Builder().addTestDevice("xxxxx").build();
 		mInterstitialAd.loadAd(adRequest);
 	}
-	
+
 	private boolean isNetworkAvailable() {
-	    ConnectivityManager connectivityManager 
-	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	public void showFatJackAdvert() {
+		fatjackAdvertFragment = new FatJackAdvertFragment();
+		getFragmentManager().beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+				.add(CONTENT_VIEW_ID, fatjackAdvertFragment).commit();
+
+	}
+
+	public void hideFatJackAdvert() {
+		
+			
+			getFragmentManager().beginTransaction()
+				.remove(fatjackAdvertFragment)
+				.commit();
+		
 	}
 
 }

@@ -52,5 +52,11 @@ public class Bull extends AnimatedSprite {
 			animate(BULL_ANIMATE,0,1,true);
 		}
 	}
+	
+	public void moveBack(){
+		
+		body.setTransform(body.getPosition().x - 10f, body.getPosition().y, 0);
+		
+	}
 
 }

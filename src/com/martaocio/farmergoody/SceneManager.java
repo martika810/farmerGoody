@@ -5,6 +5,15 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import com.martaocio.farmergoody.scenes.BaseScene;
+import com.martaocio.farmergoody.scenes.GameScene;
+import com.martaocio.farmergoody.scenes.InstructionScene;
+import com.martaocio.farmergoody.scenes.LoadingScene;
+import com.martaocio.farmergoody.scenes.MainMenu;
+import com.martaocio.farmergoody.scenes.SplashScene;
+import com.martaocio.farmergoody.scenes.StoryScene;
+import com.martaocio.farmergoody.scenes.TrainingGame;
+
 public class SceneManager {
 
 	private static final SceneManager INSTANCE = new SceneManager();
@@ -90,7 +99,7 @@ public class SceneManager {
 
 		setScene(loadingScene);
 		ResourceManager.getInstance().unloadStoryResource();
-		storyScene.disposeScene();
+		//storyScene.disposeScene();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
 
@@ -136,7 +145,7 @@ public class SceneManager {
 
 		setScene(loadingScene);
 		ResourceManager.getInstance().unloadTrainingGameGraphics();
-		trainingScene.disposeScene();
+		//trainingScene.disposeScene();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
 
@@ -166,6 +175,23 @@ public class SceneManager {
 				
 				gameScene = new GameScene();
 				setScene(gameScene);
+			}
+		}));
+		
+	}
+	
+	public void reloadTrainingGameScene(final Engine mEngine) {
+
+		setScene(loadingScene);
+
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				
+				trainingScene = new TrainingGame();
+				setScene(trainingScene);
 			}
 		}));
 		

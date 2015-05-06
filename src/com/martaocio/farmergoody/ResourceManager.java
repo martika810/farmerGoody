@@ -75,7 +75,7 @@ public class ResourceManager {
 
 	public ITextureRegion upArrowTexture, rightArrowTexture;
 
-	public ITiledTextureRegion unicycleShopItem, bicycleShopItem, hardleyShopItem, tomatoScorer;
+	public ITiledTextureRegion tomatoScorer;
 
 	public ITextureRegion unicycleSessionMenuItem, bicycleSessionMenuItem, scooterSessionMenuItem, harleySessionMenuItem;
 
@@ -88,7 +88,7 @@ public class ResourceManager {
 	public ITextureRegion levelIcon, levelIconForest, levelIconFarmEvening, levelIconDesert;
 	public ITextureRegion unycleImage,fingerTexture,tapPlayerExplanation;
 	public ITextureRegion buyBtn, priceTagIcon;
-	public ITextureRegion pauseBtnTexture, jumpBtnTextute, backBtnTexture, deleteSmallBtnTexture, rockLineTexture;
+	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture;
 	public ITextureRegion backInstructionBtnTexture, playStoryBtnTexture;
 	// SPLASH
 	public ITextureRegion splashMenuBackground, instructionBackground, storyBackground;
@@ -150,10 +150,13 @@ public class ResourceManager {
 		this.playerRidingUnicycleTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas,
 				activity.getAssets(), "riding_unicycle.png", 6, 1);
 		this.playerRidingBicycleTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas,
-				activity.getAssets(), "player_riding.png", 6, 2);
+				activity.getAssets(), "player_riding.png", 6, 3);
 
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
 				2, 1);
+		
+		this.lifeIndicatorTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"vehicle_noimage.png");
 
 		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
 				"tomatoScorerSheet.png", 3, 5);
@@ -166,7 +169,7 @@ public class ResourceManager {
 		this.rockLineTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"rock_line.png");
 
-		String levelType = LevelType.getLevelType(UserState.getInstance().getCurrentLevel()).getTypeLevel();
+		String levelType = LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel()).getTypeLevel();
 		this.tomatoIconTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"tomato_icon.png");
 		this.levelIcon = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "level70x70.png");
@@ -282,7 +285,7 @@ public class ResourceManager {
 		this.rockLineTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"rock_line.png");
 
-		String levelType = LevelType.getLevelType(UserState.getInstance().getCurrentLevel()).getTypeLevel();
+		String levelType = LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel()).getTypeLevel();
 		
 		this.point10Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				ImageProvider.getPointImage(Constants.POINT10));
@@ -610,9 +613,6 @@ public class ResourceManager {
 		this.subMenuSelectVehicleTextureAtlas = null;
 		this.mainMenuBackground = null;
 		this.shopMenuBackGround = null;
-		this.unicycleShopItem = null;
-		this.bicycleShopItem = null;
-		this.hardleyShopItem = null;
 		this.unycleImage = null;
 		this.buyBtn = null;
 		this.sessionMenuBackground = null;
@@ -645,6 +645,7 @@ public class ResourceManager {
 		this.pauseBtnTexture = null;
 		this.jumpBtnTextute = null;
 		this.tomatoIconTexture = null;
+		this.lifeIndicatorTexture =null;
 		this.levelIcon = null;
 		this.point5Texture = null;
 		this.point10Texture = null;
