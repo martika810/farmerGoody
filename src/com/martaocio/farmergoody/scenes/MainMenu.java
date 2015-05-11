@@ -46,8 +46,8 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	private static final int OUT_OF_SCREEN_Y = 900;
 	private static final int NUMBER_COLUMNS = 2;
 	private MenuScene menuChildScene;// menu that can have buttons
-	private IMenuItem shopMenuItem,helpMenuItem;
-	//private IMenuItem playMenuItem;
+	private IMenuItem shopMenuItem, helpMenuItem;
+	// private IMenuItem playMenuItem;
 	private Sprite playMenuItem;
 	// private MenuScene shopChildScene;
 	private ShopSubMenu shopBg;
@@ -67,13 +67,15 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public void createScene() {
-		activity.runOnUiThread(new Runnable(){
-			@Override
-			public void run(){
-				activity.showFatJackAdvert();
-			}
-		});
-	
+		if (!activity.FREE_ADS) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					activity.showFatJackAdvert();
+				}
+			});
+		}
+
 		createMenuScene();
 		createShopScene();
 		createSessionMenu();
@@ -86,13 +88,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				pGLState.enableDither(); // the avoid pixalation
 			}
 		});
-		
-	
 
 		// resourceManager.themeMusic.play();
 
 	}
-	public void update(){
+
+	public void update() {
 		createShopScene();
 		createSessionMenu();
 	}
@@ -105,20 +106,19 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	@Override
 	public SceneType getSceneType() {
-		
+
 		return SceneType.SCENE_MENU;
 	}
 
 	@Override
 	public void disposeScene() {
-		
+
 		this.clearTouchAreas();
 		this.clearEntityModifiers();
 		this.clearUpdateHandlers();
 		shopBg.dispose();
 		sessionBg.dispose();
 		this.dispose();
-		
 
 	}
 
@@ -132,9 +132,11 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 	private void createSessionMenu() {
 
-		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera,engine,activity);
-		//sessionBg = SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
-		//sessionBg.setCullingEnabled(true);
+		sessionBg = new SessionSubMenu(0, 0, ResourceManager.getInstance().sessionMenuBackground, vbom, menuChildScene, this, camera,
+				engine, activity);
+		// sessionBg = SessionSubMenu.getInstance(camera, vbom, menuChildScene,
+		// this);
+		// sessionBg.setCullingEnabled(true);
 		sessionBg.createMenu();
 
 	}
@@ -153,10 +155,11 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void showSessionMenuScene() {
-		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
+		// sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene,
+		// this);
 		this.menuChildScene.setOnSceneTouchListenerBindingOnActionDownEnabled(false);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, camera.getHeight(), 0));
-		
+
 		if (!sessionBg.hasParent()) {
 			this.menuChildScene.attachChild(sessionBg);
 		}
@@ -169,15 +172,17 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		shopBg.registerEntityModifier(new MoveModifier(0.3f, 0, camera.getWidth(), 0, 0));
 		showMainMenuControllers();
 		isShopMenuOnScreen = false;
-		if(shopBg.isHasBoughtSomething()){
+		if (shopBg.isHasBoughtSomething()) {
 			sessionBg.updateSelectVehiculeMenu();
+			sessionBg.refreshSessionMenu();
 		}
 		// shopMenuItem.setPosition(650, 370);
 
 	}
 
 	public void hideSessionMenuScene() {
-		//sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene, this);
+		// sessionBg=SessionSubMenu.getInstance(camera, vbom, menuChildScene,
+		// this);
 		this.menuChildScene.setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		sessionBg.registerEntityModifier(new MoveModifier(0.3f, 0, 0, 0, camera.getHeight()));
 		showMainMenuControllers();
@@ -185,14 +190,15 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 		// shopMenuItem.setPosition(650, 370);
 
 	}
-	public void showMainMenuControllers(){
+
+	public void showMainMenuControllers() {
 		shopMenuItem.setVisible(true);// move button back to screen
 		playMenuItem.setVisible(true);
 		helpMenuItem.setVisible(true);
 		areMenuItemEnabled = true;
 	}
-	
-	public void hideMainMenuControllers(){
+
+	public void hideMainMenuControllers() {
 		shopMenuItem.setVisible(false);
 		playMenuItem.setVisible(false);
 		helpMenuItem.setVisible(false);
@@ -206,40 +212,42 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 
 		// create the menu buttons
 		// when the button is clicked , it is scaled it to 1.2
-		//playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom), 1.7f, 1.5f);
-		playMenuItem = new Sprite(325,165,150,150,resourceManager.playMenuButton,vbom);
-//		{
-//			@Override
-//			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float X, final float Y) {
-//				if(!isSessionMenuOnScreen && !isShopMenuOnScreen && !sessionBg.isSelectVehicleMenuOnScreen() ){
-//					showSessionMenuScene();
-//					
-//				}
-//				return true;
-//			}
-//			
-//		};
+		// playMenuItem = new ScaleMenuItemDecorator(new
+		// SpriteMenuItem(this.PLAY, resourceManager.playMenuButton, vbom),
+		// 1.7f, 1.5f);
+		playMenuItem = new Sprite(325, 165, 150, 150, resourceManager.playMenuButton, vbom);
+		// {
+		// @Override
+		// public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final float
+		// X, final float Y) {
+		// if(!isSessionMenuOnScreen && !isShopMenuOnScreen &&
+		// !sessionBg.isSelectVehicleMenuOnScreen() ){
+		// showSessionMenuScene();
+		//
+		// }
+		// return true;
+		// }
+		//
+		// };
 		playMenuItem.setVisible(true);
 		shopMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.CONTINUE, resourceManager.shopMenuButton, vbom), 1.2f, 1);
-		
-		helpMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.HELP, resourceManager.helpButton, vbom), 1.2f, 1);
 
-		
+		helpMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(this.HELP, resourceManager.helpButton, vbom), 1.2f, 1);
 
 		this.menuChildScene.buildAnimations();
 		this.menuChildScene.setBackgroundEnabled(false);
-		
-		//this.menuChildScene.addMenuItem(playMenuItem);
+
+		// this.menuChildScene.addMenuItem(playMenuItem);
 		this.menuChildScene.attachChild(playMenuItem);
 		this.menuChildScene.addMenuItem(shopMenuItem);
 		this.menuChildScene.addMenuItem(helpMenuItem);
 
-		//playMenuItem.setPosition(325,165);
+		// playMenuItem.setPosition(325,165);
 		shopMenuItem.setPosition(530, 370);
 		helpMenuItem.setPosition(650, 370);
 		this.menuChildScene.setOnMenuItemClickListener(this);
 		this.menuChildScene.setOnSceneTouchListener(this);
-		//this.menuChildScene.registerTouchArea(playMenuItem);
+		// this.menuChildScene.registerTouchArea(playMenuItem);
 
 		// attach the play menu to the scene
 		this.setChildScene(menuChildScene, false, true, true);
@@ -255,7 +263,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				// SceneManager.getInstance().createGameScene();
 				showSessionMenuScene();
 				return true;
-				
+
 			case HELP:
 				// load game
 				// SceneManager.getInstance().createGameScene();
@@ -269,7 +277,7 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 			case BACK:
 				hideShopMenuScene();
 				return true;
-				
+
 			default:
 				return false;
 			}
@@ -283,41 +291,44 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		float x = pSceneTouchEvent.getX();
 		float y = pSceneTouchEvent.getY();
-		
-		boolean isMainMenuOnScreen = !isSessionMenuOnScreen && !isShopMenuOnScreen && ! sessionBg.isSelectVehicleMenuOnScreen();
-		
-		if(isMainMenuOnScreen){
-			if(isPlayButton(x, y)){
+
+		boolean isMainMenuOnScreen = !isSessionMenuOnScreen && !isShopMenuOnScreen && !sessionBg.isSelectVehicleMenuOnScreen();
+
+		if (isMainMenuOnScreen) {
+			if (isPlayButton(x, y)) {
 				showSessionMenuScene();
 			}
 			return true;
 		}
-		if(isSessionMenuOnScreen){
-			if(sessionBg.wasDeleteButtonTouched(x, y)!=null){
+		if (isSessionMenuOnScreen) {
+			if (sessionBg.wasDeleteButtonTouched(x, y) != null) {
 				sessionBg.deleteGameSession(sessionBg.wasDeleteButtonTouched(x, y));
 			}
-			if(sessionBg.wasPlayButtonTouched(x, y)!=null){
+			if (sessionBg.wasPlayButtonTouched(x, y) != null) {
 				sessionBg.playGame(sessionBg.wasPlayButtonTouched(x, y));
+				if(!activity.FREE_ADS){
+					activity.hideFatJackAdvert();
+				}
 			}
-			if(sessionBg.wasVehiculeButtonTouched(x, y)!=null){
+			if (sessionBg.wasVehiculeButtonTouched(x, y) != null) {
 				sessionBg.displaySelectVehicleMenu(sessionBg.wasVehiculeButtonTouched(x, y));
 			}
-			
+
 			return true;
 		}
-		if(isShopMenuOnScreen){
-			if(shopBg.wasBuyButtonTouched(x, y)!=null){
+		if (isShopMenuOnScreen) {
+			if (shopBg.wasBuyButtonTouched(x, y) != null) {
 				shopBg.buyVehicle(shopBg.wasBuyButtonTouched(x, y));
 			}
 			return true;
 		}
-		if(sessionBg.isSelectVehicleMenuOnScreen()){
-			if(sessionBg.wasVehiculeToSelectButtonTouched(x, y)!=null){
+		if (sessionBg.isSelectVehicleMenuOnScreen()) {
+			if (sessionBg.wasVehiculeToSelectButtonTouched(x, y) != null) {
 				sessionBg.selectVehicle(sessionBg.wasVehiculeToSelectButtonTouched(x, y));
 			}
 			return true;
 		}
-		
+
 		return true;
 	}
 
@@ -336,11 +347,9 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	public boolean isSessionMenuOnScreen() {
 		return isSessionMenuOnScreen;
 	}
-	
-	private boolean isPlayButton(float x,float y){
+
+	private boolean isPlayButton(float x, float y) {
 		return Util.isPointWithinSprite(x, y, playMenuItem);
 	}
-	
-	
 
 }

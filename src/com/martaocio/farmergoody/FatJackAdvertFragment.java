@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 public class FatJackAdvertFragment extends Fragment {
 	
+	public final static String URL_FREE_ADS_VERSION = "https://play.google.com/store/apps/details?id=com.martaocio.fatjack";
+	
 	 @Override
      public View onCreateView(LayoutInflater inflater, ViewGroup container,
              Bundle savedInstanceState) {
@@ -22,7 +24,7 @@ public class FatJackAdvertFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(Intent.ACTION_VIEW);
-	            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.martaocio.farmergoody"));
+	            i.setData(Uri.parse(URL_FREE_ADS_VERSION));
 	            getActivity().startActivity(i);
 				
 			}

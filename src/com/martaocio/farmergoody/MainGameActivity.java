@@ -33,11 +33,14 @@ import com.google.android.gms.ads.AdRequest;
 
 public class MainGameActivity extends BaseGameActivity {
 
+	public final static boolean FREE_ADS = false;
+
 	// private AdView adView;
 	FrameLayout frameLayout;
 	InterstitialAd mInterstitialAd;
 	private final static String BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
 	private final static String BANNER_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-5407859542823392/6486370465";
+
 	private static final int CONTENT_VIEW_ID = 10101010;
 	private boolean shouldShowAdvert = false;
 	FrameLayout fatJackPanelAdvert;
@@ -61,22 +64,21 @@ public class MainGameActivity extends BaseGameActivity {
 		// adView.setAdUnitId(BANNER_AD_UNIT_ID);
 		// adView.setAdListener(new GoogleAdListener(getApplicationContext(),
 		// adView));
-		mInterstitialAd = new InterstitialAd(this);
-		mInterstitialAd.setAdUnitId(BANNER_INTERSTITIAL_AD_UNIT_ID);
-		requestNewInterstitial();
-		mInterstitialAd.setAdListener(new AdListener() {
-			@Override
-			public void onAdClosed() {
-				requestNewInterstitial();
+		if (!FREE_ADS) {
+			mInterstitialAd = new InterstitialAd(this);
+			mInterstitialAd.setAdUnitId(BANNER_INTERSTITIAL_AD_UNIT_ID);
+			requestNewInterstitial();
+			mInterstitialAd.setAdListener(new AdListener() {
+				@Override
+				public void onAdClosed() {
+					requestNewInterstitial();
 
-			}
-		});
+				}
+			});
+		}
 
 		// AdRequest adRequest =new AdRequest.Builder().build();
 		// adView.loadAd(adRequest);
-
-		final FrameLayout.LayoutParams adViewLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-				FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
 
 		frameLayout = new FrameLayout(this);
 		frameLayout.setId(CONTENT_VIEW_ID);
@@ -87,6 +89,7 @@ public class MainGameActivity extends BaseGameActivity {
 		// frameLayout.addView(this.adView,adViewLayoutParams);
 
 		this.setContentView(frameLayout, frameLayoutLayoutParams);
+
 		this.mRenderSurfaceView.setRenderer(this.mEngine, this);
 
 	}
@@ -189,6 +192,11 @@ public class MainGameActivity extends BaseGameActivity {
 	// }
 	// }
 
+	@Override
+	public void onGameCreated() {
+		super.onGameCreated();
+	}
+
 	public void showAdvert(boolean shouldShowAdvert) {
 		if (isNetworkAvailable() && mInterstitialAd.isLoaded()) {
 			mInterstitialAd.show();
@@ -214,12 +222,9 @@ public class MainGameActivity extends BaseGameActivity {
 	}
 
 	public void hideFatJackAdvert() {
-		
-			
-			getFragmentManager().beginTransaction()
-				.remove(fatjackAdvertFragment)
-				.commit();
-		
+
+		getFragmentManager().beginTransaction().remove(fatjackAdvertFragment).commit();
+
 	}
 
 }

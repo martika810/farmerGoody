@@ -4,7 +4,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
 public enum Vehicle {
-	UNICYCLE(1,Constants.UNICYCLE,50), BICYCLE(2,Constants.BICYCLE,100), SCOOTER(3,Constants.SCOOTER,600), HARLEY(4,Constants.HARLEY,2200),NONE(0,"",0);
+	UNICYCLE(1,Constants.UNICYCLE,100), BICYCLE(2,Constants.BICYCLE,600), SCOOTER(3,Constants.SCOOTER,1200), HARLEY(4,Constants.HARLEY,3000),NONE(0,"",0);
 
 	private int id;
 	private String description;

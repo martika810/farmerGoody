@@ -39,14 +39,18 @@ import com.martaocio.farmergoody.SceneManager.SceneType;
 public class TrainingGame extends GameScene {
 
 	private static final float POINT_FINGER_ANIMATION_START = 600;
-	private static final float POINT_DISPLAY_TAP_ON_PLAYER_TIP = 2500;
+	private static final float POINT_DISPLAY_TAP_ON_PLAYER_TIP = 2000;
+	private static final float POINT_DISPLAY_PRESS_JUMP_TIP = 1300;
+	private static final float POINT_DISPLAY_DRAW_AGAINST_BULL_TIP = 2700;
 	private boolean wasTapPlayerExplanationShown = false;
-	private boolean wasFingerExplanationShown = false;
+	private boolean wasPressJumpExplanationShown = false;
+	private boolean wasDrawLineExaplantionShown = false;
+	private boolean wasAgainstBullExplantion = false;
+	//private boolean wasFingerExplanationShown = false;
 	private Sprite finger;
-	private Sprite tapPlayerExplanation;
-	private Text textDrawLine;
-	private Text textTapPlayer;
-
+	private Sprite tapPlayerExplanation, pressJumpExplanation, againstBullExplanation, drawLineExplanation;
+	private Text textDrawLine,textTapPlayer,textPressJump,textAgainstBull;
+	
 	@Override
 	public void createScene() {
 		super.createPhysicsWorld();
@@ -105,15 +109,35 @@ public class TrainingGame extends GameScene {
 		kickoffPlayer();
 
 		kickoffBull();
-		
-		tapPlayerExplanation=new Sprite(player.getX()-100,100,resourceManager.tapPlayerExplanation,vbom);
+
+		tapPlayerExplanation = new Sprite(player.getX() - 100, 100, resourceManager.tapPlayerExplanation, vbom);
 		tapPlayerExplanation.setVisible(false);
-		textDrawLine=new Text(320, 80, this.resourceManager.font, "Draw a line!", new TextOptions(
-				HorizontalAlign.CENTER), vbom);
+
+		pressJumpExplanation = new Sprite(player.getX() - 100, 100, resourceManager.pressJumpExplanation, vbom);
+		pressJumpExplanation.setVisible(false);
+
+		againstBullExplanation = new Sprite(player.getX() - 100, 100, resourceManager.againstBullExplanation, vbom);
+		againstBullExplanation.setVisible(false);
+
+		drawLineExplanation = new Sprite(player.getX() - 100, 100, resourceManager.drawLineExplanation, vbom);
+		drawLineExplanation.setVisible(false);
+
+		textDrawLine = new Text(320, 60, this.resourceManager.font, "Draw a line under Jack!", new TextOptions(HorizontalAlign.CENTER), vbom);
 		textDrawLine.setVisible(false);
-		textTapPlayer=new Text(320, 60, this.resourceManager.font, "Tap on Jack to unblock him!", new TextOptions(
-				HorizontalAlign.CENTER), vbom);
+		textTapPlayer = new Text(320, 60, this.resourceManager.font, "Tap on Jack to unblock him!",
+				new TextOptions(HorizontalAlign.CENTER), vbom);
 		textTapPlayer.setVisible(false);
+		
+		textAgainstBull = new Text(320, 60, this.resourceManager.font, "Draw toward the bull to move him back!",
+				new TextOptions(HorizontalAlign.CENTER), vbom);
+		textAgainstBull.setVisible(false);
+		
+		textPressJump = new Text(320, 60, this.resourceManager.font, "Tap on screen to Jump!",
+				new TextOptions(HorizontalAlign.CENTER), vbom);
+		textPressJump.setVisible(false);
+		
+		
+		
 
 		// that heads up the display
 		hud = new HUD();
@@ -121,8 +145,13 @@ public class TrainingGame extends GameScene {
 		hud.attachChild(tomatoScoreIcon);
 		hud.attachChild(textScore);
 		hud.attachChild(tapPlayerExplanation);
+		hud.attachChild(pressJumpExplanation);
+		hud.attachChild(againstBullExplanation);
+		hud.attachChild(drawLineExplanation);
 		hud.attachChild(textTapPlayer);
 		hud.attachChild(textDrawLine);
+		hud.attachChild(textAgainstBull);
+		hud.attachChild(textPressJump);
 
 		hud.attachChild(title);
 		hud.attachChild(jumpButton);
@@ -163,12 +192,22 @@ public class TrainingGame extends GameScene {
 				if (isBullAheadPlayer) {
 					endGameByBullCatch();
 				}
-				if (player.getX() > POINT_FINGER_ANIMATION_START && !wasFingerExplanationShown) {
-					createFingerAnimation();
+				if (player.getX() > POINT_FINGER_ANIMATION_START && !wasDrawLineExaplantionShown) {
+					createDrawLineExplanation();
 				}
 				if (player.getX() > POINT_DISPLAY_TAP_ON_PLAYER_TIP && player.getX() < POINT_DISPLAY_TAP_ON_PLAYER_TIP + 100
 						&& !wasTapPlayerExplanationShown) {
 					createTapPlayerExplanation();
+				}
+				
+				if (player.getX() > POINT_DISPLAY_PRESS_JUMP_TIP && player.getX() < POINT_DISPLAY_PRESS_JUMP_TIP + 100
+						&& !wasPressJumpExplanationShown) {
+					createPressJumpExplanation();
+				}
+				
+				if (player.getX() > POINT_DISPLAY_DRAW_AGAINST_BULL_TIP && player.getX() < POINT_DISPLAY_DRAW_AGAINST_BULL_TIP + 100
+						&& !wasAgainstBullExplantion) {
+					createAgainstBullExplanation();
 				}
 
 			}
@@ -195,19 +234,18 @@ public class TrainingGame extends GameScene {
 
 	}
 
-	private void createFingerAnimation() {
-		finger = new Sprite(player.getX()+200, 140, resourceManager.fingerTexture, vbom);
-		this.attachChild(finger);
+	// private void createFingerAnimation() {
+	// finger = new Sprite(player.getX()+200, 140,
+	// resourceManager.fingerTexture, vbom);
+	// this.attachChild(finger);
+	//
+	// finger.registerEntityModifier(createFingerSequenceModifier());
+	// wasFingerExplanationShown =true;
+	// }
 
-		finger.registerEntityModifier(createFingerSequenceModifier());
-		wasFingerExplanationShown =true;
-	}
-	
-	private void createTapPlayerExplanation(){
-		
-		
-		tapPlayerExplanation.registerEntityModifier(new SequenceEntityModifier(
-				new DelayModifier(20f)) {
+	private void createTapPlayerExplanation() {
+
+		tapPlayerExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
 			@Override
 			protected void onModifierStarted(IEntity pItem) {
 				super.onModifierStarted(pItem);
@@ -218,11 +256,81 @@ public class TrainingGame extends GameScene {
 			@Override
 			protected void onModifierFinished(IEntity pItem) {
 				super.onModifierFinished(pItem);
-				//tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
 				tapPlayerExplanation.setVisible(false);
 				textTapPlayer.setVisible(false);
-				wasTapPlayerExplanationShown=true;
-				
+				wasTapPlayerExplanationShown = true;
+
+			}
+		});
+	}
+
+	private void createPressJumpExplanation() {
+
+		pressJumpExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				pressJumpExplanation.setVisible(true);
+				textPressJump.setVisible(true);
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				pressJumpExplanation.setVisible(false);
+				textPressJump.setVisible(false);
+				wasPressJumpExplanationShown = true;
+
+			}
+		});
+	}
+
+	private void createDrawLineExplanation() {
+
+		drawLineExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				drawLineExplanation.setVisible(true);
+				textDrawLine.setVisible(true);
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				drawLineExplanation.setVisible(false);
+				textDrawLine.setVisible(false);
+				wasDrawLineExaplantionShown = true;
+
+			}
+		});
+	}
+	
+	private void createAgainstBullExplanation() {
+
+		againstBullExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				againstBullExplanation.setVisible(true);
+				textAgainstBull.setVisible(true);
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				againstBullExplanation.setVisible(false);
+				textAgainstBull.setVisible(false);
+				wasAgainstBullExplantion = true;
+
 			}
 		});
 	}
@@ -265,10 +373,6 @@ public class TrainingGame extends GameScene {
 
 		levelCleared.setOnMenuItemClickListener(this);
 	}
-	
-
-	
-	
 
 	private void startGame() {
 
@@ -285,7 +389,7 @@ public class TrainingGame extends GameScene {
 
 		SceneManager.getInstance().createGameFromTraining(engine);
 	}
-	
+
 	private void reloadTrainingGame() {
 
 		// do some clean up
@@ -310,16 +414,19 @@ public class TrainingGame extends GameScene {
 		case RESTART:
 
 			// restart
+			centerCamera();
 			reloadTrainingGame();
 
 			break;
 		case QUIT:
 			// go to main menu
 			quit();
+			centerCamera();
 			SceneManager.getInstance().loadMainMenu(engine);
 			break;
 
 		case KEEP_PLAYING:
+			centerCamera();
 			startGame();
 
 			break;
@@ -336,10 +443,8 @@ public class TrainingGame extends GameScene {
 
 	private SequenceEntityModifier createFingerSequenceModifier() {
 
-		SequenceEntityModifier fingerSequenceModifier = new SequenceEntityModifier(
-				new DelayModifier(1f),
-				new MoveXModifier(6f, finger.getX(), finger.getX()+600),
-				new DelayModifier(3f)) {
+		SequenceEntityModifier fingerSequenceModifier = new SequenceEntityModifier(new DelayModifier(1f), new MoveXModifier(6f,
+				finger.getX(), finger.getX() + 600), new DelayModifier(3f)) {
 			@Override
 			protected void onModifierStarted(IEntity pItem) {
 				super.onModifierStarted(pItem);
@@ -353,7 +458,7 @@ public class TrainingGame extends GameScene {
 				finger.dispose();
 				finger.setVisible(false);
 				textDrawLine.setVisible(false);
-				
+
 			}
 		};
 		return fingerSequenceModifier;

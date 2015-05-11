@@ -22,7 +22,7 @@ public class LevelProvider {
 			case 3:
 				return "tmx/level3.tmx";
 			case 4:
-				return "tmx/level2.tmx";
+				return "tmx/farm2.tmx";
 			case 5:
 				return "tmx/dessert1.tmx";
 			case 6:
@@ -34,7 +34,7 @@ public class LevelProvider {
 			case 9:
 				return "tmx/level3.tmx";
 			case 10:
-				return "tmx/level2.tmx";
+				return "tmx/farm2.tmx";
 			case 11:
 				return "tmx/dessert1.tmx";
 			case 12:
@@ -46,7 +46,7 @@ public class LevelProvider {
 			case 15:
 				return "tmx/level3.tmx";
 			case 16:
-				return "tmx/level2.tmx";
+				return "tmx/farm2.tmx";
 			case 17:
 				return "tmx/dessert1.tmx";
 			case 18:

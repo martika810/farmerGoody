@@ -86,7 +86,8 @@ public class ResourceManager {
 	public ITextureRegion iconUnicycle;
 	public ITextureRegion vehicleNoImage;
 	public ITextureRegion levelIcon, levelIconForest, levelIconFarmEvening, levelIconDesert;
-	public ITextureRegion unycleImage,fingerTexture,tapPlayerExplanation;
+	//public ItextureRegion fingerTexture;
+	public ITextureRegion unycleImage,tapPlayerExplanation,drawLineExplanation,pressJumpExplanation,againstBullExplanation;
 	public ITextureRegion buyBtn, priceTagIcon;
 	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture;
 	public ITextureRegion backInstructionBtnTexture, playStoryBtnTexture;
@@ -164,6 +165,7 @@ public class ResourceManager {
 		this.pauseBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"pausebtn.png");
 
+	
 		this.jumpBtnTextute = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "jump.png");
 
 		this.rockLineTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
@@ -240,12 +242,15 @@ public class ResourceManager {
 		FontFactory.setAssetBasePath("fonts/");
 		final ITexture fontTexture = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		font38 = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 40, true,
+				Color.BLACK);
+		
 		font = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 28, true, Color.BLACK);
 
-		font38 = FontFactory.createFromAsset(activity.getFontManager(), fontTexture, activity.getAssets(), "Dion.otf", 38, true,
-				Color.BLACK);
-		font.load();
 		font38.load();
+		font.load();
+		
 
 		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -270,9 +275,15 @@ public class ResourceManager {
 		this.playerTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas, activity.getAssets(),
 				"player.png", 6, 1);
 		
-		this.fingerTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerTexturesAtlas, activity.getAssets(), "finger_animation.png");
+	//	this.fingerTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(playerTexturesAtlas, activity.getAssets(), "finger_animation.png");
 		
 		this.tapPlayerExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "tap_player.png");
+		
+		this.drawLineExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "draw_line.png");
+		
+		this.pressJumpExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "press_jump.png");
+		
+		this.againstBullExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "against_bull.png");
 		
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
 				2, 1);
@@ -667,8 +678,11 @@ public class ResourceManager {
 	private void setTrainingGameResourcesToNull() {
 
 		this.playerTexture = null;
-		this.fingerTexture = null;
+	//	this.fingerTexture = null;
 		this.tapPlayerExplanation =null;
+		this.pressJumpExplanation = null;
+		this.againstBullExplanation = null;
+		this.drawLineExplanation = null;
 		this.bullTexture = null;
 		this.tomatoScorer = null;
 		this.pauseBtnTexture = null;

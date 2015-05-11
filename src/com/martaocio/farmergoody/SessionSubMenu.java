@@ -30,7 +30,7 @@ public class SessionSubMenu extends Sprite {
 	private static final int PADDING_Y = 10;
 	private static final int ITEM_SESSION_DIM_Y = 102;
 	private static final int ORIGIN_SELECTVEHICLEMENU_X = 280;
-	private static final int ORIGIN_SELECTVEHICLEMENU_Y = 10;
+	private static final int ORIGIN_SELECTVEHICLEMENU_Y = 30;
 	private static final int DIM_HEIGHT_SELECTVEHICLEITEM = 100;
 	private static final int PADDING_SELECTVEHICLEITEM = 9;
 	private static final int DIM_WIDTH_UNICYCLE_SESSION_ITEM = 70;
@@ -144,23 +144,25 @@ public class SessionSubMenu extends Sprite {
 				Sprite vehiculeItem = null;
 				int originY = ORIGIN_SELECTVEHICLEMENU_Y + (PADDING_SELECTVEHICLEITEM + (DIM_HEIGHT_SELECTVEHICLEITEM * indexItemToPlace));
 				if (isVehicleAvailable) {
-					vehiculeItem = new Sprite(ORIGIN_SELECTVEHICLEMENU_X, originY, Vehicle.getVehicleSelectVehicleItem(vehicle), vbom) {
-						@Override
-						public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
-							if (pSceneTouchEvent.isActionDown() && isSelectVehicleMenuOnScreen) {
-								this.registerEntityModifier(getScaleBtnEntityModifier());
-								String descriptionVehicleSelected = (String) this.getUserData();
-								Vehicle vehicleSelected = Vehicle.getByDescription(descriptionVehicleSelected);
-								UserState.getInstance().getSessions().get(indexSessionToUpdateVehicule).setVehicleUsed(vehicleSelected);
-								UserState.getInstance().saveToFile();
-								refreshSessionMenu();
-								hideSelectVehicleMenu();
-
-							}
-							return true;
-						};
-					};
-					this.parentScene.registerTouchArea(vehiculeItem);
+					vehiculeItem = new Sprite(ORIGIN_SELECTVEHICLEMENU_X, originY, Vehicle.getVehicleSelectVehicleItem(vehicle), vbom);
+//					{
+//						@Override
+//						public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
+//							if (pSceneTouchEvent.isActionDown() && isSelectVehicleMenuOnScreen) {
+//								this.registerEntityModifier(getScaleBtnEntityModifier());
+//								String descriptionVehicleSelected = (String) this.getUserData();
+//								Vehicle vehicleSelected = Vehicle.getByDescription(descriptionVehicleSelected);
+//								UserState.getInstance().getSessions().get(indexSessionToUpdateVehicule).setVehicleUsed(vehicleSelected);
+//								UserState.getInstance().saveToFile();
+//								refreshSessionMenu();
+//								hideSelectVehicleMenu();
+//
+//							}
+//							return true;
+//						};
+//					};
+					vehicleToSelectBtns.add(vehiculeItem);
+					//this.parentScene.registerTouchArea(vehiculeItem);
 				} else {
 					vehiculeItem = new Sprite(ORIGIN_SELECTVEHICLEMENU_X, originY, Vehicle.getVehicleShopItem(vehicle), vbom);
 					Sprite lockSprite = new Sprite(vehiculeItem.getWidth() - 30, vehiculeItem.getHeight() - 30,
@@ -171,7 +173,7 @@ public class SessionSubMenu extends Sprite {
 
 				vehiculeItem.setUserData(vehicle.getDescription());
 			
-				vehicleToSelectBtns.add(vehiculeItem);
+				
 
 				selectVehicleMenu.attachChild(vehiculeItem);
 				indexItemToPlace++;
@@ -182,16 +184,18 @@ public class SessionSubMenu extends Sprite {
 
 	public void updateSelectVehiculeMenu() {
 		for (int i = 0; i < selectVehicleMenu.getChildCount(); i++) {
-			activity.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-					selectVehicleMenu.detachChild(selectVehicleMenu.getChildByIndex(0));
-					
-				}
-			});
+//			activity.runOnUiThread(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					selectVehicleMenu.detachChild(selectVehicleMenu.getChildByIndex(0));
+//					
+//				}
+//			});
+			selectVehicleMenu.getChildByIndex(i).setVisible(false);
 			
 		}
+		vehicleToSelectBtns.clear();
 		populateSelectVehicleMenu();
 	}
 
@@ -240,9 +244,6 @@ public class SessionSubMenu extends Sprite {
 		for (final Sprite sessionItem : sessionItems) {
 			sessionItem.dispose();
 			sessionItem.setVisible(false);
-			
-
-			
 			
 
 		}
@@ -489,6 +490,7 @@ public class SessionSubMenu extends Sprite {
 	
 	public Sprite wasVehiculeToSelectButtonTouched(float x,float y){
 		for(Sprite vehiculeToSelectBtn:vehicleToSelectBtns){
+			
 			if(Util.isPointWithinSprite(x, y, vehiculeToSelectBtn)){
 				return vehiculeToSelectBtn;
 			}

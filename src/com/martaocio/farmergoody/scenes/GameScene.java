@@ -45,6 +45,11 @@ import org.andengine.extension.tmx.TMXObjectGroup;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.ContinuousHoldDetector;
+import org.andengine.input.touch.detector.HoldDetector;
+import org.andengine.input.touch.detector.HoldDetector.IHoldDetectorListener;
+import org.andengine.input.touch.detector.SurfaceGestureDetector;
+import org.andengine.input.touch.detector.SurfaceGestureDetectorAdapter;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.entity.modifier.PathModifier.Path;
 import org.andengine.util.HorizontalAlign;
@@ -65,6 +70,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.martaocio.farmergoody.Bull;
+import com.martaocio.farmergoody.FJGestureDetector;
 import com.martaocio.farmergoody.GameSession;
 import com.martaocio.farmergoody.GameUtils;
 import com.martaocio.farmergoody.LevelProvider;
@@ -106,6 +112,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	protected boolean isGameVisible = true;
 
+	private SurfaceGestureDetector gestureDetector;
+
 	protected RockPool rockPool;
 
 	// private LinkedList<Stair> stairs;
@@ -115,6 +123,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	public Text textLevel;
 	public boolean isDrawing = false;
 	public boolean wasPlayerTap = false;
+	public boolean wasSingleTap = false;
+	public boolean wasSwiping = false;
 
 	public TomatoScorer tomatoScoreIcon;
 	public Sprite levelIcon, lifeIndicator;
@@ -143,12 +153,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public void createScene() {
-		// activity.runOnUiThread(new Runnable(){
-		// @Override
-		// public void run(){
-		// activity.showAdvert(false);
-		// }
-		// });
 
 		createPhysicsWorld();
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
@@ -195,8 +199,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		try {
 			TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
-			
-			
 
 			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(levelNumber));
 
@@ -262,11 +264,58 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		setOnSceneTouchListener(this);
 		this.setTouchAreaBindingOnActionMoveEnabled(true);
 		this.setTouchAreaBindingOnActionDownEnabled(true);
+		// activity.runOnUiThread(new Runnable() {
+		// public void run() {
+		// setupGestureDetection();
+		// }
+		// });
+
+		// this.setOnSceneTouchListener(this.gestureDetector);
 
 		this.camera.setHUD(hud);
 
 		createUpdateHandler();
 
+	}
+
+	private void setupGestureDetection() {
+		gestureDetector = new SurfaceGestureDetectorAdapter(activity.getApplicationContext()) {
+			@Override
+			protected boolean onSingleTap() {
+				wasSingleTap = true;
+				return false;
+			}
+
+			@Override
+			protected boolean onDoubleTap() {
+
+				return false;
+			}
+
+			@Override
+			protected boolean onSwipeUp() {
+				wasSwiping = true;
+				return false;
+			}
+
+			@Override
+			protected boolean onSwipeDown() {
+				wasSwiping = true;
+				return false;
+			}
+
+			@Override
+			protected boolean onSwipeLeft() {
+				wasSwiping = true;
+				return false;
+			}
+
+			@Override
+			protected boolean onSwipeRight() {
+				wasSwiping = true;
+				return false;
+			}
+		};
 	}
 
 	protected void createUpdateHandler() {
@@ -276,13 +325,13 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 			public void onUpdate(float pSecondsElapsed) {
 				boolean isBullAheadPlayer = bull.getX() > player.getX();
 				if (isBullAheadPlayer) {
-					if(UserState.getInstance().getSelectedSession().getNumberLifes()>0){
+					if (UserState.getInstance().getSelectedSession().getNumberLifes() > 0) {
 						updatePlayerNumberLifes(-1);
 						bull.moveBack();
-					}else{
+					} else {
 						endGameByBullCatch();
 					}
-					
+
 				}
 
 			}
@@ -371,7 +420,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
 
 		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-		textLevel = new Text(levelIcon.getX()+20, levelIcon.getY()+20, this.resourceManager.font, "#" + levelNumber + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
+		textLevel = new Text(levelIcon.getX() + 20, levelIcon.getY() + 20, this.resourceManager.font, "#" + levelNumber + "    ",
+				new TextOptions(HorizontalAlign.CENTER), vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
 		textScore.setTag(TAG_SCORE_TEXT);
 
@@ -385,7 +435,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	protected void createPhysicsWorld() {
 
 		this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
-
 		this.registerUpdateHandler(mPhysicsWorld);
 		mPhysicsWorld.setContactListener(contactListener());
 	}
@@ -414,7 +463,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					}
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.BULL)) {
-						
+
 						int currentNumberLifes = currentUserState.getSelectedSession().getNumberLifes();
 						if (currentNumberLifes > 0) {
 							resourceManager.badSound.play();
@@ -859,12 +908,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showLevelFailed() {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				activity.showAdvert(true);
-			}
-		});
+		if (!activity.FREE_ADS) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					activity.showAdvert(true);
+				}
+			});
+		}
 		isGameVisible = false;
 		showGameIndicators(false);
 		this.hideControlButtons();
@@ -873,12 +924,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showLevelNoMoney() {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				activity.showAdvert(true);
-			}
-		});
+		if (!activity.FREE_ADS) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					activity.showAdvert(true);
+				}
+			});
+		}
 		isGameVisible = false;
 		createNoMonetMessages();
 		showGameIndicators(false);
@@ -887,12 +940,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void showLevelCleared(final int moneyWon) {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				activity.showAdvert(true);
-			}
-		});
+		if (!activity.FREE_ADS) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					activity.showAdvert(true);
+				}
+			});
+		}
 		isGameVisible = false;
 		createWinningMesages(moneyWon);
 		showGameIndicators(false);
@@ -986,10 +1041,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		title.setVisible(shouldShow);
 		tomatoScoreIcon.setVisible(shouldShow);
 
-		if (pauseButton != null){
+		if (pauseButton != null) {
 			lifeIndicator.setVisible(shouldShow);
 		}
-		if(textNumberLife!=null){
+		if (textNumberLife != null) {
 			textNumberLife.setVisible(shouldShow);
 		}
 
@@ -1031,8 +1086,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// SceneManager.getInstance().setMainMenu();
 
 	}
-	
-	private void centerCamera(){
+
+	protected void centerCamera() {
 		this.camera.setChaseEntity(null);
 		this.camera.setBoundsEnabled(false);
 		resourceManager.camera.setCenter(400, 240);
@@ -1056,8 +1111,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+
 		boolean isPlayerArea = isPlayerArea(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 		if (!isDrawing && pSceneTouchEvent.getAction() == TouchEvent.ACTION_DOWN && isPlayerArea) {
+			player.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 1f, 1.2f), new ScaleModifier(0.2f, 1.2f, 1f)));
 			player.runFaster(camera);
 			wasPlayerTap = true;
 			return true;
@@ -1211,8 +1268,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int nextLevel = UserState.getInstance().getSelectedSession().getCurrentLevel();
 		boolean isTrainingLevel = nextLevel == 1;
 		if (isTrainingLevel) {
-			Text textYouAreReady = new Text(340, 370, this.resourceManager.font, "Let's play!", new TextOptions(
-					HorizontalAlign.CENTER), vbom);
+			Text textYouAreReady = new Text(340, 370, this.resourceManager.font, "Let's play!", new TextOptions(HorizontalAlign.CENTER),
+					vbom);
 
 			levelCleared.attachChild(textYouAreReady);
 		} else {
@@ -1243,6 +1300,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		}
 
 		return false;
+	}
+
+	public Player getPlayer() {
+		return this.player;
 	}
 
 }

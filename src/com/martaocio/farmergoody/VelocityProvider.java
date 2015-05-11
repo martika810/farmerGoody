@@ -27,7 +27,8 @@ public static float getVelocityByLevel(Vehicle vehicle){
 
 public static float getBullVelocityByLevel(int currentLevel){
 	if (currentLevel==1 || currentLevel ==2 ||currentLevel==3)return 4;
-	if(currentLevel>25) return 4+(25*0.2f)+((currentLevel-25)*0.1f);
+	if(currentLevel>=45) return 4+(17*0.2f)+((28)*0.05f);
+	if(currentLevel>17 && currentLevel<45) return 4+(17*0.2f)+((currentLevel-17)*0.05f);
 	else return 4+(currentLevel*0.2f);
 						
 	}
