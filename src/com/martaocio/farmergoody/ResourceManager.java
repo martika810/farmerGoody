@@ -87,7 +87,7 @@ public class ResourceManager {
 	public ITextureRegion vehicleNoImage;
 	public ITextureRegion levelIcon, levelIconForest, levelIconFarmEvening, levelIconDesert;
 	//public ItextureRegion fingerTexture;
-	public ITextureRegion unycleImage,tapPlayerExplanation,drawLineExplanation,pressJumpExplanation,againstBullExplanation;
+	public ITextureRegion unycleImage,tapPlayerExplanation,takeLifeExplanation,drawLineExplanation,pressJumpExplanation,againstBullExplanation;
 	public ITextureRegion buyBtn, priceTagIcon;
 	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture;
 	public ITextureRegion backInstructionBtnTexture, playStoryBtnTexture;
@@ -280,6 +280,8 @@ public class ResourceManager {
 		this.tapPlayerExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "tap_player.png");
 		
 		this.drawLineExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "draw_line.png");
+		
+		this.takeLifeExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "take_life.png");
 		
 		this.pressJumpExplanation = BitmapTextureAtlasTextureRegionFactory.createFromAsset(explanationAtlas, activity.getAssets(), "press_jump.png");
 		
@@ -683,6 +685,7 @@ public class ResourceManager {
 		this.pressJumpExplanation = null;
 		this.againstBullExplanation = null;
 		this.drawLineExplanation = null;
+		this.takeLifeExplanation = null;
 		this.bullTexture = null;
 		this.tomatoScorer = null;
 		this.pauseBtnTexture = null;

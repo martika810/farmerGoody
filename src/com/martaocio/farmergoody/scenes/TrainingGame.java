@@ -42,14 +42,16 @@ public class TrainingGame extends GameScene {
 	private static final float POINT_DISPLAY_TAP_ON_PLAYER_TIP = 2000;
 	private static final float POINT_DISPLAY_PRESS_JUMP_TIP = 1300;
 	private static final float POINT_DISPLAY_DRAW_AGAINST_BULL_TIP = 2700;
+	private static final float POINT_DISPLAY_TAKE_LIFE_TIP = 3400;
 	private boolean wasTapPlayerExplanationShown = false;
 	private boolean wasPressJumpExplanationShown = false;
 	private boolean wasDrawLineExaplantionShown = false;
 	private boolean wasAgainstBullExplantion = false;
+	private boolean wasTakeLifeExplantion = false;
 	//private boolean wasFingerExplanationShown = false;
 	private Sprite finger;
-	private Sprite tapPlayerExplanation, pressJumpExplanation, againstBullExplanation, drawLineExplanation;
-	private Text textDrawLine,textTapPlayer,textPressJump,textAgainstBull;
+	private Sprite tapPlayerExplanation,takeLifeExplanation, pressJumpExplanation, againstBullExplanation, drawLineExplanation;
+	private Text textDrawLine,textTapPlayer,textPressJump,textTakeLife,textAgainstBull;
 	
 	@Override
 	public void createScene() {
@@ -121,6 +123,12 @@ public class TrainingGame extends GameScene {
 
 		drawLineExplanation = new Sprite(player.getX() - 100, 100, resourceManager.drawLineExplanation, vbom);
 		drawLineExplanation.setVisible(false);
+		
+		takeLifeExplanation = new Sprite(player.getX() - 100, 100, resourceManager.takeLifeExplanation, vbom);
+		takeLifeExplanation.setVisible(false);
+		
+		textTakeLife = new Text(320, 60, this.resourceManager.font, "Pick the lifes!", new TextOptions(HorizontalAlign.CENTER), vbom);
+		textTakeLife.setVisible(false);
 
 		textDrawLine = new Text(320, 60, this.resourceManager.font, "Draw a line under Jack!", new TextOptions(HorizontalAlign.CENTER), vbom);
 		textDrawLine.setVisible(false);
@@ -152,6 +160,8 @@ public class TrainingGame extends GameScene {
 		hud.attachChild(textDrawLine);
 		hud.attachChild(textAgainstBull);
 		hud.attachChild(textPressJump);
+		hud.attachChild(takeLifeExplanation);
+		hud.attachChild(textTakeLife);
 
 		hud.attachChild(title);
 		hud.attachChild(jumpButton);
@@ -208,6 +218,11 @@ public class TrainingGame extends GameScene {
 				if (player.getX() > POINT_DISPLAY_DRAW_AGAINST_BULL_TIP && player.getX() < POINT_DISPLAY_DRAW_AGAINST_BULL_TIP + 100
 						&& !wasAgainstBullExplantion) {
 					createAgainstBullExplanation();
+				}
+				
+				if (player.getX() > POINT_DISPLAY_TAKE_LIFE_TIP && player.getX() < POINT_DISPLAY_TAKE_LIFE_TIP + 100
+						&& !wasTakeLifeExplantion) {
+					createTakeLifeExplanation();
 				}
 
 			}
@@ -330,6 +345,29 @@ public class TrainingGame extends GameScene {
 				againstBullExplanation.setVisible(false);
 				textAgainstBull.setVisible(false);
 				wasAgainstBullExplantion = true;
+
+			}
+		});
+	}
+	
+	private void createTakeLifeExplanation() {
+
+		takeLifeExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				takeLifeExplanation.setVisible(true);
+				textTakeLife.setVisible(true);
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				takeLifeExplanation.setVisible(false);
+				textTakeLife.setVisible(false);
+				wasTakeLifeExplantion = true;
 
 			}
 		});

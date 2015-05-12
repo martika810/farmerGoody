@@ -1,6 +1,8 @@
 package com.martaocio.farmergoody.scenes;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.hud.HUD;
@@ -84,6 +86,7 @@ import com.martaocio.farmergoody.SpriteTag;
 import com.martaocio.farmergoody.TomatoResourceHelper;
 import com.martaocio.farmergoody.TomatoScorer;
 import com.martaocio.farmergoody.UserState;
+import com.martaocio.farmergoody.Util;
 import com.martaocio.farmergoody.Vehicle;
 import com.martaocio.farmergoody.SceneManager.SceneType;
 
@@ -1169,9 +1172,32 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
 
 		this.attachChild(bodyLine);
+		double distance=Util.calculateDistance(startX, startY, endX, endY);
+		if(distance>25){
+			createRocksToFillGap(startX, endX, startY, endY);
+		}
 
 		this.attachChild(rockLine);
 
+	}
+	
+	private void createRocksToFillGap(float startX,float endX,float startY,float endY){
+		double distance =Util.calculateDistance(startX, startY, endX, endY);
+		float middlePointX=Util.calculateMidPointX(startX, endX);
+		float middlePointY=Util.calculateMidPointY(startY, endY);
+		if(distance>30){
+			createRocksToFillGap(startX, middlePointX, startY, middlePointY);
+			createRocksToFillGap(middlePointX,endX, middlePointY,endY);
+		}else{
+			
+			RockSprite extraRock =rockPool.obtainPoolItem();
+			extraRock.setPosition(middlePointX,middlePointY );
+			extraRock.setIgnoreUpdate(true);
+			this.attachChild(extraRock);
+		}
+		
+		
+		
 	}
 
 	@Override
