@@ -56,12 +56,12 @@ public class ResourceManager {
 
 	public BuildableBitmapTextureAtlas gameTexturesAtlas, playerTexturesAtlas, tomatoScorerAtlas;
 
-	private BuildableBitmapTextureAtlas levelFailedAtlas, levelPassedAtlas, explanationAtlas, levelNoMoneyAtlas;
+	private BuildableBitmapTextureAtlas levelFailedAtlas, popupTextureAtlas,/*levelPassedAtlas,*/ explanationAtlas/*, levelNoMoneyAtlas*/;
 
 	public ITextureRegion playMenuButton, continueMenuButton, shopMenuButton, helpButton, mainMenuBackground, shopMenuBackGround;
 	// public ITextureRegion restartButton,quitButton,failedBG,passedBG;
 	public ITextureRegion restartButton, quitButton, playButton, pauseButton, failedBG, passedBG, pauseBG, noMoneyBG;
-
+	public ITextureRegion moneyBag100,moneyBag200,moneyIndicator;
 	// Create coin texture
 	// public ITextureRegion coinTexture;
 
@@ -73,7 +73,7 @@ public class ResourceManager {
 	// public ITiledTextureRegion tomatoTexture;
 	public ITiledTextureRegion bullTexture;
 
-	public ITextureRegion upArrowTexture, rightArrowTexture;
+	//public ITextureRegion upArrowTexture, rightArrowTexture;
 
 	public ITiledTextureRegion tomatoScorer;
 
@@ -129,11 +129,13 @@ public class ResourceManager {
 
 		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.popupTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+//		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+//				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+//		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+//				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		
 
@@ -189,25 +191,31 @@ public class ResourceManager {
 				ImageProvider.getPointImage(Constants.MINUSPOINT10));
 		minusPoint20Texture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				ImageProvider.getPointImage(Constants.MINUSPOINT20));
+		
+		moneyBag100=BitmapTextureAtlasTextureRegionFactory.createFromAsset(popupTextureAtlas, activity.getAssets(),
+				"bagmoney100.png");
+		
+		moneyBag200=BitmapTextureAtlasTextureRegionFactory.createFromAsset(popupTextureAtlas, activity.getAssets(),
+				"bagmoney200.png");
 		// this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas,activity.getAssets(),"level_cleared_background.png");
 
 		this.failedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
 				"level_failed.png");
-		this.passedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
-				"level_passed.png");
-		this.pauseBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//		this.passedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//				"level_passed.png");
+		this.pauseBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.popupTextureAtlas, activity.getAssets(),
 				"pause_screen.png");
 
-		this.noMoneyBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelNoMoneyAtlas, activity.getAssets(),
-				"level_no_money.png");
-		this.restartButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//		this.noMoneyBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelNoMoneyAtlas, activity.getAssets(),
+//				"level_no_money.png");
+		this.restartButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
 				"restartbtn.png");
 
 		this.quitButton = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "homebtn.png");
+				.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "homebtn.png");
 		this.playButton = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "playbtn.png");
-		this.pauseButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+				.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "playbtn.png");
+		this.pauseButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.popupTextureAtlas, activity.getAssets(),
 				"pausebtn.png");
 
 		this.title = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "title.png");
@@ -224,12 +232,15 @@ public class ResourceManager {
 
 			this.levelFailedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.levelFailedAtlas.load();
+			
+			this.popupTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.popupTextureAtlas.load();
 
-			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
-			this.levelPassedAtlas.load();
-
-			this.levelNoMoneyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
-			this.levelNoMoneyAtlas.load();
+//			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+//			this.levelPassedAtlas.load();
+//
+//			this.levelNoMoneyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+//			this.levelNoMoneyAtlas.load();
 
 		} catch (TextureAtlasBuilderException e) {
 			Debug.e(e);
@@ -255,9 +266,12 @@ public class ResourceManager {
 		this.levelFailedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+//		this.levelNoMoneyAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+//				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+//		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
+//				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		
+		this.popupTextureAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		this.explanationAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444,
@@ -309,21 +323,21 @@ public class ResourceManager {
 
 		this.failedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
 				"level_failed.png");
-		this.passedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
-				"level_passed.png");
-		this.pauseBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//		this.passedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//				"level_passed.png");
+		this.pauseBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.popupTextureAtlas, activity.getAssets(),
 				"pause_screen.png");
 
-		this.noMoneyBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelNoMoneyAtlas, activity.getAssets(),
-				"level_no_money.png");
-		this.restartButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+//		this.noMoneyBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelNoMoneyAtlas, activity.getAssets(),
+//				"level_no_money.png");
+		this.restartButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
 				"restartbtn.png");
 
 		this.quitButton = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "homebtn.png");
-		this.playButton = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "playbtn.png");
-		this.pauseButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas, activity.getAssets(),
+				.createFromAsset(this.levelFailedAtlas, activity.getAssets(), "homebtn.png");
+//		this.playButton = BitmapTextureAtlasTextureRegionFactory
+//				.createFromAsset(this.levelPassedAtlas, activity.getAssets(), "playbtn.png");
+		this.pauseButton = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
 				"pausebtn.png");
 
 		this.title = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "title.png");
@@ -343,12 +357,15 @@ public class ResourceManager {
 
 			this.levelFailedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.levelFailedAtlas.load();
+			
+			this.popupTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.popupTextureAtlas.load();
 
-			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
-			this.levelPassedAtlas.load();
-
-			this.levelNoMoneyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
-			this.levelNoMoneyAtlas.load();
+//			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+//			this.levelPassedAtlas.load();
+//
+//			this.levelNoMoneyAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+//			this.levelNoMoneyAtlas.load();
 
 		} catch (TextureAtlasBuilderException e) {
 			Debug.e(e);
@@ -558,8 +575,9 @@ public class ResourceManager {
 		this.playerTexturesAtlas.unload();
 		this.tomatoScorerAtlas.unload();
 		this.levelFailedAtlas.unload();
-		this.levelPassedAtlas.unload();
-		this.levelNoMoneyAtlas.unload();
+		this.popupTextureAtlas.unload();
+//		this.levelPassedAtlas.unload();
+//		this.levelNoMoneyAtlas.unload();
 		setGameResourcesToNull();
 
 	}
@@ -569,8 +587,10 @@ public class ResourceManager {
 		this.playerTexturesAtlas.unload();
 		this.tomatoScorerAtlas.unload();
 		this.levelFailedAtlas.unload();
-		this.levelPassedAtlas.unload();
-		this.levelNoMoneyAtlas.unload();
+		this.popupTextureAtlas.unload();
+//		this.levelPassedAtlas.unload();
+//		
+//		this.levelNoMoneyAtlas.unload();
 		this.explanationAtlas.unload();
 		setTrainingGameResourcesToNull();
 
@@ -666,9 +686,11 @@ public class ResourceManager {
 		this.minusPoint10Texture = null;
 		this.minusPoint20Texture = null;
 		this.failedBG = null;
-		this.passedBG = null;
+		this.moneyBag100 = null;
+		this.moneyBag200 =null;
+		//this.passedBG = null;
 		this.pauseBG = null;
-		this.noMoneyBG = null;
+		//this.noMoneyBG = null;
 		this.restartButton = null;
 		this.quitButton = null;
 		this.playButton = null;
@@ -694,8 +716,8 @@ public class ResourceManager {
 		this.point10Texture = null;
 		this.minusPoint20Texture = null;
 		this.failedBG = null;
-		this.passedBG = null;
-		this.noMoneyBG = null;
+	//	this.passedBG = null;
+	//	this.noMoneyBG = null;
 		this.restartButton = null;
 		this.quitButton = null;
 		this.playButton = null;

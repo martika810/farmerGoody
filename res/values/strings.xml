@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Fat Jack</string>
+    <string name="app_name">Fat Jack Free</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="free_ads_app_text">Remove the ads now!</string>
+    <string name="sign_google_text">Sign Google+</string>
+    <string name="sign_facebook_text">Sign Facebook</string>
+    <string name="play_offline_text">Play Offline</string>
 
 </resources>

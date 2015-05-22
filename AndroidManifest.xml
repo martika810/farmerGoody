@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.martaocio.farmergoody"
-    android:versionCode="9"
-    android:versionName="1.8" >
+    android:versionCode="12"
+    android:versionName="1.11" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
       <!-- Include required permissions for Google Mobile Ads to run-->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--  retrieve the account name (email) as part of sign-in -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- invalidate tokens to disconnect a user -->
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
@@ -21,9 +25,20 @@
         <meta-data android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
         <activity
-            android:name=".MainGameActivity"
+            android:name="com.martaocio.farmergoody.SplashActivity"
             android:label="@string/app_name" 
             android:theme="@style/Theme.NoBackground">
+            <intent-filter>
+                <action android:name="android.intent.action.SPLASH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+         
+        <activity
+            android:name="com.martaocio.farmergoody.MainGameActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

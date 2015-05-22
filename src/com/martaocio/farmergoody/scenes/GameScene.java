@@ -99,6 +99,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private final int TAG_REWARD_ICON = 999;
 	protected final int TAG_TOMAT_ICON = 998;
 	protected final int TAG_SCORE_TEXT = 997;
+	protected final int SCREEN_WIDTH = 800;
+	protected final int SCREEN_HEIGHT = 480;
 
 	protected TMXTiledMap mTMXTiledMap;
 	protected TMXLayer tmxLayer;
@@ -137,9 +139,12 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	public Sprite restartButton;
 	public Sprite leftButton;
 	public Sprite rightButton;
+	public Sprite moneyBag100Indicator, moneyBag200Indicator;
 	// public final SpriteBatch rockLine=new
 	// SpriteBatch(resourceManager.gameTexturesAtlas, 1000, vbom);
 	public SpriteBatch tomatoSprite = new SpriteBatch(resourceManager.gameTexturesAtlas, 100, vbom);
+
+	public boolean wasMoneyBag100IndicatorsShown, wasMoneyBag200IndicatorsShown = false;
 
 	public int percentage = 0;
 
@@ -160,8 +165,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		createPhysicsWorld();
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
 		createLevelFailedScene();
-		createLevelClearedScene();
-		createLevelNoMoneyScene();
+		// createLevelClearedScene();
+		// createLevelNoMoneyScene();
 		createPauseScene();
 
 	}
@@ -257,6 +262,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		hud.attachChild(jumpButton);
 		hud.attachChild(pauseButton);
 		hud.attachChild(restartButton);
+		hud.attachChild(moneyBag100Indicator);
+		hud.attachChild(moneyBag200Indicator);
 
 		hud.registerTouchArea(jumpButton);
 		hud.registerTouchArea(pauseButton);
@@ -416,17 +423,21 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int currentNumberLifes = selectSession.getNumberLifes();
 		levelTotalPoints = LevelType.getLevelType(currentLevel).getTotalPoints();
 		tomatoScoreIcon = new TomatoScorer(20, 20, 200, 80, vbom);
-		lifeIndicator = new Sprite(20, 110, 70, 70, ResourceManager.getInstance().lifeIndicatorTexture, vbom);
+		lifeIndicator = new Sprite(20, 110, 70, 70, this.resourceManager.lifeIndicatorTexture, vbom);
 		textNumberLife = new Text(lifeIndicator.getX() + 25, lifeIndicator.getY() + 20, this.resourceManager.font, currentNumberLifes
 				+ "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-		levelIcon = new Sprite(20, 190, 70, 70, ResourceManager.getInstance().levelIcon, vbom);
-		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
+		levelIcon = new Sprite(20, 190, 70, 70, this.resourceManager.levelIcon, vbom);
+		title = new Sprite(693, 5, 107, 50, this.resourceManager.title, vbom);
 
 		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
 		textLevel = new Text(levelIcon.getX() + 20, levelIcon.getY() + 20, this.resourceManager.font, "#" + levelNumber + "    ",
 				new TextOptions(HorizontalAlign.CENTER), vbom);
 		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
 		textScore.setTag(TAG_SCORE_TEXT);
+		moneyBag100Indicator = new Sprite(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 128, 256, 256, this.resourceManager.moneyBag100, vbom);
+		moneyBag100Indicator.setVisible(false);
+		moneyBag200Indicator = new Sprite(SCREEN_WIDTH / 2 - 128, SCREEN_HEIGHT / 2 - 128, 256, 256, this.resourceManager.moneyBag200, vbom);
+		moneyBag200Indicator.setVisible(false);
 
 	}
 
@@ -535,11 +546,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO5)) {
 						// resourceManager.coinCollect.play();
 						// update the score
-						score += 5;
-						textScore.setText("" + score);
-						resourceManager.goodSound.play();
-						percentage = (score * 100) / levelTotalPoints;
-						tomatoScoreIcon.update(percentage);
+						updateGameIndicators(5);
 
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.TOMATO5)) {
@@ -551,11 +558,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.TOMATO10)) {
 						// resourceManager.coinCollect.play();
 						// update the score
-						score += 10;
-						textScore.setText("" + score);
-						resourceManager.goodSound.play();
-						percentage = (score * 100) / levelTotalPoints;
-						tomatoScoreIcon.update(percentage);
+						updateGameIndicators(10);
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.TOMATO10)) {
 							removeBody(a);
@@ -566,11 +569,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.MINUSTOMATO5)) {
 						// resourceManager.coinCollect.play();
 						// update the score
-						score -= 5;
-						textScore.setText("" + score);
-						resourceManager.badSound.play();
-						percentage = (score * 100) / levelTotalPoints;
-						tomatoScoreIcon.update(percentage);
+						updateGameIndicators(-5);
 
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.MINUSTOMATO5)) {
@@ -582,11 +581,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.MINUSTOMATO10)) {
 						// resourceManager.coinCollect.play();
 						// update the score
-						score -= 10;
-						textScore.setText("" + score);
-						resourceManager.badSound.play();
-						percentage = (score * 100) / levelTotalPoints;
-						tomatoScoreIcon.update(percentage);
+						updateGameIndicators(-10);
 
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.MINUSTOMATO10)) {
@@ -598,11 +593,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.MINUSTOMATO20)) {
 						// resourceManager.coinCollect.play();
 						// update the score
-						score -= 20;
-						textScore.setText("" + score);
-						resourceManager.badSound.play();
-						percentage = (score * 100) / levelTotalPoints;
-						tomatoScoreIcon.update(percentage);
+						updateGameIndicators(-20);
 
 						// detect which body was colaided
 						if (a.getUserData().equals(SpriteTag.MINUSTOMATO20)) {
@@ -624,28 +615,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 					}
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
-						// show success screen
-						// if (currentUserState.getBestScore() < score) {
-						// currentUserState.setBestScore(score);
-						// }
-						Log.d("MRB", "The percentage is:" + percentage);
-						if (percentage < 50) {
-							showLevelNoMoney();
+						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel() + 1);
+						activity.runOnUpdateThread(new Runnable() {
 
-						} else {
-							Log.d("MRB", "The percentage is:" + percentage);
-							currentUserState.getSelectedSession().setCurrentLevel(
-									currentUserState.getSelectedSession().getCurrentLevel() + 1);
-							int currentMoney = currentUserState.getSelectedSession().getCurrentMoney();
+							@Override
+							public void run() {
+								restartLevel();
 
-							int moneyWon = 100;
-							if (percentage >= 70 && percentage <= 100) {
-								moneyWon = 200;
 							}
-							currentUserState.getSelectedSession().setCurrentMoney(currentMoney + moneyWon);
-							currentUserState.saveToFile();
-							showLevelCleared(moneyWon);
-						}
+						});
 
 					}
 
@@ -926,37 +904,68 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	}
 
-	private void showLevelNoMoney() {
-		if (!activity.FREE_ADS) {
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					activity.showAdvert(true);
-				}
-			});
+	public void updateGameIndicators(int points) {
+		score += points;
+		textScore.setText("" + score);
+		if (points > 0) {
+			resourceManager.goodSound.play();
+		} else {
+			resourceManager.badSound.play();
 		}
-		isGameVisible = false;
-		createNoMonetMessages();
-		showGameIndicators(false);
-		this.hideControlButtons();
-		this.setChildScene(levelNoMoney, false, true, true);
+		percentage = (score * 100) / levelTotalPoints;
+
+		if (percentage > 50 && !wasMoneyBag100IndicatorsShown) {
+			showMoneyBag100Indicator();
+			updateCurrentMoney(100);
+		}
+		if (percentage > 80 && !wasMoneyBag200IndicatorsShown) {
+			showMoneyBag100Indicator();
+			updateCurrentMoney(100);
+		}
+
+		tomatoScoreIcon.update(percentage);
+
 	}
 
-	private void showLevelCleared(final int moneyWon) {
-		if (!activity.FREE_ADS) {
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					activity.showAdvert(true);
-				}
-			});
-		}
-		isGameVisible = false;
-		createWinningMesages(moneyWon);
-		showGameIndicators(false);
-		this.hideControlButtons();
-		this.setChildScene(levelCleared, false, true, true);
+	private void updateCurrentMoney(int money) {
+		UserState currentUserState = UserState.getInstance();
+		
+		int currentMoney = currentUserState.getSelectedSession().getCurrentMoney();
+		currentUserState.getSelectedSession().setCurrentMoney(currentMoney + 100);
+		currentUserState.saveToFile();
 	}
+
+	// private void showLevelNoMoney() {
+	// if (!activity.FREE_ADS) {
+	// activity.runOnUiThread(new Runnable() {
+	// @Override
+	// public void run() {
+	// activity.showAdvert(true);
+	// }
+	// });
+	// }
+	// isGameVisible = false;
+	// createNoMonetMessages();
+	// showGameIndicators(false);
+	// this.hideControlButtons();
+	// this.setChildScene(levelNoMoney, false, true, true);
+	// }
+
+	// private void showLevelCleared(final int moneyWon) {
+	// if (!activity.FREE_ADS) {
+	// activity.runOnUiThread(new Runnable() {
+	// @Override
+	// public void run() {
+	// activity.showAdvert(true);
+	// }
+	// });
+	// }
+	// isGameVisible = false;
+	// createWinningMesages(moneyWon);
+	// showGameIndicators(false);
+	// this.hideControlButtons();
+	// this.setChildScene(levelCleared, false, true, true);
+	// }
 
 	private void showPause() {
 		// activity.runOnUiThread(new Runnable(){
@@ -1097,10 +1106,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	}
 
 	private void restartLevel() {
+		centerCamera();
+		showGameIndicators(false);
+		this.setChildScene(levelFailed);
 
 		// do some clean up
 		this.mPhysicsWorld.clearForces();
 		this.mPhysicsWorld.clearPhysicsConnectors();
+
 		this.mPhysicsWorld.dispose();
 
 		// some work with the scene
@@ -1172,32 +1185,30 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		// currentLevelType=LevelType.getLevelType(UserState.getInstance().getSelectedSession().getCurrentLevel());
 
 		this.attachChild(bodyLine);
-		double distance=Util.calculateDistance(startX, startY, endX, endY);
-		if(distance>25){
+		double distance = Util.calculateDistance(startX, startY, endX, endY);
+		if (distance > 25) {
 			createRocksToFillGap(startX, endX, startY, endY);
 		}
 
 		this.attachChild(rockLine);
 
 	}
-	
-	private void createRocksToFillGap(float startX,float endX,float startY,float endY){
-		double distance =Util.calculateDistance(startX, startY, endX, endY);
-		float middlePointX=Util.calculateMidPointX(startX, endX);
-		float middlePointY=Util.calculateMidPointY(startY, endY);
-		if(distance>30){
+
+	private void createRocksToFillGap(float startX, float endX, float startY, float endY) {
+		double distance = Util.calculateDistance(startX, startY, endX, endY);
+		float middlePointX = Util.calculateMidPointX(startX, endX);
+		float middlePointY = Util.calculateMidPointY(startY, endY);
+		if (distance > 30) {
 			createRocksToFillGap(startX, middlePointX, startY, middlePointY);
-			createRocksToFillGap(middlePointX,endX, middlePointY,endY);
-		}else{
-			
-			RockSprite extraRock =rockPool.obtainPoolItem();
-			extraRock.setPosition(middlePointX,middlePointY );
+			createRocksToFillGap(middlePointX, endX, middlePointY, endY);
+		} else {
+
+			RockSprite extraRock = rockPool.obtainPoolItem();
+			extraRock.setPosition(middlePointX, middlePointY);
 			extraRock.setIgnoreUpdate(true);
 			this.attachChild(extraRock);
 		}
-		
-		
-		
+
 	}
 
 	@Override
@@ -1310,13 +1321,73 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	}
 
-	private void createNoMonetMessages() {
-		Text textNotEnoughTomatos = new Text(300, 370, this.resourceManager.font, "Just " + percentage + " % of tomatos!", new TextOptions(
-				HorizontalAlign.CENTER), vbom);
-		Text textComeBack = new Text(300, 400, this.resourceManager.font, "Come back for more!", new TextOptions(HorizontalAlign.CENTER),
-				vbom);
-		levelNoMoney.attachChild(textNotEnoughTomatos);
-		levelNoMoney.attachChild(textComeBack);
+	// private void createNoMonetMessages() {
+	// Text textNotEnoughTomatos = new Text(300, 370, this.resourceManager.font,
+	// "Just " + percentage + " % of tomatos!", new TextOptions(
+	// HorizontalAlign.CENTER), vbom);
+	// Text textComeBack = new Text(300, 400, this.resourceManager.font,
+	// "Come back for more!", new TextOptions(HorizontalAlign.CENTER),
+	// vbom);
+	// levelNoMoney.attachChild(textNotEnoughTomatos);
+	// levelNoMoney.attachChild(textComeBack);
+	// }
+
+	private void showMoneyBag100Indicator() {
+		moneyBag100Indicator.registerEntityModifier(new SequenceEntityModifier(
+				new DelayModifier(2f),
+				new ScaleModifier(3, 1f, 1.2f),
+				new ScaleModifier(3, 1.2f, 1f),
+				new ScaleModifier(3, 1f, 1.2f),
+				new ScaleModifier(3, 1.2f, 1f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				moneyBag100Indicator.setVisible(true);
+
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				moneyBag100Indicator.setVisible(false);
+				if(wasMoneyBag100IndicatorsShown){
+					wasMoneyBag200IndicatorsShown=true;
+				}
+				wasMoneyBag100IndicatorsShown = true;
+				
+
+			}
+		});
+
+	}
+
+	private void showMoneyBag200Indicator() {
+		moneyBag200Indicator.registerEntityModifier(new SequenceEntityModifier(
+				new DelayModifier(2f),
+				new ScaleModifier(3, 1f, 1.2f),
+				new ScaleModifier(3, 1.2f, 1f),
+				new ScaleModifier(3, 1f, 1.2f),
+				new ScaleModifier(3, 1.2f, 1f)) {
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				super.onModifierStarted(pItem);
+				moneyBag200Indicator.setVisible(true);
+
+			}
+
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				super.onModifierFinished(pItem);
+				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
+				// GL10.GL_ONE_MINUS_SRC_ALPHA);
+				moneyBag200Indicator.setVisible(false);
+				wasMoneyBag200IndicatorsShown = true;
+
+			}
+		});
+
 	}
 
 	private boolean isPlayerArea(float f, float g) {

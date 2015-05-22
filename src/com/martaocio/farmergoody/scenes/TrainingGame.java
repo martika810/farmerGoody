@@ -58,8 +58,8 @@ public class TrainingGame extends GameScene {
 		super.createPhysicsWorld();
 		createLevel();
 		super.createLevelFailedScene();
-		super.createLevelNoMoneyScene();
-		createLevelClearedScene();
+		//super.createLevelNoMoneyScene();
+		//createLevelClearedScene();
 
 	}
 
@@ -140,7 +140,7 @@ public class TrainingGame extends GameScene {
 				new TextOptions(HorizontalAlign.CENTER), vbom);
 		textAgainstBull.setVisible(false);
 		
-		textPressJump = new Text(320, 60, this.resourceManager.font, "Tap on screen to Jump!",
+		textPressJump = new Text(320, 60, this.resourceManager.font, "Press Jump!",
 				new TextOptions(HorizontalAlign.CENTER), vbom);
 		textPressJump.setVisible(false);
 		
@@ -477,6 +477,22 @@ public class TrainingGame extends GameScene {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public void updateGameIndicators(int points) {
+		score += points;
+		textScore.setText("" + score);
+		if (points > 0) {
+			resourceManager.goodSound.play();
+		} else {
+			resourceManager.badSound.play();
+		}
+		percentage = (score * 100) / levelTotalPoints;
+		
+
+		tomatoScoreIcon.update(percentage);
+
 	}
 
 	private SequenceEntityModifier createFingerSequenceModifier() {

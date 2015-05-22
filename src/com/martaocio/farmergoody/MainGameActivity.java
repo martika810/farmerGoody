@@ -21,19 +21,31 @@ import com.google.android.gms.ads.InterstitialAd;
 import android.app.ActionBar.LayoutParams;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.opengl.Visibility;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.plus.Plus;
 
-public class MainGameActivity extends BaseGameActivity {
+
+public class MainGameActivity extends BaseGameActivity{
 
 	public final static boolean FREE_ADS = false;
+	private BoundCamera camera;// camera that allow us to set the bounds
+	private float WIDTH = 800; // that s a default resolution
+	private float HEIGTH = 480;
 
 	// private AdView adView;
 	FrameLayout frameLayout;
@@ -42,9 +54,22 @@ public class MainGameActivity extends BaseGameActivity {
 	private final static String BANNER_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-5407859542823392/6486370465";
 
 	private static final int CONTENT_VIEW_ID = 10101010;
+	private static final int CONTENT_SIGIN_GOOGLE_VIEW_ID = 10101011;
 	private boolean shouldShowAdvert = false;
 	FrameLayout fatJackPanelAdvert;
 	FatJackAdvertFragment fatjackAdvertFragment;
+	SignInGoogleFragment signInGoogleFragment;
+	
+	
+	
+	@Override
+	protected void onCreate(final Bundle pSavedInstanceState) {
+		super.onCreate(pSavedInstanceState);
+		
+	}
+	
+
+	
 
 	@Override
 	protected void onSetContentView() {
@@ -55,9 +80,14 @@ public class MainGameActivity extends BaseGameActivity {
 
 		final LayoutParams layoutParams = new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+		
+		final LayoutParams wrapContentLayoutParams = new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		layoutParams.gravity = Gravity.CENTER;
 
 		final android.widget.FrameLayout.LayoutParams surfaceViewLayoutParams = new FrameLayout.LayoutParams(layoutParams);
+		
+		final android.widget.FrameLayout.LayoutParams signInGoogleViewLayoutParams = new FrameLayout.LayoutParams(wrapContentLayoutParams);
 
 		// adView=new AdView(this);
 		// adView.setAdSize(AdSize.FULL_BANNER);
@@ -86,6 +116,8 @@ public class MainGameActivity extends BaseGameActivity {
 				FrameLayout.LayoutParams.MATCH_PARENT, Gravity.CENTER);
 
 		frameLayout.addView(this.mRenderSurfaceView, surfaceViewLayoutParams);
+		addSignInGoogleButton();
+		
 		// frameLayout.addView(this.adView,adViewLayoutParams);
 
 		this.setContentView(frameLayout, frameLayoutLayoutParams);
@@ -94,9 +126,7 @@ public class MainGameActivity extends BaseGameActivity {
 
 	}
 
-	private BoundCamera camera;// camera that allow us to set the bounds
-	private float WIDTH = 800; // that s a default resolution
-	private float HEIGTH = 480;
+	
 
 	@Override
 	public Engine onCreateEngine(EngineOptions engineOptions) {
@@ -154,6 +184,14 @@ public class MainGameActivity extends BaseGameActivity {
 		super.onDestroy();
 		// System.exit(0);
 	}
+	
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+		//hideFatJackAdvert();
+		// System.exit(0);
+	}
 
 	@Override
 	public synchronized void onResumeGame() {
@@ -165,6 +203,7 @@ public class MainGameActivity extends BaseGameActivity {
 	public synchronized void onGameDestroyed() {
 		// TODO Auto-generated method stub
 		super.onGameDestroyed();
+		//hideFatJackAdvert();
 	}
 
 	@Override
@@ -195,6 +234,7 @@ public class MainGameActivity extends BaseGameActivity {
 	@Override
 	public void onGameCreated() {
 		super.onGameCreated();
+		//showFatJackAdvert();
 	}
 
 	public void showAdvert(boolean shouldShowAdvert) {
@@ -216,9 +256,17 @@ public class MainGameActivity extends BaseGameActivity {
 
 	public void showFatJackAdvert() {
 		fatjackAdvertFragment = new FatJackAdvertFragment();
-		getFragmentManager().beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-				.add(CONTENT_VIEW_ID, fatjackAdvertFragment).commit();
+		getFragmentManager()
+			.beginTransaction()
+			.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+			.add(CONTENT_VIEW_ID, fatjackAdvertFragment)
+			.commit();
 
+	}
+	
+	public void addSignInGoogleButton(){
+		signInGoogleFragment =new SignInGoogleFragment();
+		getFragmentManager().beginTransaction().add(CONTENT_VIEW_ID,signInGoogleFragment).commit();
 	}
 
 	public void hideFatJackAdvert() {
@@ -226,5 +274,18 @@ public class MainGameActivity extends BaseGameActivity {
 		getFragmentManager().beginTransaction().remove(fatjackAdvertFragment).commit();
 
 	}
+
+
+	
+	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+		if (requestCode == SignInGoogleFragment.RC_SIGN_IN) {
+			signInGoogleFragment.setmIntentInProgress(false);
+
+			if (responseCode!=ConnectionResult.SUCCESS && isNetworkAvailable()) {
+				signInGoogleFragment.getmGoogleApiClient().connect();
+			}
+		}
+	}
+
 
 }

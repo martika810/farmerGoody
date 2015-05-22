@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="antartica_tileset" tilewidth="32" tileheight="32">
+  <image source="../../../../../../farmerGame/antartica/antartica_tileset.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1OfXzwUYx/Gfu2iQBhUNpUgpshpStDSEkhbFbe+9995777333lvRUmbRnjS0UVGR1//gHOd8z7kevJ5cT97n8+RKz5BKVaM6NahJLWpTh7rUoz4NaEgjGtOEpjSjOS1oSSta04a2pEcjGtGIRoIb7WhPBzrSic50oSvd6E4PetKL3vShL/3ozwAGMojBDGEow6IRjWhEI+GN4YxgJKMYzRjGMo7xTGAik5jMFKYyjenMYCazmM0c5jKP+dGIRjSikfDGAhayiMUsYSnLWM4KVrKK1axhLetYzwY2sonNbGEr29jO69GIRjSikfDGG+xgJ2/yFm/zDu+yi/d4n93sYS/72M8BPuBDDnKIj/iYT/g0GtGIRjQS3viMz/mCL/mKr/mGbznMEb7je37gR47yEz/zC7/yG7/zB8c4zoloRCMa0Uh440/+4m9Ocop/+Jf/OM0Z/ieVlkplII0LuJCMZOIiLuYSLiUzWbgsLRrRiEY0kt3I6n45V3AlV5GN7FzNNVxLDnJyHddzAzeSi5u4mdzcwq3kIS+3pUUjGtGIRrIb+bidO8jPndxFAQpyN4UoTBGKUox7uJf7uJ/iPEAJHuQhSlIqGtGIRjQS3niYR3iUx3ic0jzBkzzF05ThGcpSjvI8y3NU4Hkq8gIv8hIv80o0ohGNaCS8UYnKvMprVKEq6VSjOjWoSS1qU4e61KM+DWhIIxrThKY0o3k0ohGNaCS80YKWtKI1bWhLO9rTgY50ojNd6Eo3utODnvSiN33oSz/6MyAa0YhGNBLeGMggBjOEoQxjOCMYyShGM4axjGM8E5jIJCYzhalMYzozmBmNaEQjGglvzGI2c5jLPOazgIUsYjFLWMoylrOClaxiNWtYyzrWs4GNbIpGNKIRjYQ3CqVCCOHcnY8fdj52bNbZwla2sZ2zvFuqnQ==
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzjkVQlEQBcEn6RtAA0uABpYADfBRwaKCRR9XAdEEE1RQaZ+exhgTAAAAAAAAAAAAAAAUWsYq1rFp8APQzS72cYhjgx+Abs5xiTmuDX4AKi0K3OIej3gWNQG62BZ4xTs+8S1qAnRxAuCvH5vxOPc=
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1"/>
+</map>

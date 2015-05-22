@@ -61,20 +61,7 @@ public class SessionSubMenu extends Sprite {
 	
 	
 
-	// private static SessionSubMenu INSTANCE=null;
-
-	// public static SessionSubMenu getInstance(BoundCamera
-	// camera,VertexBufferObjectManager vbom,MenuScene parentScene,MainMenu
-	// parentMenu){
-	// if(INSTANCE==null){
-	// INSTANCE = new SessionSubMenu(0, 0,
-	// ResourceManager.getInstance().sessionMenuBackground, vbom, parentScene,
-	// parentMenu, camera);
-	// }
-	//
-	// return INSTANCE;
-	// }
-
+	
 	public SessionSubMenu(float pX, float pY, ITextureRegion texture, VertexBufferObjectManager vbom, MenuScene parentScene,
 			MainMenu parentMenu, BoundCamera camera, Engine engine,Activity activity) {
 
