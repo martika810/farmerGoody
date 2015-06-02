@@ -4,13 +4,22 @@
     android:id="@+id/signin_google_fragment"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="left|top"
+    android:layout_gravity="right|bottom"
+    android:layout_marginBottom="10dp"
+    android:layout_marginRight="200dp"
     android:clickable="true" >
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
+    <ImageButton
+        android:id="@+id/google_play_services"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         />
+        android:src="@drawable/google_service_icon"/>
+    
+ <!--    <TextView
+        android:id="@+id/sign_in_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dip"
+        android:text="@string/status_signed_out" />  -->
 
 </FrameLayout>

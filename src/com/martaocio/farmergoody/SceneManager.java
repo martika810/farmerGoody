@@ -166,12 +166,33 @@ public class SceneManager {
 	public void loadNextGameScene(final Engine mEngine) {
 
 		setScene(loadingScene);
+		ResourceManager.getInstance().unloadGameGraphics();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
 
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				mEngine.unregisterUpdateHandler(pTimerHandler);
+				ResourceManager.getInstance().loadGameResources();
+				
+				gameScene = new GameScene();
+				setScene(gameScene);
+			}
+		}));
+		
+	}
+	
+	public void loadNextGameSceneFromTraining(final Engine mEngine) {
+
+		setScene(loadingScene);
+		ResourceManager.getInstance().unloadTrainingGameGraphics();
+
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				mEngine.unregisterUpdateHandler(pTimerHandler);
+				ResourceManager.getInstance().loadGameResources();
 				
 				gameScene = new GameScene();
 				setScene(gameScene);

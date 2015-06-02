@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/google_play_services_fragment"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:layout_marginBottom="10dp"
+    android:clickable="true" >
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:background="@drawable/select_vehicle_panel"
+        android:orientation="vertical"
+        android:paddingTop="60dp" >
+
+        <Button
+            android:id="@+id/connect_google"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/menu_item"
+            android:textColor="@android:color/black"
+            android:text="Connect" />
+        
+           <Button
+            android:id="@+id/disconnect_google"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/menu_item"
+            android:textColor="@android:color/black"
+            android:text="Disconnect"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/achievements_google"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/menu_item"
+            android:textColor="@android:color/black"
+            android:text="Achievements" />
+
+        <Button
+            android:id="@+id/leaderboard_google"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/menu_item"
+            android:textColor="@android:color/black"
+            android:text="Leaderboard" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_google_services_close"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/close_menu"
+       
+        android:gravity="top|right" />
+
+</FrameLayout>

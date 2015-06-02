@@ -25,6 +25,11 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import com.martaocio.farmergoody.domain.Constants;
+import com.martaocio.farmergoody.domain.LevelType;
+import com.martaocio.farmergoody.domain.UserState;
+import com.martaocio.farmergoody.providers.ImageProvider;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Vibrator;
@@ -54,7 +59,7 @@ public class ResourceManager {
 	private BuildableBitmapTextureAtlas subMenuSelectVehicleTextureAtlas;
 	private BuildableBitmapTextureAtlas splashTexturesAtlas, instructionTexturesAtlas, storyTexturesAtlas;
 
-	public BuildableBitmapTextureAtlas gameTexturesAtlas, playerTexturesAtlas, tomatoScorerAtlas;
+	public BuildableBitmapTextureAtlas gameTexturesAtlas,playerRidingTexturesAtlas, playerTexturesAtlas, tomatoScorerAtlas;
 
 	private BuildableBitmapTextureAtlas levelFailedAtlas, popupTextureAtlas,/*levelPassedAtlas,*/ explanationAtlas/*, levelNoMoneyAtlas*/;
 
@@ -89,7 +94,7 @@ public class ResourceManager {
 	//public ItextureRegion fingerTexture;
 	public ITextureRegion unycleImage,tapPlayerExplanation,takeLifeExplanation,drawLineExplanation,pressJumpExplanation,againstBullExplanation;
 	public ITextureRegion buyBtn, priceTagIcon;
-	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture;
+	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,moneyIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture,turboButtonTexture;
 	public ITextureRegion backInstructionBtnTexture, playStoryBtnTexture;
 	// SPLASH
 	public ITextureRegion splashMenuBackground, instructionBackground, storyBackground;
@@ -137,7 +142,8 @@ public class ResourceManager {
 //		this.levelPassedAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_8888,
 //				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		
+		this.playerRidingTexturesAtlas=new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		this.gameTexturesAtlas = new BuildableBitmapTextureAtlas(activity.getTextureManager(), 1024, 1024, BitmapTextureFormat.RGBA_4444,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -152,14 +158,17 @@ public class ResourceManager {
 				"player.png", 6, 1);
 		this.playerRidingUnicycleTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas,
 				activity.getAssets(), "riding_unicycle.png", 6, 1);
-		this.playerRidingBicycleTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerTexturesAtlas,
-				activity.getAssets(), "player_riding.png", 6, 3);
+		this.playerRidingBicycleTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(playerRidingTexturesAtlas,
+				activity.getAssets(), "player_riding.png", 6, 4);
 
 		this.bullTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(gameTexturesAtlas, activity.getAssets(), "bull.png",
 				2, 1);
 		
 		this.lifeIndicatorTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"vehicle_noimage.png");
+		
+		this.moneyIndicatorTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"bag100.png");
 
 		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
 				"tomatoScorerSheet.png", 3, 5);
@@ -195,8 +204,8 @@ public class ResourceManager {
 		moneyBag100=BitmapTextureAtlasTextureRegionFactory.createFromAsset(popupTextureAtlas, activity.getAssets(),
 				"bagmoney100.png");
 		
-		moneyBag200=BitmapTextureAtlasTextureRegionFactory.createFromAsset(popupTextureAtlas, activity.getAssets(),
-				"bagmoney200.png");
+		turboButtonTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(popupTextureAtlas, activity.getAssets(),
+				"turbo_btn.png");
 		// this.passedBG=BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelPassedAtlas,activity.getAssets(),"level_cleared_background.png");
 
 		this.failedBG = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.levelFailedAtlas, activity.getAssets(),
@@ -235,7 +244,10 @@ public class ResourceManager {
 			
 			this.popupTextureAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 			this.popupTextureAtlas.load();
-
+			
+			this.playerRidingTexturesAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
+			this.playerRidingTexturesAtlas.load();
+			
 //			this.levelPassedAtlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 0, 1));
 //			this.levelPassedAtlas.load();
 //
@@ -576,6 +588,8 @@ public class ResourceManager {
 		this.tomatoScorerAtlas.unload();
 		this.levelFailedAtlas.unload();
 		this.popupTextureAtlas.unload();
+		
+		this.playerRidingTexturesAtlas.unload();
 //		this.levelPassedAtlas.unload();
 //		this.levelNoMoneyAtlas.unload();
 		setGameResourcesToNull();
@@ -687,7 +701,8 @@ public class ResourceManager {
 		this.minusPoint20Texture = null;
 		this.failedBG = null;
 		this.moneyBag100 = null;
-		this.moneyBag200 =null;
+		//this.moneyBag200 =null;
+		this.turboButtonTexture =null;
 		//this.passedBG = null;
 		this.pauseBG = null;
 		//this.noMoneyBG = null;

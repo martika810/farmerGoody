@@ -8,6 +8,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.pool.GenericPool;
 
+import com.martaocio.farmergoody.customsprites.RockSprite;
 import com.martaocio.farmergoody.scenes.BaseScene;
 
 import android.util.Log;

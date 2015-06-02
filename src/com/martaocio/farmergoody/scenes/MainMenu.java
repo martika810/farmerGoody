@@ -27,10 +27,10 @@ import org.andengine.util.HorizontalAlign;
 
 import com.martaocio.farmergoody.ResourceManager;
 import com.martaocio.farmergoody.SceneManager;
-import com.martaocio.farmergoody.SessionSubMenu;
-import com.martaocio.farmergoody.ShopSubMenu;
-import com.martaocio.farmergoody.Util;
 import com.martaocio.farmergoody.SceneManager.SceneType;
+import com.martaocio.farmergoody.customsprites.SessionSubMenu;
+import com.martaocio.farmergoody.customsprites.ShopSubMenu;
+import com.martaocio.farmergoody.util.Util;
 
 public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOnSceneTouchListener {
 
@@ -192,6 +192,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void showMainMenuControllers() {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				activity.addSignInGoogleButton();
+			}
+		});
 		shopMenuItem.setVisible(true);// move button back to screen
 		playMenuItem.setVisible(true);
 		helpMenuItem.setVisible(true);
@@ -199,6 +205,12 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 	}
 
 	public void hideMainMenuControllers() {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				activity.removeSignInGoogleButton();
+			}
+		});
 		shopMenuItem.setVisible(false);
 		playMenuItem.setVisible(false);
 		helpMenuItem.setVisible(false);
@@ -267,6 +279,8 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 			case HELP:
 				// load game
 				// SceneManager.getInstance().createGameScene();
+				activity.removeSignInGoogleButton();
+				activity.removeGoogleServiceFragment();
 				SceneManager.getInstance().createInstructions(engine);
 				return true;
 			case CONTINUE:
@@ -305,9 +319,17 @@ public class MainMenu extends BaseScene implements IOnMenuItemClickListener, IOn
 				sessionBg.deleteGameSession(sessionBg.wasDeleteButtonTouched(x, y));
 			}
 			if (sessionBg.wasPlayButtonTouched(x, y) != null) {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						activity.removeSignInGoogleButton();
+						activity.removeGoogleServiceFragment();
+					}
+				});
 				sessionBg.playGame(sessionBg.wasPlayButtonTouched(x, y));
-				if(!activity.FREE_ADS){
+				if (!activity.FREE_ADS) {
 					activity.hideFatJackAdvert();
+					activity.removeSignInGoogleButton();
 				}
 			}
 			if (sessionBg.wasVehiculeButtonTouched(x, y) != null) {

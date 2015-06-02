@@ -28,13 +28,13 @@ import org.andengine.util.HorizontalAlign;
 import org.andengine.util.debug.Debug;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.martaocio.farmergoody.LevelProvider;
-import com.martaocio.farmergoody.LevelType;
 import com.martaocio.farmergoody.ResourceManager;
 import com.martaocio.farmergoody.RockPool;
 import com.martaocio.farmergoody.SceneManager;
-import com.martaocio.farmergoody.TomatoScorer;
 import com.martaocio.farmergoody.SceneManager.SceneType;
+import com.martaocio.farmergoody.customsprites.TomatoScorer;
+import com.martaocio.farmergoody.domain.LevelType;
+import com.martaocio.farmergoody.providers.LevelProvider;
 
 public class TrainingGame extends GameScene {
 
@@ -42,7 +42,7 @@ public class TrainingGame extends GameScene {
 	private static final float POINT_DISPLAY_TAP_ON_PLAYER_TIP = 2000;
 	private static final float POINT_DISPLAY_PRESS_JUMP_TIP = 1300;
 	private static final float POINT_DISPLAY_DRAW_AGAINST_BULL_TIP = 2700;
-	private static final float POINT_DISPLAY_TAKE_LIFE_TIP = 3400;
+	private static final float POINT_DISPLAY_TAKE_LIFE_TIP = 2700;
 	private boolean wasTapPlayerExplanationShown = false;
 	private boolean wasPressJumpExplanationShown = false;
 	private boolean wasDrawLineExaplantionShown = false;
@@ -215,10 +215,10 @@ public class TrainingGame extends GameScene {
 					createPressJumpExplanation();
 				}
 				
-				if (player.getX() > POINT_DISPLAY_DRAW_AGAINST_BULL_TIP && player.getX() < POINT_DISPLAY_DRAW_AGAINST_BULL_TIP + 100
-						&& !wasAgainstBullExplantion) {
-					createAgainstBullExplanation();
-				}
+//				if (player.getX() > POINT_DISPLAY_DRAW_AGAINST_BULL_TIP && player.getX() < POINT_DISPLAY_DRAW_AGAINST_BULL_TIP + 100
+//						&& !wasAgainstBullExplantion) {
+//					createAgainstBullExplanation();
+//				}
 				
 				if (player.getX() > POINT_DISPLAY_TAKE_LIFE_TIP && player.getX() < POINT_DISPLAY_TAKE_LIFE_TIP + 100
 						&& !wasTakeLifeExplantion) {
@@ -442,6 +442,33 @@ public class TrainingGame extends GameScene {
 		this.dispose();
 
 		SceneManager.getInstance().reloadTrainingGameScene(engine);
+	}
+	
+	@Override
+	public void restartLevel() {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				activity.removeShareGoogleButton();
+			}
+		});
+		centerCamera();
+		showGameIndicators(false);
+		this.setChildScene(levelFailed);
+
+		// do some clean up
+		this.mPhysicsWorld.clearForces();
+		this.mPhysicsWorld.clearPhysicsConnectors();
+
+		this.mPhysicsWorld.dispose();
+
+		// some work with the scene
+		this.clearTouchAreas();
+		this.clearEntityModifiers();
+		this.clearUpdateHandlers();
+		this.dispose();
+
+		SceneManager.getInstance().loadNextGameSceneFromTraining(engine);
 	}
 
 	@Override

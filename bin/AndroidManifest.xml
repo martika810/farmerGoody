@@ -7,34 +7,40 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="21" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
-      <!-- Include required permissions for Google Mobile Ads to run-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--  retrieve the account name (email) as part of sign-in -->
+    <!-- Include required permissions for Google Mobile Ads to run -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- retrieve the account name (email) as part of sign-in -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- invalidate tokens to disconnect a user -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true" >
-         <!--This meta-data tag is required to use Google Play Services.-->
-        <meta-data android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+
+        <!-- This meta-data tag is required to use Google Play Services. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name="com.martaocio.farmergoody.SplashActivity"
-            android:label="@string/app_name" 
-            android:theme="@style/Theme.NoBackground">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.NoBackground" >
             <intent-filter>
                 <action android:name="android.intent.action.SPLASH" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-         
         <activity
             android:name="com.martaocio.farmergoody.MainGameActivity"
             android:label="@string/app_name"
@@ -45,7 +51,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.google.android.gms.ads.AdActivity"
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
     </application>
