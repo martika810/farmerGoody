@@ -148,25 +148,25 @@ public class AchievementHelper {
 
 	public static void updateAchievementBox(MainGameActivity activity, AchievementBox boxToUpdate, String achiviementId,
 			boolean isUnlocked, boolean isIncremental, int steps) {
-		boolean isMonocycleAchievement = (achiviementId == activity.getString(R.string.monocycle_achievements));
+		boolean isMonocycleAchievement = (achiviementId.equals(activity.getString(R.string.monocycle_achievements)));
 		if (isMonocycleAchievement) {
 			boxToUpdate.setMonocycleAchievement(isUnlocked);
 			return;
 		}
-		boolean isFirstMotoAchievement = (achiviementId == activity.getString(R.string.moto_achievements));
+		boolean isFirstMotoAchievement = (achiviementId.equals(activity.getString(R.string.moto_achievements)));
 		if (isFirstMotoAchievement) {
 			boxToUpdate.setNumberStepsFirstMoto(steps);
 			boxToUpdate.setFirstMotoAchievement(isUnlocked);
 			return;
 
 		}
-		boolean isScooterAchievement = (achiviementId == activity.getString(R.string.scooter_achievements));
+		boolean isScooterAchievement = (achiviementId.equals(activity.getString(R.string.scooter_achievements)));
 		if (isScooterAchievement) {
 			boxToUpdate.setNumberStepsScooter(steps);
-			boxToUpdate.setAntarcticaAchievement(isUnlocked);
+			boxToUpdate.setScooterAchievement(isUnlocked);
 			return;
 		}
-		boolean isCoolMotoAchiviement = (achiviementId == activity.getString(R.string.coolmoto_achievements));
+		boolean isCoolMotoAchiviement = (achiviementId.equals(activity.getString(R.string.coolmoto_achievements)));
 		if (isCoolMotoAchiviement) {
 			boxToUpdate.setNumberStepsCoolMoto(steps);
 			boxToUpdate.setCoolMotoAchievement(isUnlocked);

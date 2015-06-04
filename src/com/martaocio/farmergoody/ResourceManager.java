@@ -49,6 +49,7 @@ public class ResourceManager {
 	public Sound goodSound;
 	public Sound badSound;
 	public Sound jumpSound;
+	public Sound motoEngineSound;
 
 	// TEXTURES
 	// this class is like a canvas to paint over
@@ -80,7 +81,7 @@ public class ResourceManager {
 
 	//public ITextureRegion upArrowTexture, rightArrowTexture;
 
-	public ITiledTextureRegion tomatoScorer;
+	public ITiledTextureRegion tomatoScorer,fuelDepositTexture;
 
 	public ITextureRegion unicycleSessionMenuItem, bicycleSessionMenuItem, scooterSessionMenuItem, harleySessionMenuItem;
 
@@ -172,6 +173,9 @@ public class ResourceManager {
 
 		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
 				"tomatoScorerSheet.png", 3, 5);
+		
+		this.fuelDepositTexture = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
+				"fuel_sheet.png", 3, 3);
 
 		this.pauseBtnTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"pausebtn.png");
@@ -390,6 +394,7 @@ public class ResourceManager {
 			this.goodSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/good_bell.wav");
 			this.jumpSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/jump.wav");
 			this.badSound = SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/bad.wav");
+			this.motoEngineSound =SoundFactory.createSoundFromAsset(activity.getSoundManager(), activity, "sfx/moto.wav");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -689,6 +694,7 @@ public class ResourceManager {
 		this.playerRidingBicycleTexture = null;
 		this.bullTexture = null;
 		this.tomatoScorer = null;
+		this.fuelDepositTexture =null;
 		this.pauseBtnTexture = null;
 		this.jumpBtnTextute = null;
 		this.tomatoIconTexture = null;

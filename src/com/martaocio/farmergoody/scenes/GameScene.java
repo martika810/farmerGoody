@@ -81,6 +81,7 @@ import com.martaocio.farmergoody.SceneManager;
 import com.martaocio.farmergoody.SpriteTag;
 import com.martaocio.farmergoody.SceneManager.SceneType;
 import com.martaocio.farmergoody.customsprites.Bull;
+import com.martaocio.farmergoody.customsprites.FuelDeposit;
 import com.martaocio.farmergoody.customsprites.Player;
 import com.martaocio.farmergoody.customsprites.RockSprite;
 import com.martaocio.farmergoody.customsprites.TomatoScorer;
@@ -105,6 +106,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	protected final int TAG_SCORE_TEXT = 997;
 	protected final int SCREEN_WIDTH = 800;
 	protected final int SCREEN_HEIGHT = 480;
+	public final static int PRICE_FILL_FUEL_DEPOSIT = 15;
 
 	protected TMXTiledMap mTMXTiledMap;
 	protected TMXLayer tmxLayer;
@@ -120,6 +122,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	private int i = 0;
 
 	protected boolean isGameVisible = true;
+	private boolean isTurboRunning=false;
 
 	private SurfaceGestureDetector gestureDetector;
 
@@ -136,9 +139,10 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 	public boolean wasSwiping = false;
 
 	public TomatoScorer tomatoScoreIcon;
+	public FuelDeposit fuelDepositIcon;
 	public Sprite levelIcon, lifeIndicator, moneyIndicator;
 	public Sprite rightPathScoreIcon;
-	public Sprite jumpButton,turboButton;
+	public Sprite jumpButton, turboButton;
 	public Sprite pauseButton;
 	public Sprite restartButton;
 	public Sprite leftButton;
@@ -165,13 +169,14 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	@Override
 	public void createScene() {
-		
+
 		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				((MainGameActivity)activity).removeSignInGoogleButton();
-				
-			}});
+				((MainGameActivity) activity).removeSignInGoogleButton();
+
+			}
+		});
 
 		createPhysicsWorld();
 		createLevel(UserState.getInstance().getSelectedSession().getCurrentLevel());
@@ -264,6 +269,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		hud.attachChild(levelIcon);
 		hud.attachChild(textLevel);
 		hud.attachChild(tomatoScoreIcon);
+		hud.attachChild(fuelDepositIcon);
 		hud.attachChild(textScore);
 		hud.attachChild(turboButton);
 
@@ -402,18 +408,19 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 				return true;
 			};
 		};
-		
-		
+
 		turboButton = new Sprite(450, 380, 70, 70, ResourceManager.getInstance().turboButtonTexture, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
 				if (pSceneTouchEvent.isActionUp() && isGameVisible) {
-					makePlayerTurbo();
+					if(!isTurboRunning){
+						runTurbo();
+					}
+					
 				}
 				return true;
 			}
-			
-			
+
 		};
 
 		pauseButton = new Sprite(700, 400, 80, 64, ResourceManager.getInstance().pauseBtnTexture, vbom) {
@@ -452,6 +459,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int currentMoney = selectSession.getCurrentMoney();
 		levelTotalPoints = LevelType.getLevelType(currentLevel).getTotalPoints();
 		tomatoScoreIcon = new TomatoScorer(20, 20, 200, 80, vbom);
+		fuelDepositIcon = new FuelDeposit(20, 280, 70, 70, vbom);
+		fuelDepositIcon.update(UserState.getInstance().getSelectedSession().getFuelpoints());
 		lifeIndicator = new Sprite(20, 110, 80, 80, this.resourceManager.lifeIndicatorTexture, vbom);
 
 		textNumberLife = new Text(lifeIndicator.getX() + 30, lifeIndicator.getY() + 20, this.resourceManager.font, currentNumberLifes
@@ -460,7 +469,7 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		moneyIndicator = new Sprite(20, 190, 80, 80, this.resourceManager.moneyIndicatorTexture, vbom);
 		textMoney = new Text(moneyIndicator.getX() + 10, moneyIndicator.getY() + 20, this.resourceManager.font,
 				currentMoney + "$" + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-		levelIcon = new Sprite(20, 280, 70, 70, this.resourceManager.levelIcon, vbom);
+		levelIcon = new Sprite(100, 280, 70, 70, this.resourceManager.levelIcon, vbom);
 
 		title = new Sprite(693, 5, 107, 50, this.resourceManager.title, vbom);
 
@@ -699,6 +708,27 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		int currentNumberLife = selectedSession.getNumberLifes() + pointToUpdate;
 		selectedSession.setNumberLifes(currentNumberLife);
 		textNumberLife.setText(currentNumberLife + "  ");
+
+	}
+
+	private void updateTurbo() {
+		int currentUserPoints = UserState.getInstance().getSelectedSession().getFuelpoints();
+		if (currentUserPoints > 10) {
+			resourceManager.motoEngineSound.play();
+			makePlayerTurbo();
+			currentUserPoints = currentUserPoints - 10;
+			UserState.getInstance().getSelectedSession().setFuelpoints(currentUserPoints);
+			fuelDepositIcon.update(currentUserPoints);
+			return;
+		} else {
+			int currentMoney = UserState.getInstance().getSelectedSession().getCurrentMoney();
+			if (currentMoney >= PRICE_FILL_FUEL_DEPOSIT) {
+				UserState.getInstance().getSelectedSession().setFuelpoints((int) FuelDeposit.FULL);
+				fuelDepositIcon.fill();
+				updateCurrentMoney(PRICE_FILL_FUEL_DEPOSIT);
+
+			}
+		}
 
 	}
 
@@ -968,48 +998,16 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	}
 
-	private void updateCurrentMoney(int money) {
+	private void updateCurrentMoney(final int money) {
 		UserState currentUserState = UserState.getInstance();
 
-		int currentMoney = currentUserState.getSelectedSession().getCurrentMoney()+100;
+		int currentMoney = currentUserState.getSelectedSession().getCurrentMoney() + money;
 		textMoney.setText(currentMoney + "$");
 		currentUserState.getSelectedSession().setCurrentMoney(currentMoney);
 		AchievementHelper.getInstance(activity).checkAchievements(currentMoney);
 		AchievementHelper.getInstance(activity).pushAchievements(activity);
 		currentUserState.saveToFile();
 	}
-
-	// private void showLevelNoMoney() {
-	// if (!activity.FREE_ADS) {
-	// activity.runOnUiThread(new Runnable() {
-	// @Override
-	// public void run() {
-	// activity.showAdvert(true);
-	// }
-	// });
-	// }
-	// isGameVisible = false;
-	// createNoMonetMessages();
-	// showGameIndicators(false);
-	// this.hideControlButtons();
-	// this.setChildScene(levelNoMoney, false, true, true);
-	// }
-
-	// private void showLevelCleared(final int moneyWon) {
-	// if (!activity.FREE_ADS) {
-	// activity.runOnUiThread(new Runnable() {
-	// @Override
-	// public void run() {
-	// activity.showAdvert(true);
-	// }
-	// });
-	// }
-	// isGameVisible = false;
-	// createWinningMesages(moneyWon);
-	// showGameIndicators(false);
-	// this.hideControlButtons();
-	// this.setChildScene(levelCleared, false, true, true);
-	// }
 
 	private void showPause() {
 		// activity.runOnUiThread(new Runnable(){
@@ -1048,8 +1046,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 			// restart
 			centerCamera();
-			if(UserState.getInstance().getSelectedSession().getCurrentLevel()==1){
-				
+			if (UserState.getInstance().getSelectedSession().getCurrentLevel() == 1) {
+
 			}
 			restartLevel();
 
@@ -1081,12 +1079,15 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		title.setVisible(shouldShow);
 		tomatoScoreIcon.setVisible(shouldShow);
 
+		if (fuelDepositIcon != null) {
+			fuelDepositIcon.setVisible(shouldShow);
+		}
 		if (pauseButton != null) {
 			lifeIndicator.setVisible(shouldShow);
 			textNumberLife.setVisible(shouldShow);
 
 		}
-		if(turboButton !=null){
+		if (turboButton != null) {
 			turboButton.setVisible(shouldShow);
 		}
 		if (moneyIndicator != null) {
@@ -1138,7 +1139,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	public void restartLevel() {
 		int currentPoints = UserState.getInstance().getSelectedSession().getCurrentMoney();
-		//AchievementHelper.getInstance(activity).checkAchievements(activity, currentPoints);
+		// AchievementHelper.getInstance(activity).checkAchievements(activity,
+		// currentPoints);
 		activity.submitLeaderBoard(currentPoints);
 		activity.runOnUiThread(new Runnable() {
 			@Override
@@ -1268,7 +1270,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 					FixtureDef groundFixtureDef = PhysicsFactory.createFixtureDef(0, 0, .2f);
 					// BodyType to static if u dont want the body moves
-					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.GROUND_FIXTURE_DEF).setUserData(SpriteTag.GROUND);
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.GROUND_FIXTURE_DEF).setUserData(
+							SpriteTag.GROUND);
 
 					// store data in userData so it can be retrieved later on
 
@@ -1307,7 +1310,8 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
 					FixtureDef endLineDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
-					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.END_FIXTURE_DEF).setUserData(SpriteTag.END);
+					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.END_FIXTURE_DEF).setUserData(
+							SpriteTag.END);
 
 				}
 
@@ -1340,42 +1344,6 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		return player;
 	}
 
-	// private void createWinningMesages(final int moneyWon) {
-	//
-	// int nextLevel =
-	// UserState.getInstance().getSelectedSession().getCurrentLevel();
-	// boolean isTrainingLevel = nextLevel == 1;
-	// if (isTrainingLevel) {
-	// Text textYouAreReady = new Text(340, 370, this.resourceManager.font,
-	// "Let's play!", new TextOptions(HorizontalAlign.CENTER),
-	// vbom);
-	//
-	// levelCleared.attachChild(textYouAreReady);
-	// } else {
-	// Text textYouWon = new Text(340, 370, this.resourceManager.font,
-	// "You won " + moneyWon + " $  ", new TextOptions(
-	// HorizontalAlign.CENTER), vbom);
-	// Text textNextLevel = new Text(340, 400, this.resourceManager.font,
-	// "Next Level: " + nextLevel + " ", new TextOptions(
-	// HorizontalAlign.CENTER), vbom);
-	//
-	// levelCleared.attachChild(textNextLevel);
-	// levelCleared.attachChild(textYouWon);
-	// }
-	//
-	// }
-
-	// private void createNoMonetMessages() {
-	// Text textNotEnoughTomatos = new Text(300, 370, this.resourceManager.font,
-	// "Just " + percentage + " % of tomatos!", new TextOptions(
-	// HorizontalAlign.CENTER), vbom);
-	// Text textComeBack = new Text(300, 400, this.resourceManager.font,
-	// "Come back for more!", new TextOptions(HorizontalAlign.CENTER),
-	// vbom);
-	// levelNoMoney.attachChild(textNotEnoughTomatos);
-	// levelNoMoney.attachChild(textComeBack);
-	// }
-
 	private void showMoneyBag100Indicator() {
 		moneyBag100Indicator.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(2f), new ScaleModifier(3, 1f, 1.2f),
 				new ScaleModifier(3, 1.2f, 1f), new ScaleModifier(3, 1f, 1.2f), new ScaleModifier(3, 1.2f, 1f)) {
@@ -1403,27 +1371,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 		});
 
 	}
-	
+
 	private void makePlayerTurbo() {
-		
-		player.registerEntityModifier(
-				new SequenceEntityModifier(
-						//new MoveXModifier(1f, player.getX(), player.getX()+400)
-						new DelayModifier(1f)) {
+
+		player.registerEntityModifier(new SequenceEntityModifier(
+		// new MoveXModifier(1f, player.getX(), player.getX()+400)
+				new DelayModifier(2f)) {
 			@Override
 			protected void onModifierStarted(IEntity pItem) {
 				super.onModifierStarted(pItem);
 				player.runTurbo();
-				player.isTurbo=true;
+				player.isTurbo = true;
 
 			}
-			
-			
+
 			@Override
 			protected void onModifierFinished(IEntity pItem) {
 				super.onModifierFinished(pItem);
-			
-				player.isTurbo=false;
+
+				player.isTurbo = false;
 				player.setRunning();
 
 			}
@@ -1431,6 +1397,25 @@ public class GameScene extends BaseScene implements IOnSceneTouchListener, IOnMe
 
 	}
 
+	private void runTurbo() {
+		turboButton
+				.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.1f, 1f, 1.2f), new ScaleModifier(0.1f, 1.2f, 1f)) {
+					@Override
+					protected void onModifierStarted(IEntity pItem) {
+						super.onModifierStarted(pItem);
+						isTurboRunning=true;
+
+					}
+
+					@Override
+					protected void onModifierFinished(IEntity pItem) {
+						super.onModifierFinished(pItem);
+						isTurboRunning=false;
+					}
+				});
+		updateTurbo();
+
+	}
 
 	private boolean isPlayerArea(float f, float g) {
 		if ((f > player.getX() + 3 && f < (player.getX() + player.getWidth() - 3))

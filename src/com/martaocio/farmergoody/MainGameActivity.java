@@ -102,8 +102,6 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 
 		signInGoogleFragment = new SignInGoogleFragment();
 		
-		new LoadGoogleAchievementTask().execute(this);
-		UserState.getInstance().loadAchievementBox(AchievementHelper.getInstance(this).getAchievementBox());
 		
 		// signInGoogleFragment.setListener(this);
 
@@ -443,6 +441,11 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 		} else {
 			displayName = p.getDisplayName();
 		}
+		new LoadGoogleAchievementTask().execute(this);
+//		if(AchievementHelper.getInstance(this)!=null){
+//			UserState.getInstance().loadAchievementBox(AchievementHelper.getInstance(this).getAchievementBox());
+//		}
+	
 		
 		
 		// mMainMenuFragment.setGreeting("Hello, " + displayName);

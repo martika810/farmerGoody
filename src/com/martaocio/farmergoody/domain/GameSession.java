@@ -8,6 +8,7 @@ public class GameSession {
 	private int currentLevel=0;
 	private int currentMoney=0;
 	private int numberLifes = 0;
+	private int fuelpoints=100;//from 100 to 0
 	private int score =0;
 	private Vehicle vehicleUsed=Vehicle.NONE;
 	private GregorianCalendar lastModified=new GregorianCalendar();
@@ -16,6 +17,7 @@ public class GameSession {
 		this.currentLevel=0;
 		this.currentMoney=0;
 		this.numberLifes=0;
+		this.fuelpoints =100;
 		this.score=0;
 		this.vehicleUsed=Vehicle.NONE;
 		this.lastModified=new GregorianCalendar();
@@ -80,6 +82,14 @@ public class GameSession {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public int getFuelpoints() {
+		return fuelpoints;
+	}
+
+	public void setFuelpoints(int fuelpoints) {
+		this.fuelpoints = fuelpoints;
 	}
 
 }
