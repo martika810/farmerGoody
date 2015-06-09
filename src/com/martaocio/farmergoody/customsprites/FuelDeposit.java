@@ -10,6 +10,7 @@ public class FuelDeposit extends AnimatedSprite{
 	public static final float PORTION=20f;
 	public static final float EMPTY=0f;
 	public static final float FULL=100f;
+	public static final int PRICE_FILL_FUEL_DEPOSIT = 15;
 	
 	public FuelDeposit(float pX, float pY, float width, float height, VertexBufferObjectManager vbom){
 		super(pX, pY, width, height, ResourceManager.getInstance().fuelDepositTexture, vbom);

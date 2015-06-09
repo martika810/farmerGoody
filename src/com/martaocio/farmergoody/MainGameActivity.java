@@ -74,7 +74,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	FrameLayout fatJackPanelAdvert;
 	FatJackAdvertFragment fatjackAdvertFragment;
 	SignInGoogleFragment signInGoogleFragment;
-	ShareGoogleFragment shareGoogleFragment;
+	//ShareGoogleFragment shareGoogleFragment;
 	GooglePlayServicesFragment googlePlayServiceFragment;
 
 	// Client used to interact with Google APIs
@@ -337,17 +337,17 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 
 	}
 
-	public void addShareGoogleButton(GameSession gameSessionInfo) {
-		shareGoogleFragment = new ShareGoogleFragment();
-		shareGoogleFragment.setDataToShare(gameSessionInfo);
-		getFragmentManager().beginTransaction().add(CONTENT_VIEW_ID, shareGoogleFragment).commit();
-	}
-
-	public void removeShareGoogleButton() {
-		if (shareGoogleFragment != null) {
-			getFragmentManager().beginTransaction().hide(shareGoogleFragment).commit();
-		}
-	}
+//	public void addShareGoogleButton(GameSession gameSessionInfo) {
+//		shareGoogleFragment = new ShareGoogleFragment();
+//		shareGoogleFragment.setDataToShare(gameSessionInfo);
+//		getFragmentManager().beginTransaction().add(CONTENT_VIEW_ID, shareGoogleFragment).commit();
+//	}
+//
+//	public void removeShareGoogleButton() {
+//		if (shareGoogleFragment != null) {
+//			getFragmentManager().beginTransaction().hide(shareGoogleFragment).commit();
+//		}
+//	}
 
 	public boolean isSignedIn() {
 		return (mGoogleApiClient != null && mGoogleApiClient.isConnected());

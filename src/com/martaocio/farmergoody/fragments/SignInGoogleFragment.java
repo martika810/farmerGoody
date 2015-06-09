@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.SignInButton;
 import com.martaocio.farmergoody.MainGameActivity;
@@ -25,16 +26,15 @@ public class SignInGoogleFragment extends Fragment implements OnClickListener {
 	private static final String SAVED_PROGRESS = "sign_in_progress";
 
 	Listener mListener = null;
-	private SignInButton signInBtn;
 	boolean mShowSignIn = true;
-	private ImageButton googleServiceButton;
+	private ImageView googleServiceButton;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.button_sign_google_layout, container, false);
 
-		googleServiceButton = (ImageButton) rootView.findViewById(R.id.google_play_services);
+		googleServiceButton = (ImageView) rootView.findViewById(R.id.google_play_services);
 		googleServiceButton.setOnClickListener(this);
 
 		return rootView;

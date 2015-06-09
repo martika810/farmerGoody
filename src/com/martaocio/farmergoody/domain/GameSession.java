@@ -71,6 +71,8 @@ public class GameSession {
 	public void flush(){
 		this.currentLevel=0;
 		this.currentMoney=0;
+		this.numberLifes=0;
+		this.fuelpoints=0;
 		this.score=0;
 		this.vehicleUsed=Vehicle.NONE;
 		this.lastModified=new GregorianCalendar();

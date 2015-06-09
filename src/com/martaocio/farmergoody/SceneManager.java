@@ -5,6 +5,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import com.martaocio.farmergoody.domain.UserState;
 import com.martaocio.farmergoody.scenes.BaseScene;
 import com.martaocio.farmergoody.scenes.GameScene;
 import com.martaocio.farmergoody.scenes.InstructionScene;
@@ -315,7 +316,13 @@ public class SceneManager {
 
 	public void loadMainMenu(final Engine mEngine) {
 		setScene(loadingScene);
-		ResourceManager.getInstance().unloadGameGraphics();
+		boolean isTrainingLevel=(UserState.getInstance().getSelectedSession().getCurrentLevel()==0);
+		if(isTrainingLevel){
+			ResourceManager.getInstance().unloadTrainingGameGraphics();
+		}else{
+			ResourceManager.getInstance().unloadGameGraphics();
+		}
+		
 		// gameScene.disposeScene();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
 

@@ -1,42 +1,28 @@
 package com.martaocio.farmergoody.scenes;
 
-import java.util.LinkedList;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.MoveXModifier;
-import org.andengine.entity.modifier.MoveYModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
-import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
-import org.andengine.extension.tmx.TMXLoader;
-import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.util.HorizontalAlign;
-import org.andengine.util.debug.Debug;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.martaocio.farmergoody.ResourceManager;
-import com.martaocio.farmergoody.RockPool;
 import com.martaocio.farmergoody.SceneManager;
 import com.martaocio.farmergoody.SceneManager.SceneType;
-import com.martaocio.farmergoody.customsprites.TomatoScorer;
-import com.martaocio.farmergoody.domain.LevelType;
-import com.martaocio.farmergoody.providers.LevelProvider;
+import com.martaocio.farmergoody.customsprites.BasicGameIndicatorPanel;
 
-public class TrainingGame extends GameScene {
+public class TrainingGame extends AbstractGameScene {
 
 	private static final float POINT_FINGER_ANIMATION_START = 600;
 	private static final float POINT_DISPLAY_TAP_ON_PLAYER_TIP = 2000;
@@ -55,63 +41,52 @@ public class TrainingGame extends GameScene {
 	
 	@Override
 	public void createScene() {
-		super.createPhysicsWorld();
+		super.createScene();
 		createLevel();
-		super.createLevelFailedScene();
-		//super.createLevelNoMoneyScene();
-		//createLevelClearedScene();
+		
 
 	}
 
-	private void createLevel() {
+	public void createLevel() {
 
-		RockPool.prepareRockPool(resourceManager.rockLineTexture, vbom, camera, this);
-		rockPool = RockPool.getInstance();
-		createGameIndicators();
+		super.createLevel();
+		
+		gameIndicatorController=new BasicGameIndicatorPanel();
+		gameIndicatorController.createGameIndicator(vbom);
+		
+		createExplanationPopups();
+		
+		// that heads up the display
+		hud = new HUD();
+		gameIndicatorController.attachGameIndicatorToHud(hud);
+		attachButtonsToHud();
 
-		createButtons();
+		
+		hud.attachChild(tapPlayerExplanation);
+		hud.attachChild(pressJumpExplanation);
+		hud.attachChild(againstBullExplanation);
+		hud.attachChild(drawLineExplanation);
+		hud.attachChild(textTapPlayer);
+		hud.attachChild(textDrawLine);
+		hud.attachChild(textAgainstBull);
+		hud.attachChild(textPressJump);
+		hud.attachChild(takeLifeExplanation);
+		hud.attachChild(textTakeLife);
 
-		tomatos = new LinkedList<Sprite>();
-		fencesBodies = new LinkedList<Body>();
-		pathScoreIndicators = new LinkedList<Sprite>();
 
-		try {
-			TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
-					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
+		
 
-			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(0));
+		this.camera.setHUD(hud);
+		
+		this.setOnSceneTouchListener(this);
+		this.setTouchAreaBindingOnActionMoveEnabled(true);
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 
-		} catch (TMXLoadException e) {
+		createUpdateHandler();
 
-			Debug.e(e);
-			e.printStackTrace();
-		}
-
-		// Create all the objects from the TMXLayer
-		createObjectTMXLayer();
-
-		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);// to get the first
-		// layer
-
-		attachChild(tmxLayer);
-
-		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(1);
-
-		attachChild(tmxLayer);
-		if (this.mTMXTiledMap.getTMXLayers().size() > 2) {
-			tmxLayer = this.mTMXTiledMap.getTMXLayers().get(2);
-			attachChild(tmxLayer);
-		}
-
-		for (Sprite tomato : tomatos) {
-			this.attachChild(tomato);
-
-		}
-
-		kickoffPlayer();
-
-		kickoffBull();
-
+	}
+	
+	private void createExplanationPopups(){
 		tapPlayerExplanation = new Sprite(player.getX() - 100, 100, resourceManager.tapPlayerExplanation, vbom);
 		tapPlayerExplanation.setVisible(false);
 
@@ -143,57 +118,11 @@ public class TrainingGame extends GameScene {
 		textPressJump = new Text(320, 60, this.resourceManager.font, "Press Jump!",
 				new TextOptions(HorizontalAlign.CENTER), vbom);
 		textPressJump.setVisible(false);
-		
-		
-		
-
-		// that heads up the display
-		hud = new HUD();
-
-		hud.attachChild(tomatoScoreIcon);
-		hud.attachChild(textScore);
-		hud.attachChild(tapPlayerExplanation);
-		hud.attachChild(pressJumpExplanation);
-		hud.attachChild(againstBullExplanation);
-		hud.attachChild(drawLineExplanation);
-		hud.attachChild(textTapPlayer);
-		hud.attachChild(textDrawLine);
-		hud.attachChild(textAgainstBull);
-		hud.attachChild(textPressJump);
-		hud.attachChild(takeLifeExplanation);
-		hud.attachChild(textTakeLife);
-
-		hud.attachChild(title);
-		hud.attachChild(jumpButton);
-
-		hud.registerTouchArea(jumpButton);
-
-		setOnSceneTouchListener(this);
-		this.setTouchAreaBindingOnActionMoveEnabled(true);
-		this.setTouchAreaBindingOnActionDownEnabled(true);
-
-		this.camera.setHUD(hud);
-
-		createUpdateHandler();
 
 	}
 
-	private void createGameIndicators() {
-		score = 10;
 
-		levelTotalPoints = LevelType.TRAINING_LEVEL.getTotalPoints();
-		tomatoScoreIcon = new TomatoScorer(20, 100, 200, 80, vbom);
-		title = new Sprite(693, 5, 107, 50, ResourceManager.getInstance().title, vbom);
-
-		tomatoScoreIcon.setPosition(20, 20);
-		textScore = new Text(40, 50, this.resourceManager.font, score + "    ", new TextOptions(HorizontalAlign.CENTER), vbom);
-
-		tomatoScoreIcon.setTag(TAG_TOMAT_ICON);
-		textScore.setTag(TAG_SCORE_TEXT);
-
-	}
-
-	protected void createUpdateHandler() {
+	public void createUpdateHandler() {
 		this.registerUpdateHandler(new IUpdateHandler() {
 
 			@Override
@@ -327,28 +256,7 @@ public class TrainingGame extends GameScene {
 		});
 	}
 	
-	private void createAgainstBullExplanation() {
 
-		againstBullExplanation.registerEntityModifier(new SequenceEntityModifier(new DelayModifier(25f)) {
-			@Override
-			protected void onModifierStarted(IEntity pItem) {
-				super.onModifierStarted(pItem);
-				againstBullExplanation.setVisible(true);
-				textAgainstBull.setVisible(true);
-			}
-
-			@Override
-			protected void onModifierFinished(IEntity pItem) {
-				super.onModifierFinished(pItem);
-				// tapPlayerExplanation.setBlendFunction(GL10.GL_SRC_ALPHA,
-				// GL10.GL_ONE_MINUS_SRC_ALPHA);
-				againstBullExplanation.setVisible(false);
-				textAgainstBull.setVisible(false);
-				wasAgainstBullExplantion = true;
-
-			}
-		});
-	}
 	
 	private void createTakeLifeExplanation() {
 
@@ -373,7 +281,7 @@ public class TrainingGame extends GameScene {
 		});
 	}
 
-	protected void createButtons() {
+	public void createButtons() {
 		jumpButton = new Sprite(320, 380, 164, 70, ResourceManager.getInstance().jumpBtnTextute, vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float X, float Y) {
@@ -388,29 +296,6 @@ public class TrainingGame extends GameScene {
 
 	}
 
-	protected void createLevelClearedScene() {
-		levelCleared = new MenuScene(camera);
-		levelCleared.setPosition(0, 0);
-
-		IMenuItem playButton = new ScaleMenuItemDecorator(new SpriteMenuItem(KEEP_PLAYING, resourceManager.playButton, vbom), 1.2f, 0.9f);
-		IMenuItem quitButton = new ScaleMenuItemDecorator(new SpriteMenuItem(QUIT, resourceManager.quitButton, vbom), 1.2f, 0.9f);
-
-		Sprite bg = new Sprite(0, 0, resourceManager.passedBG, vbom);
-
-		levelCleared.attachChild(bg);
-		// bg.setCullingEnabled(true);
-		levelCleared.setBackgroundEnabled(false);
-
-		levelCleared.addMenuItem(playButton);
-		levelCleared.addMenuItem(quitButton);
-
-		levelCleared.buildAnimations();
-
-		playButton.setPosition(300, 270);
-		quitButton.setPosition(400, 270);
-
-		levelCleared.setOnMenuItemClickListener(this);
-	}
 
 	private void startGame() {
 
@@ -444,14 +329,9 @@ public class TrainingGame extends GameScene {
 		SceneManager.getInstance().reloadTrainingGameScene(engine);
 	}
 	
-	@Override
+	
 	public void restartLevel() {
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				activity.removeShareGoogleButton();
-			}
-		});
+		
 		centerCamera();
 		showGameIndicators(false);
 		this.setChildScene(levelFailed);
@@ -496,31 +376,14 @@ public class TrainingGame extends GameScene {
 
 			break;
 
-		case UNPAUSE:
-
-			reset();
-
-			break;
+		
 		}
 
 		return false;
 	}
 	
-	@Override
-	public void updateGameIndicators(int points) {
-		score += points;
-		textScore.setText("" + score);
-		if (points > 0) {
-			resourceManager.goodSound.play();
-		} else {
-			resourceManager.badSound.play();
-		}
-		percentage = (score * 100) / levelTotalPoints;
-		
-
-		tomatoScoreIcon.update(percentage);
-
-	}
+	
+	
 
 	private SequenceEntityModifier createFingerSequenceModifier() {
 
@@ -544,5 +407,54 @@ public class TrainingGame extends GameScene {
 		};
 		return fingerSequenceModifier;
 	}
+	
+	public void showGameIndicators(boolean shouldShow) {
+		jumpButton.setVisible(shouldShow);
+		
+		gameIndicatorController.show(shouldShow);
+		
+		
+	}
+
+	@Override
+	public void updatePlayerNumberLifes(int pointToUpdate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeLife(Body body) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void attachButtonsToHud() {
+		hud.attachChild(jumpButton);
+		hud.registerTouchArea(jumpButton);
+
+		
+		
+	}
+	
+	public void hideControlButtons() {
+		super.hideControlButtons();
+		showExplanationPanels(false);
+	}
+	
+	
+	
+	private void showExplanationPanels(boolean shouldShown){
+		tapPlayerExplanation.setVisible(shouldShown);
+		textTapPlayer.setVisible(shouldShown);
+		takeLifeExplanation.setVisible(shouldShown);
+		textPressJump.setVisible(shouldShown);
+		pressJumpExplanation.setVisible(shouldShown);
+		textDrawLine.setVisible(shouldShown);
+		drawLineExplanation.setVisible(shouldShown);
+	}
+
+	
+
 
 }

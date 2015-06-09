@@ -593,8 +593,9 @@ public class ResourceManager {
 		this.tomatoScorerAtlas.unload();
 		this.levelFailedAtlas.unload();
 		this.popupTextureAtlas.unload();
-		
-		this.playerRidingTexturesAtlas.unload();
+		if(playerRidingTexturesAtlas!=null){
+			this.playerRidingTexturesAtlas.unload();
+		}
 //		this.levelPassedAtlas.unload();
 //		this.levelNoMoneyAtlas.unload();
 		setGameResourcesToNull();
