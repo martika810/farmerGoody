@@ -164,7 +164,7 @@ public abstract class Player extends AnimatedSprite {
 	// make the player jumps
 	public void jump() {
 		// first stop the player from running
-		if (canJump) {
+		//if (canJump) {
 
 			ResourceManager.getInstance().jumpSound.play();
 			// comment this if the walking animation is gonna keep running while
@@ -187,14 +187,14 @@ public abstract class Player extends AnimatedSprite {
 
 			}
 
-			canJump = false;
+			//canJump = false;
 
-			Vector2 velocity = new Vector2(0, -13); // set the height of the
+			Vector2 velocity = new Vector2(0, -8); // set the height of the
 													// jump(10 metres off the
 													// ground)
 
 			body.setLinearVelocity(velocity);
-		}
+	//	}
 	}
 
 	public void eat() {

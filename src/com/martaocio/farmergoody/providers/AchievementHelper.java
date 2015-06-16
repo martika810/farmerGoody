@@ -23,6 +23,7 @@ public class AchievementHelper {
 	private Context context;
 	private static AchievementHelper INSTANCE = null;
 	public static int NUMBER_POINTS_PER_STEP = 200;
+	public static int ANTARCTICA_PRICE=1000;
 	public AchievementBox achievementBox;
 
 
@@ -52,16 +53,18 @@ public class AchievementHelper {
 				&& (moneyPoints % NUMBER_POINTS_PER_STEP == 0);
 		boolean justGotFirstMoto = !achievementBox.isFirstMotoAchievement()
 				&& (moneyPoints >= Vehicle.BICYCLE.getPrice() && moneyPoints < Vehicle.SCOOTER.getPrice());
-		boolean isProgressForScooter = achievementBox.isFirstMotoAchievement()
+		boolean isProgressForScooter = !achievementBox.isScooterAchievement()
 				&& (moneyPoints > Vehicle.BICYCLE.getPrice() && moneyPoints < Vehicle.SCOOTER.getPrice())
 				&& (moneyPoints % NUMBER_POINTS_PER_STEP == 0);
-		boolean justGotScooter = !achievementBox.isMonocycleAchievement()
+		boolean justGotScooter = !achievementBox.isScooterAchievement()
 				&& (moneyPoints >= Vehicle.SCOOTER.getPrice() && moneyPoints < Vehicle.HARLEY.getPrice());
-		boolean isProgressForCoolMoto = achievementBox.isMonocycleAchievement()
+		boolean isProgressForCoolMoto = !achievementBox.isCoolMotoAchievement()
 				&& (moneyPoints >= Vehicle.SCOOTER.getPrice() && moneyPoints < Vehicle.HARLEY.getPrice())
 				&& (moneyPoints % NUMBER_POINTS_PER_STEP == 0);
-		boolean justGotCoolMoto = !achievementBox.isMonocycleAchievement() && (moneyPoints >= Vehicle.HARLEY.getPrice());
-		boolean justGotAntarctica = !achievementBox.isMonocycleAchievement() && (moneyPoints >= 1200);
+		boolean justGotCoolMoto = !achievementBox.isCoolMotoAchievement() && (moneyPoints >= Vehicle.HARLEY.getPrice());
+		boolean isProgresAntarctica = !achievementBox.isAntarcticaAchievement() && achievementBox.isCoolMotoAchievement() &&
+				(moneyPoints>0 && moneyPoints<ANTARCTICA_PRICE)&& (moneyPoints % NUMBER_POINTS_PER_STEP == 0);
+		boolean justGotAntarctica = !achievementBox.isAntarcticaAchievement() && (moneyPoints >= ANTARCTICA_PRICE);
 
 		if (justGotMonocycle) {
 
@@ -70,7 +73,7 @@ public class AchievementHelper {
 			return;
 		}
 		if (isProgressForFirstMoto) {
-			achievementBox.increaseNumberStepsFirstMoto();
+			achievementBox.setNumberStepsFirstMoto(moneyPoints/NUMBER_POINTS_PER_STEP);
 			return;
 		}
 		if (justGotFirstMoto) {
@@ -79,7 +82,7 @@ public class AchievementHelper {
 			return;
 		}
 		if (isProgressForScooter) {
-			achievementBox.increaseNumberStepsScooter();
+			achievementBox.setNumberStepsScooter(moneyPoints/NUMBER_POINTS_PER_STEP);
 			return;
 		}
 
@@ -90,12 +93,21 @@ public class AchievementHelper {
 		}
 
 		if (isProgressForCoolMoto) {
-			achievementBox.increaseNumberStepsCoolMoto();
+			achievementBox.setNumberStepsCoolMoto(moneyPoints/NUMBER_POINTS_PER_STEP);
 			return;
 		}
 		if (justGotCoolMoto) {
 			achievementBox.setCoolMotoAchievement(true);
 			UserStateUtil.addVehicle(Vehicle.HARLEY, Vehicle.HARLEY.getPrice());
+			return;
+		}
+		if(isProgresAntarctica){
+			achievementBox.setNumberStepsAntartica(moneyPoints/NUMBER_POINTS_PER_STEP);
+			return;
+		}
+		if(justGotAntarctica){
+			achievementBox.setAntarcticaAchievement(true);
+			UserState.getInstance().setCanGoToAntarctica(true);
 			return;
 		}
 
@@ -122,6 +134,12 @@ public class AchievementHelper {
 		}
 		if (achievementBox.isCoolMotoAchievement()) {
 			activity.unlockAchievement(R.string.coolmoto_achievements, "fallback string");
+		}
+		if(achievementBox.getNumberStepsAntartica() > 0){
+			activity.incrementAchievement(R.string.antart_achievements, achievementBox.getNumberStepsAntartica());
+		}
+		if(achievementBox.isAntarcticaAchievement()){
+			activity.unlockAchievement(R.string.antart_achievements, "fallback string");
 		}
 
 	}
@@ -170,6 +188,13 @@ public class AchievementHelper {
 		if (isCoolMotoAchiviement) {
 			boxToUpdate.setNumberStepsCoolMoto(steps);
 			boxToUpdate.setCoolMotoAchievement(isUnlocked);
+			return;
+		}
+		
+		boolean isAntarcticaAchiviement = (achiviementId.equals(activity.getString(R.string.antart_achievements)));
+		if (isAntarcticaAchiviement) {
+			boxToUpdate.setNumberStepsAntartica(steps);
+			boxToUpdate.setAntarcticaAchievement(isUnlocked);
 			return;
 		}
 

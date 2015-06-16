@@ -12,6 +12,7 @@ public class AchievementBox {
 	private int numberStepsFirstMoto = 0;
 	private int numberStepsScooter = 0;
 	private int numberStepsCoolMoto = 0;
+	private int numberStepsAntartica = 0;
 
 
 	public boolean isEmpty() {
@@ -70,6 +71,18 @@ public class AchievementBox {
 		this.antarcticaAchievement = antarcticaAchievement;
 	}
 	
+	public int getNumberStepsAntartica() {
+		return numberStepsAntartica;
+	}
+
+	public void setNumberStepsAntartica(int numberStepsAntartica) {
+		this.numberStepsAntartica = numberStepsAntartica;
+	}
+	
+	public void increaseStepsAntartica() {
+		this.numberStepsAntartica ++;
+	}
+
 	public int getNumberStepsFirstMoto() {
 		return numberStepsFirstMoto;
 	}

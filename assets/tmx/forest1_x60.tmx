@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="330" height="15" tilewidth="32" tileheight="32" nextobjectid="30">
+ <tileset firstgid="1" name="forest_tileset_x60" tilewidth="32" tileheight="32">
+  <image source="gfx/forest_tileset_x60.png" width="800" height="1300"/>
+ </tileset>
+ <layer name="sky" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzVW3lQUUQNFzzyVEUVHBwCBMbBFBBQzE7sBCsFExQMEAxUJQMC/d3d3d3d3d3d04/8Y3xn6YL+tlZWWkUg1oSCMa04SmNKM5LWhJK1rThra0oz0d6EgnOtOFrnSjO1nxiEc84pHgRw960ove9KEv/ejPAAYyiMEMYSjDGM4IRjKK0YxhLOMYz4R4xCMe8Uj4YyKTmMwUpjKN6cxgJrOYzRzmMo/5LGAhi1jMEpayjOWsYGU84hGPeCT8sYrVrGEt61jPBjayic1sYSvb2M4OdrKL3exhL/vYzwEOcige8YhHPBL+OMwRjnKM45zgJKc4zRnOkkqnUhmkySQb2clBTs4hF+dyHrk5Px2PeMQjHsl+XKBfSB4u4mIuIS/5uJTLuJwryM+VXMXVXEMBClKIwlzLdVzPDel4xCMe8Uj240Zuogg3cwu3chu3cwd3chdFuZti3ENxSnAv93E/JSlFaR7gwXjEIx7xSPjjIR6mDI9Qlkd5jMd5gid5iqd5hmd5jud5gRd5iZd5hXK8ymu8Ho94xCMeCX+8wZuU5y0qUJG3eYd3eY/3+YAPqcRHfMwnVOZTPuNzvqAKVfkyHvGIRzwS/viKalTna77hW76jBjX5nh+oxY/8xM/8wq/U5jfqUJff+YN61I9HPOIRj4Q//uQv/uYf/uU/smhAQxrRmCY0pRnNaUFLWtGaNrSlHe3pQMd4xCMe8Uj4oxOd6UJXutGdHvSkF73pQ1/60Z8BDGQQgxnCUIYxnBGMZFQ84hGPeCT8MZoxjGUc45nARCYxmSlMZRrTmcFMZjGbOcxlHvNZwEIWsTge8YhHPBL+WMJSlrGcFaxkFatZw1rWsZ4NbGQTm9nCVraxnR3sZBe72ROPeMQjHgl/7GUf+znAQQ5xmCMc5RjHOcFJTnGaM5wllZlKZZAmk2xkJwc5M+MRj3jEI9mP/wEKcDCY
+  </data>
+ </layer>
+ <layer name="ground" width="330" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztmEduVEEQhh8eCfAJWBJE2LIkCGO4AUHYhhsQhG24AUEi7QERJNIeEOEMgAinIJyCfzk8al5XdVVXFTMsvtXI/X9dVd3T47mu6+YSsRPsArvBngQ+/7HvW4seW62Zef6G3A6BBXAYLCZwjZqtaaVfg0z9pvrj2TNtlqerpG8temy1JnediLM75HYKLIFlsOLk41WDTHdCFP0aRPRb0h/LnpXmTJul+XvpGZD0zaLHfb+aNak9ctehatv63hhyuwhWwRpYb5BtPV+a3s7C+7JUg1b9rqktNZeW93hpzqRZFncHx42qpaRvFj3u+9WsSe2Ruw5V29bvHsot8vdNqzdNqbez8L60mG+LXM7fUG4aX+mcSbNqajvpnA25RcxpizOqWYOqreW9wb3/PHvhdXZLdcz0m7MFGx33WDpX88r1JHveBDZ37eespraTztmQW8Sclmon7WdpjzXzIFlvfC4od+7917IXfUevvpfqaNH7zGxl1MCK0rnaoVxPsudtYHv395yNfyb1qZkviprZj/hfGOVpXT+PeaDmgnLn9qVlL/qOXn3n9DWy963ZB/aDA+Bg4yxqzjT5td+l45n9OfOsxyRKs0+9myK8Kc/I+mnfViX3iO8iqWNkboaz04pj4Dg4AU42zqLmTJNfO7f9zPkxPOtR2xPq3ZTBO9pDe49lqWFGR07uv1C/Ws6Cc+A8uDAj+UOZ0fXgOFDvpgzemTym1T3KkZNr7bYwwlsALIIj4Ogoru5XwFVwDVyfkfyhzOh6cByod1MG70we0+oe5cjJtXZbwr24DFbAaXAm8J58AB6CR+CxwXp3wT1wPyhfm6n1ke7fqiYWdYxy9/SLcrfak6WjJJuTK3Ur5a/iXlwD6+ASuBx4T74Bb8E78N5gvZfgFXgdlK/N1PpI929VE4s6Rrl7+kW5W+3J0lGSzcmVupXyb+BevAlugdvgTu+e3LLBj8/I+wK+gm8G2R+wxkfwibmWdb42U+sj3b9VTSzqGOXu6RflbrUnS0dJNidX6lbKf4J78Sl4Bp6DF6M/P9/ryHc4/gA/wa/ONzsqfygzuh61Dhm8M3lMq3uUIyfX2+03sx8TRw==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="0" height="0">
+  <object id="1" name="ground" x="-11" y="433" width="10574" height="49"/>
+  <object id="2" name="t10" x="512" y="351" width="36" height="37"/>
+  <object id="3" name="t10" x="575" y="353" width="41" height="36"/>
+  <object id="4" name="t10" x="640" y="352" width="39" height="38"/>
+  <object id="6" name="end" x="10313" y="58" width="236" height="361"/>
+  <object id="7" name="ground" x="1192" y="89" width="57" height="10"/>
+  <object id="9" name="ground" x="2469" y="123" width="61" height="7"/>
+  <object id="11" name="ground" x="2950" y="218" width="60" height="9"/>
+  <object id="12" name="ground" x="3845" y="121" width="58" height="10"/>
+  <object id="14" name="ground" x="4386" y="317" width="63" height="8"/>
+  <object id="16" name="ground" x="6147" y="155" width="65" height="7"/>
+  <object id="17" name="ground" x="6628" y="122" width="62" height="9"/>
+  <object id="19" name="ground" x="7714" y="186" width="61" height="8"/>
+  <object id="23" name="fence" x="1515" y="383" width="53" height="48"/>
+  <object id="24" name="fence" x="3564" y="381" width="55" height="49"/>
+  <object id="25" name="fence" x="5068" y="384" width="56" height="49"/>
+  <object id="26" name="fence" x="6347" y="381" width="55" height="53"/>
+  <object id="27" name="fence" x="8043" y="380" width="54" height="51"/>
+  <object id="28" name="fence" x="9034" y="382" width="57" height="50"/>
+  <object id="29" name="fence" x="10064" y="383" width="56" height="50"/>
+  <object id="30" name="mt20" x="799" y="352" width="40" height="41"/>
+  <object id="31" name="t10" x="958" y="125" width="36" height="40"/>
+  <object id="32" name="t10" x="1054" y="65" width="40" height="38"/>
+  <object id="33" name="mt20" x="1214" y="30" width="38" height="39"/>
+  <object id="34" name="t10" x="1088" y="320" width="37" height="38"/>
+  <object id="35" name="t5" x="1342" y="317" width="39" height="42"/>
+  <object id="36" name="mt20" x="1505" y="222" width="35" height="40"/>
+  <object id="37" name="t5" x="1772" y="200" width="41" height="41"/>
+  <object id="38" name="t5" x="1904" y="135" width="40" height="42"/>
+  <object id="39" name="mt20" x="1983" y="125" width="40" height="39"/>
+  <object id="40" name="mt10" x="2305" y="63" width="37" height="41"/>
+  <object id="41" name="t10" x="2478" y="62" width="32" height="40"/>
+  <object id="42" name="t5" x="2407" y="195" width="42" height="40"/>
+  <object id="43" name="mt20" x="2303" y="350" width="38" height="41"/>
+  <object id="44" name="t10" x="3039" y="12" width="39" height="41"/>
+  <object id="45" name="mt20" x="2975" y="159" width="39" height="44"/>
+  <object id="46" name="t5" x="3106" y="62" width="38" height="41"/>
+  <object id="47" name="t5" x="3009" y="352" width="35" height="39"/>
+  <object id="48" name="t5" x="3359" y="30" width="40" height="42"/>
+  <object id="49" name="mt20" x="3423" y="352" width="41" height="41"/>
+  <object id="50" name="t5" x="3744" y="126" width="38" height="42"/>
+  <object id="51" name="t5" x="3870" y="61" width="38" height="40"/>
+  <object id="52" name="mt20" x="3776" y="351" width="38" height="40"/>
+  <object id="53" name="mt20" x="3934" y="349" width="40" height="43"/>
+  <object id="54" name="mt20" x="4158" y="161" width="39" height="40"/>
+  <object id="55" name="t5" x="4033" y="63" width="39" height="41"/>
+  <object id="56" name="t5" x="4320" y="61" width="38" height="41"/>
+  <object id="57" name="t5" x="4400" y="260" width="38" height="41"/>
+  <object id="58" name="mt20" x="4543" y="30" width="41" height="42"/>
+  <object id="59" name="t5" x="4578" y="123" width="40" height="41"/>
+  <object id="60" name="t5" x="4674" y="321" width="39" height="41"/>
+  <object id="61" name="mt20" x="5122" y="284" width="37" height="43"/>
+  <object id="62" name="t5" x="5086" y="32" width="38" height="37"/>
+  <object id="63" name="mt20" x="5634" y="92" width="39" height="41"/>
+  <object id="64" name="t10" x="5729" y="33" width="42" height="36"/>
+  <object id="65" name="t5" x="5504" y="161" width="40" height="39"/>
+  <object id="66" name="t5" x="5533" y="349" width="39" height="40"/>
+  <object id="67" name="mt20" x="5856" y="349" width="42" height="42"/>
+  <object id="68" name="t5" x="6175" y="94" width="40" height="42"/>
+  <object id="69" name="t5" x="6399" y="317" width="38" height="41"/>
+  <object id="70" name="mt20" x="6337" y="31" width="36" height="41"/>
+  <object id="71" name="t5" x="6625" y="65" width="37" height="39"/>
+  <object id="72" name="t5" x="6816" y="96" width="38" height="40"/>
+  <object id="73" name="mt20" x="6719" y="64" width="39" height="40"/>
+  <object id="74" name="t5" x="6656" y="189" width="40" height="41"/>
+  <object id="75" name="mt20" x="7135" y="158" width="38" height="39"/>
+  <object id="76" name="t5" x="7104" y="318" width="40" height="45"/>
+  <object id="77" name="t5" x="7264" y="285" width="39" height="40"/>
+  <object id="78" name="t5" x="7427" y="160" width="40" height="42"/>
+  <object id="79" name="t5" x="7581" y="32" width="38" height="38"/>
+  <object id="80" name="mt20" x="7487" y="286" width="39" height="42"/>
+  <object id="81" name="t10" x="7712" y="94" width="39" height="43"/>
+  <object id="82" name="mt20" x="7937" y="127" width="41" height="42"/>
+  <object id="83" name="t5" x="7807" y="6" width="39" height="41"/>
+  <object id="84" name="mt20" x="8480" y="193" width="40" height="40"/>
+  <object id="85" name="t5" x="8607" y="128" width="40" height="42"/>
+  <object id="86" name="t5" x="8258" y="320" width="37" height="37"/>
+  <object id="87" name="t5" x="8448" y="317" width="40" height="43"/>
+  <object id="88" name="t5" x="8734" y="66" width="38" height="37"/>
+  <object id="89" name="mt20" x="8672" y="319" width="36" height="41"/>
+  <object id="90" name="t5" x="9057" y="128" width="36" height="40"/>
+  <object id="91" name="mt20" x="9697" y="97" width="39" height="42"/>
+  <object id="92" name="t5" x="9217" y="321" width="40" height="41"/>
+  <object id="93" name="t5" x="9567" y="33" width="37" height="39"/>
+  <object id="94" name="t5" x="9441" y="66" width="39" height="39"/>
+  <object id="95" name="t5" x="9504" y="319" width="37" height="42"/>
+  <object id="96" name="mt10" x="9634" y="320" width="36" height="43"/>
+  <object id="97" name="life" x="4739" y="34" width="39" height="39"/>
+  <object id="1" name="ground" x="9540" y="91" width="62" height="10"/>
+  <object id="2" name="ground" x="7779" y="58" width="61" height="8"/>
+  <object id="3" name="ground" x="6788" y="154" width="62" height="9"/>
+  <object id="4" name="ground" x="6305" y="90" width="62" height="9"/>
+  <object id="5" name="ground" x="5730" y="92" width="65" height="7"/>
+  <object id="6" name="ground" x="5060" y="93" width="65" height="7"/>
+  <object id="7" name="ground" x="3718" y="187" width="58" height="10"/>
+  <object id="8" name="ground" x="3718" y="187" width="58" height="10"/>
+  <object id="10" name="ground" x="3331" y="123" width="58" height="10"/>
+  <object id="11" name="ground" x="2307" y="124" width="61" height="7"/>
+  <object id="12" name="ground" x="1061" y="124" width="57" height="10"/>
+  <object id="13" name="ground" x="1767" y="250" width="57" height="10"/>
+  <object id="14" name="ground" x="1896" y="187" width="57" height="10"/>
+  <object id="15" name="ground" x="2402" y="251" width="61" height="7"/>
+  <object id="16" name="ground" x="3076" y="154" width="59" height="8"/>
+  <object id="17" name="ground" x="4132" y="216" width="58" height="10"/>
+  <object id="18" name="ground" x="4329" y="152" width="58" height="10"/>
+  <object id="19" name="ground" x="4548" y="187" width="63" height="8"/>
+  <object id="20" name="ground" x="4709" y="91" width="63" height="8"/>
+  <object id="21" name="ground" x="5602" y="154" width="65" height="7"/>
+  <object id="22" name="ground" x="5476" y="222" width="65" height="7"/>
+  <object id="23" name="ground" x="6628" y="251" width="62" height="9"/>
+  <object id="24" name="ground" x="7557" y="91" width="61" height="8"/>
+  <object id="25" name="ground" x="7394" y="219" width="61" height="8"/>
+  <object id="26" name="ground" x="8580" y="188" width="61" height="8"/>
+  <object id="27" name="ground" x="8709" y="123" width="61" height="8"/>
+  <object id="28" name="ground" x="9409" y="154" width="62" height="10"/>
+  <object id="29" name="ground" x="9668" y="156" width="62" height="10"/>
+ </objectgroup>
+</map>

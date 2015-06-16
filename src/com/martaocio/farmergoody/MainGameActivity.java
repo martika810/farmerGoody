@@ -223,8 +223,15 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	protected void onPause() {
 
 		super.onPause();
+		getEngine().stop();
 		// hideFatJackAdvert();
 		// System.exit(0);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getEngine().start();
 	}
 
 	@Override
@@ -356,6 +363,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
 		Log.i(TAG, "Try connect onStart");
 		mGoogleApiClient.connect();
 	}

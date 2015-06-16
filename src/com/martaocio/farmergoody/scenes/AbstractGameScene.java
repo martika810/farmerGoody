@@ -50,9 +50,11 @@ import com.martaocio.farmergoody.customsprites.Bull;
 import com.martaocio.farmergoody.customsprites.GameIndicatorPanel;
 import com.martaocio.farmergoody.customsprites.Player;
 import com.martaocio.farmergoody.customsprites.RockSprite;
+import com.martaocio.farmergoody.domain.AchievementBox;
 import com.martaocio.farmergoody.domain.LevelType;
 import com.martaocio.farmergoody.domain.UserState;
 import com.martaocio.farmergoody.domain.Vehicle;
+import com.martaocio.farmergoody.providers.AchievementHelper;
 import com.martaocio.farmergoody.providers.LevelProvider;
 import com.martaocio.farmergoody.providers.TomatoResourceHelper;
 import com.martaocio.farmergoody.util.GameUtils;
@@ -440,11 +442,19 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 		lifes = new LinkedList<Sprite>();
 		fencesBodies = new LinkedList<Sprite>();
 		
+		int currentLevel=UserState.getInstance().getSelectedSession().getCurrentLevel();
+		boolean isTrainingLevel=currentLevel ==0;
 		try {
 			TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
-
-			this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(0));
+			
+			
+			if(isTrainingLevel){
+				this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(0,null));
+			}else{
+				this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(currentLevel,AchievementHelper.getInstance(activity).getAchievementBox()));
+			}
+			
 
 		} catch (TMXLoadException e) {
 
@@ -467,7 +477,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 			tmxLayer = this.mTMXTiledMap.getTMXLayers().get(2);
 			attachChild(tmxLayer);
 		}
-		int currentLevel = UserState.getInstance().getSelectedSession().getCurrentLevel();
+		
 		levelTotalPoints = LevelType.getLevelType(currentLevel).getTotalPoints();
 		
 		for (Sprite tomato : tomatos) {
@@ -528,7 +538,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 					lifeSprite.setUserData(body);
 
 				} else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
-					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 50, 50, TomatoResourceHelper.getTomatoResource(object
+					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 40, 40, TomatoResourceHelper.getTomatoResource(object
 							.getName()), vbom);
 
 					tomatoType.setCullingEnabled(true);
@@ -570,7 +580,8 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 		Player player = null;
 		Vehicle vehicleSelected = UserState.getInstance().getSelectedSession().getVehicleUsed();
 		if (vehicleSelected.equals(Vehicle.NONE)) {
-			player = new Player(400, 150, 100, 110, vbom, camera, mPhysicsWorld) {
+			//before 100 and 110
+			player = new Player(400, 150, 70, 77, vbom, camera, mPhysicsWorld) {
 
 				@Override
 				public void onDie() {
@@ -578,7 +589,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 				}
 			};
 		} else {
-			player = new Player(400, 150, 130, 140, vbom, camera, mPhysicsWorld) {
+			player = new Player(400, 150, 91, 98, vbom, camera, mPhysicsWorld) {
 
 				@Override
 				public void onDie() {
@@ -591,7 +602,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 	
 	protected void kickoffBull() {
 		// Attach bull
-		bull = new Bull(50, 150, 150, 150, vbom, camera, mPhysicsWorld);
+		bull = new Bull(50, 150, 103, 103, vbom, camera, mPhysicsWorld);
 
 		// animate the player
 		bull.setRunning();
