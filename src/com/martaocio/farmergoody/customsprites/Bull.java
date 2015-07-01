@@ -24,6 +24,7 @@ public class Bull extends AnimatedSprite {
 	
 	public Bull(float pX,float pY,float width,float height,VertexBufferObjectManager vbom,BoundCamera camera,PhysicsWorld physicsWorld){
 		super(pX,pY,width,height,ResourceManager.getInstance().bullTexture,vbom);
+		this.setOnTop(true);
 		createPhysics(camera,physicsWorld);
 		
 	}

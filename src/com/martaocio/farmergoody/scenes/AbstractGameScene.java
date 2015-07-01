@@ -42,6 +42,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.martaocio.farmergoody.BodyGroups;
 import com.martaocio.farmergoody.MainGameActivity;
+import com.martaocio.farmergoody.ResourceManager;
 import com.martaocio.farmergoody.RockPool;
 import com.martaocio.farmergoody.SpriteTag;
 import com.martaocio.farmergoody.SceneManager.SceneType;
@@ -84,14 +85,17 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 	protected LinkedList<Sprite> fencesBodies;
 	protected LinkedList<Sprite> tomatos;
 	protected LinkedList<Sprite> lifes;
+	protected LinkedList<Sprite> mistakeIndicatorList;
 	protected boolean isGameVisible = true;
 	
 	///////GAME INDICATOR AND CONTROLS//////////
 	public BasicGameIndicatorPanel gameIndicatorController;
 	public Sprite jumpButton;
+	public int mistakeCounter;
 	
 	///////////////TMX OBJECTS///////////////////////
 	protected TMXTiledMap mTMXTiledMap;
+	protected TMXTiledMap mNextTMXTiledMap=null;
 	protected TMXLayer tmxLayer;
 	
 	///////PANELS/////////////////
@@ -278,19 +282,19 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 					
 
 					if (GameUtils.isCollisionBetween(a, b, SpriteTag.PLAYER, SpriteTag.END)) {
-						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel() + 1);
-						activity.runOnUpdateThread(new Runnable() {
-
-							@Override
-							public void run() {
-								restartLevel();
-
-							}
-						});
+//						currentUserState.getSelectedSession().setCurrentLevel(currentUserState.getSelectedSession().getCurrentLevel() + 1);
+//						activity.runOnUpdateThread(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								restartLevel();
+//
+//							}
+//						});
 
 					}
 
-					if (score <= 0) {
+					if (score <= 0 || isLimitMistakeReached()) {
 						// currentUserState.setCurrentLevel(currentUserState.getCurrentLevel());
 						currentUserState.saveToFile();
 						endGameByRunOutPoints();
@@ -322,6 +326,10 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 
 		return contactListener;
 
+	}
+	
+	private boolean isLimitMistakeReached(){
+		return mistakeIndicatorList.size() ==3;
 	}
 	
 	private void removeBody(final Body body) {
@@ -395,6 +403,19 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 
 	}
 	
+	private void addMistakeIcon() {
+	
+	int totalIconAlreadyAdded = mistakeIndicatorList.size();
+	//int rowToPlaceIcon = totalIconAlreadyAdded % 10 + 1;
+	float positionX = 650 - 35 * totalIconAlreadyAdded;
+	
+	Sprite icon = new Sprite(positionX, 10, 35, 35, resourceManager.mistakeIconTexture, vbom);
+
+	this.camera.getHUD().attachChild(icon);
+	this.mistakeIndicatorList.add(icon);
+
+}
+	
 	public void updateGameIndicators(int points) {
 		score += points;
 		gameIndicatorController.getTextScore().setText("" + score);
@@ -402,6 +423,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 			resourceManager.goodSound.play();
 		} else {
 			resourceManager.badSound.play();
+			addMistakeIcon();
 		}
 		if(levelTotalPoints>0){
 			percentage = (score * 100) / levelTotalPoints;
@@ -432,15 +454,19 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 	public void hideControlButtons() {
 		
 		this.jumpButton.setVisible(false);
+		for(Sprite mistakeIcon:mistakeIndicatorList){
+			mistakeIcon.setVisible(false);
+		}
 
 	}
 	
 	public void createLevel() {
 		RockPool.prepareRockPool(resourceManager.rockLineTexture, vbom, camera, this);
 		rockPool = RockPool.getInstance();
-		tomatos = new LinkedList<Sprite>();
-		lifes = new LinkedList<Sprite>();
-		fencesBodies = new LinkedList<Sprite>();
+		tomatos = new LinkedList<>();
+		lifes = new LinkedList<>();
+		fencesBodies = new LinkedList<>();
+		mistakeIndicatorList =new LinkedList<>();
 		
 		int currentLevel=UserState.getInstance().getSelectedSession().getCurrentLevel();
 		boolean isTrainingLevel=currentLevel ==0;
@@ -450,10 +476,11 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 			
 			
 			if(isTrainingLevel){
-				this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(0,null));
-			}else{
-				this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(currentLevel,AchievementHelper.getInstance(activity).getAchievementBox()));
+				this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(0));
+			}else {
+					this.mTMXTiledMap = tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(currentLevel));
 			}
+			
 			
 
 		} catch (TMXLoadException e) {
@@ -463,9 +490,10 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 		}
 
 		// Create all the objects from the TMXLayer
-		createObjectTMXLayer();
+		createObjectTMXLayer(this.mTMXTiledMap,0);
 
 		tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);// to get the first
+		
 		// layer
 
 		attachChild(tmxLayer);
@@ -501,14 +529,14 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 
 	}
 	
-	protected void createObjectTMXLayer() {
-		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {// loop
+	protected void createObjectTMXLayer(TMXTiledMap tiledMap,int originX) {
+		for (final TMXObjectGroup group : tiledMap.getTMXObjectGroups()) {// loop
 			// over
 			// the
 			// objectgroups
 			for (final TMXObject object : group.getTMXObjects()) {
 				if (object.getName().equals(SpriteTag.GROUND)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					Rectangle rect = new Rectangle(object.getX()+originX, object.getY(), object.getWidth(), object.getHeight(), vbom);
 
 					FixtureDef groundFixtureDef = PhysicsFactory.createFixtureDef(0, 0, .2f);
 					// BodyType to static if u dont want the body moves
@@ -520,7 +548,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 					rect.setVisible(false);
 					attachChild(rect);
 				} else if (object.getName().equals(SpriteTag.FENCE)) {
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					Rectangle rect = new Rectangle(object.getX()+originX, object.getY(), object.getWidth(), object.getHeight(), vbom);
 
 					FixtureDef spikeFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body fenceBody = PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.FENCE_FIXTURE_DEF);
@@ -529,8 +557,9 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 
 				}
 				else if (object.getName().equals(SpriteTag.LIFE)) {
-					Sprite lifeSprite = new Sprite(object.getX(), object.getY(), 50, 53, resourceManager.lifeIndicatorTexture, vbom);
-					lifeSprite.setIgnoreUpdate(true);
+					Sprite lifeSprite = new Sprite(object.getX()+originX, object.getY(), 50, 53, resourceManager.lifeIndicatorTexture, vbom);
+					//lifeSprite.setIgnoreUpdate(true);
+					lifeSprite.setOnTop(true);
 					FixtureDef lifeFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, lifeSprite, BodyType.StaticBody, BodyGroups.LIFE_FIXTURE_DEF);
 					body.setUserData(object.getName());
@@ -538,11 +567,12 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 					lifeSprite.setUserData(body);
 
 				} else if (SpriteTag.isTomatoTag(object.getName()) || SpriteTag.isMinusTomatoTag(object.getName())) {
-					Sprite tomatoType = new Sprite(object.getX(), object.getY(), 40, 40, TomatoResourceHelper.getTomatoResource(object
+					Sprite tomatoType = new Sprite(object.getX()+originX, object.getY(), 40, 40, TomatoResourceHelper.getTomatoResource(object
 							.getName()), vbom);
 
-					tomatoType.setCullingEnabled(true);
-					tomatoType.setIgnoreUpdate(true);
+					//tomatoType.setCullingEnabled(true);
+					//tomatoType.setIgnoreUpdate(true);
+					tomatoType.setOnTop(true);
 					FixtureDef tomatoFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					Body body = PhysicsFactory.createBoxBody(mPhysicsWorld, tomatoType, BodyType.StaticBody, BodyGroups.TOMATO_FIXTURE_DEF);
 					body.setUserData(object.getName());
@@ -551,7 +581,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 
 				} else if (object.getName().equals(SpriteTag.END)) {
 
-					Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), vbom);
+					Rectangle rect = new Rectangle(object.getX()+originX, object.getY(), object.getWidth(), object.getHeight(), vbom);
 					FixtureDef endLineDef = PhysicsFactory.createFixtureDef(0, 0, 0f);
 					PhysicsFactory.createBoxBody(mPhysicsWorld, rect, BodyType.StaticBody, BodyGroups.END_FIXTURE_DEF).setUserData(
 							SpriteTag.END);
@@ -578,7 +608,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 	
 	protected Player createPlayer() {
 		Player player = null;
-		Vehicle vehicleSelected = UserState.getInstance().getSelectedSession().getVehicleUsed();
+		Vehicle vehicleSelected = UserState.getInstance().getBestVehicle();
 		if (vehicleSelected.equals(Vehicle.NONE)) {
 			//before 100 and 110
 			player = new Player(400, 150, 70, 77, vbom, camera, mPhysicsWorld) {
@@ -749,6 +779,7 @@ public abstract class AbstractGameScene extends BaseScene implements IOnSceneTou
 			extraRock.setPosition(middlePointX, middlePointY);
 			extraRock.setIgnoreUpdate(true);
 			this.attachChild(extraRock);
+			
 		}
 
 	}

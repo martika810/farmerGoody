@@ -95,7 +95,7 @@ public class ResourceManager {
 	//public ItextureRegion fingerTexture;
 	public ITextureRegion unycleImage,tapPlayerExplanation,takeLifeExplanation,drawLineExplanation,pressJumpExplanation,againstBullExplanation;
 	public ITextureRegion buyBtn, priceTagIcon;
-	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,moneyIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture,turboButtonTexture;
+	public ITextureRegion pauseBtnTexture, jumpBtnTextute, lifeIndicatorTexture,moneyIndicatorTexture,backBtnTexture, deleteSmallBtnTexture, rockLineTexture,turboButtonTexture,mistakeIconTexture;
 	public ITextureRegion backInstructionBtnTexture, playStoryBtnTexture;
 	// SPLASH
 	public ITextureRegion splashMenuBackground, instructionBackground, storyBackground;
@@ -170,6 +170,9 @@ public class ResourceManager {
 		
 		this.moneyIndicatorTexture=BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"bag100.png");
+		
+		this.mistakeIconTexture =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"mistake_icon.png");
 
 		this.tomatoScorer = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(tomatoScorerAtlas, activity.getAssets(),
 				"tomatoScorerSheet.png", 3, 5);
@@ -324,6 +327,9 @@ public class ResourceManager {
 				"tomatoScorerSheet.png", 3, 5);
 
 		this.jumpBtnTextute = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(), "jump.png");
+		
+		this.mistakeIconTexture =BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
+				"mistake_icon.png");
 
 		this.rockLineTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gameTexturesAtlas, activity.getAssets(),
 				"rock_line.png");
@@ -713,6 +719,7 @@ public class ResourceManager {
 		//this.passedBG = null;
 		this.pauseBG = null;
 		//this.noMoneyBG = null;
+		this.mistakeIconTexture =null;
 		this.restartButton = null;
 		this.quitButton = null;
 		this.playButton = null;
@@ -740,6 +747,7 @@ public class ResourceManager {
 		this.failedBG = null;
 	//	this.passedBG = null;
 	//	this.noMoneyBG = null;
+		this.mistakeIconTexture =null;
 		this.restartButton = null;
 		this.quitButton = null;
 		this.playButton = null;

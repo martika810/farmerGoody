@@ -1,8 +1,5 @@
 package com.martaocio.farmergoody;
 
-import java.sql.PreparedStatement;
-import java.util.concurrent.TimeUnit;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
@@ -16,7 +13,6 @@ import org.andengine.opengl.view.RenderSurfaceView;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,7 +20,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -34,23 +29,13 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesStatusCodes;
 import com.google.android.gms.games.Player;
-import com.google.android.gms.games.achievement.Achievement;
-import com.google.android.gms.games.achievement.AchievementBuffer;
-import com.google.android.gms.games.achievement.Achievements.LoadAchievementsResult;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 import com.martaocio.farmergoody.asynctasks.LoadGoogleAchievementTask;
-import com.martaocio.farmergoody.domain.AchievementBox;
-import com.martaocio.farmergoody.domain.GameSession;
-import com.martaocio.farmergoody.domain.UserState;
 import com.martaocio.farmergoody.fragments.FatJackAdvertFragment;
-import com.martaocio.farmergoody.fragments.ShareGoogleFragment;
-import com.martaocio.farmergoody.fragments.SignInGoogleFragment;
 import com.martaocio.farmergoody.fragments.GooglePlayServicesFragment;
-import com.martaocio.farmergoody.providers.AchievementHelper;
-
+import com.martaocio.farmergoody.fragments.SignInGoogleFragment;
 
 public class MainGameActivity extends BaseGameActivity implements GooglePlayServicesFragment.Listener, GoogleApiClient.ConnectionCallbacks,
 		GoogleApiClient.OnConnectionFailedListener {
@@ -74,7 +59,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	FrameLayout fatJackPanelAdvert;
 	FatJackAdvertFragment fatjackAdvertFragment;
 	SignInGoogleFragment signInGoogleFragment;
-	//ShareGoogleFragment shareGoogleFragment;
+	// ShareGoogleFragment shareGoogleFragment;
 	GooglePlayServicesFragment googlePlayServiceFragment;
 
 	// Client used to interact with Google APIs
@@ -101,8 +86,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 		buildGoogleApiClient();
 
 		signInGoogleFragment = new SignInGoogleFragment();
-		
-		
+
 		// signInGoogleFragment.setListener(this);
 
 	}
@@ -227,7 +211,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 		// hideFatJackAdvert();
 		// System.exit(0);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -248,12 +232,13 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		// if(keyCode ==KeyEvent.KEYCODE_BACK){
-		// SceneManager.getInstance().get
-		// }
-		return super.onKeyDown(keyCode, event);
+	public void onBackPressed() {
+//		Scene scene = this.mEngine.getScene();
+//		if (scene.hasChildScene()) {
+//			scene.back();
+//		} else {
+			this.onGameDestroyed();
+	//	}
 	}
 
 	public boolean isShouldShowAdvert() {
@@ -344,17 +329,18 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 
 	}
 
-//	public void addShareGoogleButton(GameSession gameSessionInfo) {
-//		shareGoogleFragment = new ShareGoogleFragment();
-//		shareGoogleFragment.setDataToShare(gameSessionInfo);
-//		getFragmentManager().beginTransaction().add(CONTENT_VIEW_ID, shareGoogleFragment).commit();
-//	}
-//
-//	public void removeShareGoogleButton() {
-//		if (shareGoogleFragment != null) {
-//			getFragmentManager().beginTransaction().hide(shareGoogleFragment).commit();
-//		}
-//	}
+	// public void addShareGoogleButton(GameSession gameSessionInfo) {
+	// shareGoogleFragment = new ShareGoogleFragment();
+	// shareGoogleFragment.setDataToShare(gameSessionInfo);
+	// getFragmentManager().beginTransaction().add(CONTENT_VIEW_ID,
+	// shareGoogleFragment).commit();
+	// }
+	//
+	// public void removeShareGoogleButton() {
+	// if (shareGoogleFragment != null) {
+	// getFragmentManager().beginTransaction().hide(shareGoogleFragment).commit();
+	// }
+	// }
 
 	public boolean isSignedIn() {
 		return (mGoogleApiClient != null && mGoogleApiClient.isConnected());
@@ -363,9 +349,10 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		Log.i(TAG, "Try connect onStart");
-		mGoogleApiClient.connect();
+		if (isNetworkAvailable()) {
+			Log.i(TAG, "Try connect onStart");
+			mGoogleApiClient.connect();
+		}
 	}
 
 	@Override
@@ -450,12 +437,10 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 			displayName = p.getDisplayName();
 		}
 		new LoadGoogleAchievementTask().execute(this);
-//		if(AchievementHelper.getInstance(this)!=null){
-//			UserState.getInstance().loadAchievementBox(AchievementHelper.getInstance(this).getAchievementBox());
-//		}
-	
-		
-		
+		// if(AchievementHelper.getInstance(this)!=null){
+		// UserState.getInstance().loadAchievementBox(AchievementHelper.getInstance(this).getAchievementBox());
+		// }
+
 		// mMainMenuFragment.setGreeting("Hello, " + displayName);
 
 	}
@@ -494,14 +479,12 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 			Toast.makeText(this, getString(R.string.sample_achievement) + ": " + fallbackString, Toast.LENGTH_LONG).show();
 		}
 	}
-	
-	public void loadAchiviements(){
-		if(isSignedIn()){
+
+	public void loadAchiviements() {
+		if (isSignedIn()) {
 			Games.Achievements.load(mGoogleApiClient, true);
 		}
 	}
-	
-	
 
 	public void submitLeaderBoard(long pointScore) {
 
@@ -516,7 +499,7 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 			Games.Achievements.increment(mGoogleApiClient, getString(achievementId), 1);
 		}
 	}
-	
+
 	public void incrementAchievement(int achievementId, int numberSteps) {
 		if (isSignedIn()) {
 			Games.Achievements.increment(mGoogleApiClient, getString(achievementId), numberSteps);
@@ -531,11 +514,9 @@ public class MainGameActivity extends BaseGameActivity implements GooglePlayServ
 			Toast.makeText(this, getString(R.string.sample_achievement) + ": " + achievement, Toast.LENGTH_LONG).show();
 		}
 	}
-	
+
 	public GoogleApiClient getmGoogleApiClient() {
 		return mGoogleApiClient;
 	}
-
-	
 
 }

@@ -89,6 +89,9 @@ public class UserState {
 		if(achievementBox.isCoolMotoAchievement()){
 			availableVehicles.add(Vehicle.HARLEY);
 		}
+		if(achievementBox.isAntarcticaAchievement()){
+			UserState.getInstance().setCanGoToAntarctica(true);
+		}
 		
 		
 	}
@@ -111,6 +114,10 @@ public class UserState {
 		}
 		return lastModifiedSession;
 
+	}
+	
+	public Vehicle getBestVehicle(){
+		return Vehicle.getBestVehicle(availableVehicles);
 	}
 
 	public GameSession getSelectedSession() {

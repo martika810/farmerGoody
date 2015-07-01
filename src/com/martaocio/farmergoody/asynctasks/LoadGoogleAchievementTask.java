@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 
 public class LoadGoogleAchievementTask extends AsyncTask<MainGameActivity, Void, Integer>{
 	MainGameActivity activity;
-	AchievementBox achievementBoxResult;
+	AchievementBox achievementBoxResult = new AchievementBox();
 	@Override
     protected Integer doInBackground(MainGameActivity... params) {
 		this.activity=params[0];

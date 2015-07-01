@@ -12,10 +12,14 @@ import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.batch.SpriteBatch;
+import org.andengine.extension.tmx.TMXLoader;
+import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.input.touch.detector.SurfaceGestureDetector;
+import org.andengine.opengl.texture.TextureOptions;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.martaocio.farmergoody.MainGameActivity;
 import com.martaocio.farmergoody.ResourceManager;
 import com.martaocio.farmergoody.SceneManager;
 import com.martaocio.farmergoody.SceneManager.SceneType;
@@ -26,6 +30,7 @@ import com.martaocio.farmergoody.domain.GameSession;
 import com.martaocio.farmergoody.domain.UserState;
 import com.martaocio.farmergoody.domain.Vehicle;
 import com.martaocio.farmergoody.providers.AchievementHelper;
+import com.martaocio.farmergoody.providers.LevelProvider;
 
 public class GameScene extends AbstractGameScene {
 
@@ -75,6 +80,7 @@ public class GameScene extends AbstractGameScene {
 	public void createLevel() {
 
 		super.createLevel();
+		loadNextLevel();
 
 		gameIndicatorController = new GameIndicatorPanel();
 		gameIndicatorController.createGameIndicator(vbom);
@@ -99,6 +105,9 @@ public class GameScene extends AbstractGameScene {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				boolean isBullAheadPlayer = bull.getX() > player.getX();
+				boolean isPlayerAheadMiddleLevel = player.getX() > camera.getBoundsWidth();
+				boolean wasNextLevelLoaded = mNextTMXTiledMap !=null;
+				//CHECK END GAME
 				if (isBullAheadPlayer) {
 					if (UserState.getInstance().getSelectedSession().getNumberLifes() > 0) {
 						updatePlayerNumberLifes(-1);
@@ -108,6 +117,10 @@ public class GameScene extends AbstractGameScene {
 					}
 
 				}
+				//CHECK IF NEXT LEVEL NEED TO BE LOADED
+//				if((isPlayerAheadMiddleLevel) &&(!wasNextLevelLoaded)){
+//					loadNextLevel();
+//				}
 
 			}
 
@@ -327,8 +340,10 @@ public class GameScene extends AbstractGameScene {
 		int currentMoney = currentUserState.getSelectedSession().getCurrentMoney() + money;
 		((GameIndicatorPanel) gameIndicatorController).getTextMoney().setText(currentMoney + "$");
 		currentUserState.getSelectedSession().setCurrentMoney(currentMoney);
-		AchievementHelper.getInstance(activity).checkAchievements(currentMoney);
-		AchievementHelper.getInstance(activity).pushAchievements(activity);
+		if(((MainGameActivity)activity).isSignedIn()){
+			AchievementHelper.getInstance(activity).checkAchievements(currentMoney);
+			AchievementHelper.getInstance(activity).pushAchievements(activity);
+		}
 		currentUserState.saveToFile();
 	}
 
@@ -510,6 +525,33 @@ public class GameScene extends AbstractGameScene {
 
 	public Player getPlayer() {
 		return this.player;
+	}
+	
+	private void loadNextLevel(){
+		Runnable loadNextLevel=new Runnable(){
+
+			@Override
+			public void run() {
+				TMXLoader tmxLoader = new TMXLoader(activity.getAssets(), activity.getTextureManager(),
+						TextureOptions.BILINEAR_PREMULTIPLYALPHA, vbom);
+				int nextLevel=UserState.getInstance().getSelectedSession().getCurrentLevel()+1;
+				try {
+					mNextTMXTiledMap=tmxLoader.loadFromAsset(LevelProvider.getTXMLevel(nextLevel));
+				} catch (TMXLoadException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				tmxLayer=mNextTMXTiledMap.getTMXLayers().get(0);
+				tmxLayer.setPosition(Player.CAMERA_WIDE_PER_LEVEL, 0);
+				attachChild(tmxLayer);
+				tmxLayer=mNextTMXTiledMap.getTMXLayers().get(1);
+				tmxLayer.setPosition(Player.CAMERA_WIDE_PER_LEVEL, 0);
+				attachChild(tmxLayer);
+				createObjectTMXLayer(mNextTMXTiledMap,Player.CAMERA_WIDE_PER_LEVEL);
+				camera.setBounds(0, 190, Player.CAMERA_WIDE_PER_LEVEL*2, 290);
+			}};
+		activity.runOnUiThread(loadNextLevel);
+		
 	}
 
 }

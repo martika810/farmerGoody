@@ -1,11 +1,12 @@
 package com.martaocio.farmergoody.providers;
 
 import com.martaocio.farmergoody.domain.AchievementBox;
+import com.martaocio.farmergoody.domain.UserState;
 
 public class LevelProvider {
 	public static int NUM_TOTAL_LEVELS=20;
 	
-	public static String getTXMLevel(int levelNumber,AchievementBox achievementBox){
+	public static String getTXMLevel(int levelNumber){
 		int convertedLevelNumber;
 		if(levelNumber>=20){
 			 convertedLevelNumber=levelNumber%LevelProvider.NUM_TOTAL_LEVELS+1;
@@ -30,16 +31,17 @@ public class LevelProvider {
 			case 4:
 				return "tmx/farm2.tmx";
 			case 5:
-				if(achievementBox.isAntarcticaAchievement()){
+				if(UserState.getInstance().isCanGoToAntarctica()){
 					return "tmx/antarctica1_x60.tmx";
-				}else{
+				}
+				else{
 					return "tmx/dessert1_x60.tmx";
 				}
 			case 6:
 				
 				return "tmx/forest1_x60.tmx";
 			case 7:
-				//return "tmx/level2.tmx";
+				
 				return "tmx/farm1_x60.tmx";
 			case 8:
 				//return "tmx/dessert1.tmx";
@@ -50,7 +52,7 @@ public class LevelProvider {
 			case 10:
 				return "tmx/farm2.tmx";
 			case 11:
-				if(achievementBox.isAntarcticaAchievement()){
+				if(UserState.getInstance().isCanGoToAntarctica()){
 					return "tmx/antarctica1_x60.tmx";
 				}else{
 					return "tmx/dessert1_x60.tmx";
@@ -70,7 +72,7 @@ public class LevelProvider {
 			case 16:
 				return "tmx/farm2.tmx";
 			case 17:
-				if(achievementBox.isAntarcticaAchievement()){
+				if(UserState.getInstance().isCanGoToAntarctica()){
 					return "tmx/antarctica1_x60.tmx";
 				}else{
 					return "tmx/dessert1_x60.tmx";

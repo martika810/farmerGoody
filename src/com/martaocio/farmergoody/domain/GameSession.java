@@ -2,6 +2,8 @@ package com.martaocio.farmergoody.domain;
 
 import java.util.GregorianCalendar;
 
+import com.google.android.gms.games.internal.constants.AvailabilityCode;
+
 
 public class GameSession {
 	
@@ -49,6 +51,7 @@ public class GameSession {
 		return vehicleUsed;
 		
 	}
+	
 	public void setVehicleUsed(Vehicle vehicleUsed) {
 		this.vehicleUsed = vehicleUsed;
 		this.lastModified=new GregorianCalendar();

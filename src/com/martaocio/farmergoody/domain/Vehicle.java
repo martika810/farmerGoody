@@ -1,5 +1,10 @@
 package com.martaocio.farmergoody.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 
@@ -28,6 +33,20 @@ public enum Vehicle {
 
 	public int getPrice() {
 		return price;
+	}
+	
+	private static Comparator<Vehicle> vehiculeComparator=new Comparator<Vehicle>() {
+
+		@Override
+		public int compare(Vehicle vehicle1, Vehicle vehicle2) {
+			return vehicle2.getId()-vehicle1.getId();
+		}
+	};
+	
+	public static Vehicle getBestVehicle(List<Vehicle> vehicles){
+		List<Vehicle> sortedList=new ArrayList<>(vehicles);
+		Collections.sort(sortedList, vehiculeComparator);
+		return sortedList.get(0);
 	}
 	
 	public static ITextureRegion getVehicleShopItem(Vehicle vehicle) {

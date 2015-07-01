@@ -10,7 +10,7 @@
  </layer>
  <layer name="ground" width="330" height="15">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup name="Object Layer 1" width="0" height="0">
@@ -19,14 +19,6 @@
   <object id="3" name="t10" x="575" y="353" width="41" height="36"/>
   <object id="4" name="t10" x="640" y="352" width="39" height="38"/>
   <object id="6" name="end" x="10313" y="58" width="236" height="361"/>
-  <object id="7" name="ground" x="1192" y="89" width="57" height="10"/>
-  <object id="9" name="ground" x="2469" y="123" width="61" height="7"/>
-  <object id="11" name="ground" x="2950" y="218" width="60" height="9"/>
-  <object id="12" name="ground" x="3845" y="121" width="58" height="10"/>
-  <object id="14" name="ground" x="4386" y="317" width="63" height="8"/>
-  <object id="16" name="ground" x="6147" y="155" width="65" height="7"/>
-  <object id="17" name="ground" x="6628" y="122" width="62" height="9"/>
-  <object id="19" name="ground" x="7714" y="186" width="61" height="8"/>
   <object id="23" name="fence" x="1515" y="383" width="53" height="48"/>
   <object id="24" name="fence" x="3564" y="381" width="55" height="49"/>
   <object id="25" name="fence" x="5068" y="384" width="56" height="49"/>
@@ -103,32 +95,7 @@
   <object id="96" name="mt10" x="9634" y="320" width="36" height="43"/>
   <object id="97" name="life" x="4739" y="34" width="39" height="39"/>
   <object id="1" name="ground" x="9540" y="91" width="62" height="10"/>
-  <object id="2" name="ground" x="7779" y="58" width="61" height="8"/>
-  <object id="3" name="ground" x="6788" y="154" width="62" height="9"/>
-  <object id="4" name="ground" x="6305" y="90" width="62" height="9"/>
-  <object id="5" name="ground" x="5730" y="92" width="65" height="7"/>
-  <object id="6" name="ground" x="5060" y="93" width="65" height="7"/>
-  <object id="7" name="ground" x="3718" y="187" width="58" height="10"/>
-  <object id="8" name="ground" x="3718" y="187" width="58" height="10"/>
-  <object id="10" name="ground" x="3331" y="123" width="58" height="10"/>
-  <object id="11" name="ground" x="2307" y="124" width="61" height="7"/>
   <object id="12" name="ground" x="1061" y="124" width="57" height="10"/>
-  <object id="13" name="ground" x="1767" y="250" width="57" height="10"/>
-  <object id="14" name="ground" x="1896" y="187" width="57" height="10"/>
-  <object id="15" name="ground" x="2402" y="251" width="61" height="7"/>
-  <object id="16" name="ground" x="3076" y="154" width="59" height="8"/>
-  <object id="17" name="ground" x="4132" y="216" width="58" height="10"/>
-  <object id="18" name="ground" x="4329" y="152" width="58" height="10"/>
-  <object id="19" name="ground" x="4548" y="187" width="63" height="8"/>
-  <object id="20" name="ground" x="4709" y="91" width="63" height="8"/>
   <object id="21" name="ground" x="5602" y="154" width="65" height="7"/>
-  <object id="22" name="ground" x="5476" y="222" width="65" height="7"/>
-  <object id="23" name="ground" x="6628" y="251" width="62" height="9"/>
-  <object id="24" name="ground" x="7557" y="91" width="61" height="8"/>
-  <object id="25" name="ground" x="7394" y="219" width="61" height="8"/>
-  <object id="26" name="ground" x="8580" y="188" width="61" height="8"/>
-  <object id="27" name="ground" x="8709" y="123" width="61" height="8"/>
-  <object id="28" name="ground" x="9409" y="154" width="62" height="10"/>
-  <object id="29" name="ground" x="9668" y="156" width="62" height="10"/>
  </objectgroup>
 </map>

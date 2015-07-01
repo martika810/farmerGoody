@@ -2,6 +2,8 @@ package com.martaocio.farmergoody.customsprites;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.Entity;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -20,7 +22,7 @@ import com.martaocio.farmergoody.domain.Vehicle;
 import com.martaocio.farmergoody.providers.VelocityProvider;
 
 public abstract class Player extends AnimatedSprite {
-
+	public static final int CAMERA_WIDE_PER_LEVEL= 10560;
 	private Body body;
 	public boolean isAlive = true;
 	public boolean isTurbo = false;
@@ -32,6 +34,7 @@ public abstract class Player extends AnimatedSprite {
 	public Player(float pX, float pY, float width, float height, VertexBufferObjectManager vbom, BoundCamera camera,
 			PhysicsWorld physicsWorld) {
 		super(pX, pY, width, height, getSelectedPlayerTexture(UserState.getInstance().getSelectedSession().getVehicleUsed()), vbom);
+		this.setOnTop(true);
 		GameSession selectedSession = UserState.getInstance().getSelectedSession();
 		vehicleUsed = selectedSession.getVehicleUsed();
 		boolean isTraningLevel = selectedSession.getCurrentLevel() == 0;
@@ -41,7 +44,7 @@ public abstract class Player extends AnimatedSprite {
 		if (isTraningLevel) {
 			camera.setBounds(0, 190, 6400, 290);
 		} else {
-			camera.setBounds(0, 190, 10560, 290);
+			camera.setBounds(0, 190, CAMERA_WIDE_PER_LEVEL*2, 290);
 		}
 		camera.setBoundsEnabled(true);
 		camera.offsetCenter(0, 0);
